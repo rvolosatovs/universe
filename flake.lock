@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "enarx": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1639148910,
-        "narHash": "sha256-eIz9HE4UxnYGRs6zTY9Ac7UQ0ie1AlKuREdy9epLXZc=",
-        "owner": "enarx",
-        "repo": "enarx",
-        "rev": "fc640a2a6cc4c962e8f9a5416e64d5246c978856",
-        "type": "github"
-      },
-      "original": {
-        "owner": "enarx",
-        "repo": "enarx",
-        "type": "github"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -65,7 +49,6 @@
     },
     "root": {
       "inputs": {
-        "enarx": "enarx",
         "flake-compat": "flake-compat",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",

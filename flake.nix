@@ -9,10 +9,7 @@
   inputs.rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
   inputs.rust-overlay.url = github:oxalica/rust-overlay;
 
-  inputs.enarx.url = github:enarx/enarx;
-  inputs.enarx.flake = false;
-
-  outputs = { self, nixpkgs, rust-overlay, flake-utils, enarx, ... }:
+  outputs = { self, nixpkgs, rust-overlay, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs {
@@ -20,9 +17,7 @@
           overlays = [ (import rust-overlay) ];
         };
 
-        rust = (pkgs.rust-bin.fromRustupToolchainFile "${enarx}/rust-toolchain.toml").override {
-          extensions = [ "rust-src" ];
-        };
+        rust = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
       in
       {
         devShell = pkgs.mkShell {
