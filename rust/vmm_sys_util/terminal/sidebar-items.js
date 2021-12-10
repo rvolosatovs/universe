@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["Terminal","Trait for file descriptors that are TTYs, according to `isatty`."]]});

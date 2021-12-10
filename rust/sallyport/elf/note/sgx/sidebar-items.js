@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["ATTR","Attributes (u128)"],["ATTRMASK","Attributes Mask (u128)"],["BITS","The SGX enclave bits (u8; in powers of 2)"],["MISC","MiscSelect (u32)"],["MISCMASK","MiscSelect Mask (u32)"],["PID","The product identifier (u16)"],["SSAP","The number of pages in an SSA frame (u8)"],["SVN","The security version number (u16)"]]});

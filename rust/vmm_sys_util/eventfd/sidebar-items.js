@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["EFD_CLOEXEC",""],["EFD_NONBLOCK",""],["EFD_SEMAPHORE",""]],"struct":[["EventFd","A safe wrapper around Linux `eventfd`."]]});

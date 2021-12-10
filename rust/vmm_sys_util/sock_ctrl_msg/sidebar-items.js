@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["IntoIovec","Trait for types that can be converted into an `iovec` that can be referenced by a syscall for the lifetime of this object."],["ScmSocket","Trait for file descriptors can send and receive socket control messages via `sendmsg` and `recvmsg`."]]});

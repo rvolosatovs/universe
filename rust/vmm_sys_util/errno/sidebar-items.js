@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["errno_result","Returns the last `errno` as a `Result` that is always an error."]],"struct":[["Error","Wrapper over `errno`."]],"type":[["Result","A specialized Result type for operations that can return `errno`."]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["SyscallReturnCode","Wrapper to interpret syscall exit codes and provide a rustacean `io::Result`."]]});

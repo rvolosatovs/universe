@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `&#x2F;home&#x2F;runner&#x2F;.cargo&#x2F;registry&#x2F;src&#x2F;github.com-1ecc6299db9ec823&#x2F;sallyport-0.1.0&#x2F;src&#x2F;elf.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>elf.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a class="sidebar-logo" href='../../sallyport/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container rust-logo" href='../../sallyport/index.html'><img src='../../rust-logo.png' alt='logo'></a><nav class="sub"><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1"> 1</span>
+<span id="2"> 2</span>
+<span id="3"> 3</span>
+<span id="4"> 4</span>
+<span id="5"> 5</span>
+<span id="6"> 6</span>
+<span id="7"> 7</span>
+<span id="8"> 8</span>
+<span id="9"> 9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Defines constants for use in ELF parsing</span>
+
+<span class="doccomment">/// Program Header Types</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">pt</span> {
+    <span class="kw">use</span> <span class="ident">goblin::elf64::program_header::PT_LOOS</span>;
+
+    <span class="doccomment">/// The exec program header type</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This program header indicates the region within which the loader should</span>
+    <span class="doccomment">/// load the executable. The executable must be loaded at the start of the</span>
+    <span class="doccomment">/// region and must (obviously) fit in the region.</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">EXEC</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="ident">PT_LOOS</span> <span class="op">+</span> <span class="number">0x3400000</span>;
+}
+
+<span class="doccomment">/// Program Header Flags</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">pf</span> {
+    <span class="doccomment">/// SGX Program Header Flags</span>
+    <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">sgx</span> {
+        <span class="doccomment">/// This segment contains TCS pages</span>
+        <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">TCS</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">20</span>;
+
+        <span class="doccomment">/// This segment contains unmeasured pages.</span>
+        <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">UNMEASURED</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">21</span>;
+    }
+
+    <span class="doccomment">/// KVM Program Headers Flags</span>
+    <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">kvm</span> {
+        <span class="doccomment">/// This segment contains the initial sallyport blocks.</span>
+        <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">SALLYPORT</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">22</span>;
+    }
+
+    <span class="doccomment">/// SNP Program Headers Flags</span>
+    <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">snp</span> {
+        <span class="doccomment">/// This segment contains cpuid page.</span>
+        <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">CPUID</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">23</span>;
+
+        <span class="doccomment">/// This segment contains the SNP secrets page.</span>
+        <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">SECRETS</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">24</span>;
+    }
+}
+
+<span class="doccomment">/// ELF Notes</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">note</span> {
+    <span class="doccomment">/// The name used for all note sections</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">NAME</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;sallyport&quot;</span>;
+
+    <span class="doccomment">/// The minimum sallyport semver requires</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">REQUIRES</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0</span>;
+
+    <span class="doccomment">/// SGX ELF Notes</span>
+    <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">sgx</span> {
+        <span class="doccomment">/// The SGX enclave bits (u8; in powers of 2)</span>
+        <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">BITS</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0x73677800</span>;
+
+        <span class="doccomment">/// The number of pages in an SSA frame (u8)</span>
+        <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">SSAP</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0x73677801</span>;
+
+        <span class="doccomment">/// The product identifier (u16)</span>
+        <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">PID</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0x73677810</span>;
+
+        <span class="doccomment">/// The security version number (u16)</span>
+        <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">SVN</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0x73677811</span>;
+
+        <span class="doccomment">/// MiscSelect (u32)</span>
+        <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MISC</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0x73677812</span>;
+
+        <span class="doccomment">/// MiscSelect Mask (u32)</span>
+        <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MISCMASK</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0x73677813</span>;
+
+        <span class="doccomment">/// Attributes (u128)</span>
+        <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ATTR</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0x73677814</span>;
+
+        <span class="doccomment">/// Attributes Mask (u128)</span>
+        <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ATTRMASK</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0x73677815</span>;
+    }
+}
+</code></pre></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="sallyport" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (0b42deacc 2021-12-09)" ></div>
+</body></html>

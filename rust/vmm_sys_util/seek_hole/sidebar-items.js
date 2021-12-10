@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["SeekHole","A trait for seeking to the next hole or non-hole position in a file."]]});

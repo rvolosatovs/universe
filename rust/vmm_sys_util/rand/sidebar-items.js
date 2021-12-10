@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["rand_alphanumerics","Gets a pseudo random OsString of length `len` with characters in the range [a-zA-Z0-9]."],["timestamp_cycles","Gets an ever increasing u64 (at least for this process)."],["xor_psuedo_rng_u32","Generate pseudo random u32 numbers based on the current timestamp."]]});

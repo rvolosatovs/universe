@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["FallocateMode","Operation to be performed on a given range when calling `fallocate`"]],"fn":[["fallocate","A safe wrapper for `fallocate`."]]});

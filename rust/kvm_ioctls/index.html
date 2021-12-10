@@ -1,0 +1,205 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="A safe wrapper around the kernel’s KVM interface."><meta name="keywords" content="rust, rustlang, rust-lang, kvm_ioctls"><title>kvm_ioctls - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../dark.css" disabled><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><script defer src="../main.js"></script>
+    <noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a class="sidebar-logo" href='../kvm_ioctls/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><h2 class="location">Crate kvm_ioctls</h2><div class="block version"><div class="narrow-helper"></div><p>Version 0.11.0</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all kvm_ioctls's items</p></a><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li></ul></div><div id="sidebar-vars" data-name="kvm_ioctls" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container rust-logo" href='../kvm_ioctls/index.html'><img src='../rust-logo.png' alt='logo'></a><nav class="sub"><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">kvm_ioctls</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/kvm_ioctls/lib.rs.html#7-229" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>A safe wrapper around the kernel’s KVM interface.</p>
+<p>This crate offers safe wrappers for:</p>
+<ul>
+<li><a href="struct.Kvm.html">system ioctls</a> using the <code>Kvm</code> structure</li>
+<li><a href="struct.VmFd.html">VM ioctls</a> using the <code>VmFd</code> structure</li>
+<li><a href="struct.VcpuFd.html">vCPU ioctls</a> using the <code>VcpuFd</code> structure</li>
+<li><a href="struct.DeviceFd.html">device ioctls</a> using the <code>DeviceFd</code> structure</li>
+</ul>
+<h2 id="platform-support" class="section-header"><a href="#platform-support">Platform support</a></h2>
+<ul>
+<li>x86_64</li>
+<li>arm64 (experimental)</li>
+</ul>
+<p><strong>NOTE:</strong> The list of available ioctls is not extensive.</p>
+<h2 id="example---running-a-vm-on-x86_64" class="section-header"><a href="#example---running-a-vm-on-x86_64">Example - Running a VM on x86_64</a></h2>
+<p>In this example we are creating a Virtual Machine (VM) with one vCPU.
+On the vCPU we are running machine specific code. This example is based on
+the <a href="https://lwn.net/Articles/658511/">LWN article</a> on using the KVM API.
+The aarch64 example was modified accordingly.</p>
+<p>To get code running on the vCPU we are going through the following steps:</p>
+<ol>
+<li>Instantiate KVM. This is used for running
+<a href="struct.Kvm.html">system specific ioctls</a>.</li>
+<li>Use the KVM object to create a VM. The VM is used for running
+<a href="struct.VmFd.html">VM specific ioctls</a>.</li>
+<li>Initialize the guest memory for the created VM. In this dummy example we
+are adding only one memory region and write the code in one memory page.</li>
+<li>Create a vCPU using the VM object. The vCPU is used for running
+<a href="struct.VcpuFd.html">vCPU specific ioctls</a>.</li>
+<li>Setup architectural specific general purpose registers and special registers. For
+details about how and why these registers are set, please check the
+<a href="https://lwn.net/Articles/658511/">LWN article</a> on which this example is
+built.</li>
+<li>Run the vCPU code in a loop and check the
+<a href="enum.VcpuExit.html">exit reasons</a>.</li>
+</ol>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">kvm_ioctls</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">kvm_bindings</span>;
+
+<span class="kw">use</span> <span class="ident">kvm_ioctls::VcpuExit</span>;
+<span class="kw">use</span> <span class="ident">kvm_ioctls</span>::{<span class="ident">Kvm</span>, <span class="ident">VcpuFd</span>, <span class="ident">VmFd</span>};
+
+<span class="kw">fn</span> <span class="ident">main</span>() {
+    <span class="kw">use</span> <span class="ident">std::io::Write</span>;
+    <span class="kw">use</span> <span class="ident">std::ptr::null_mut</span>;
+    <span class="kw">use</span> <span class="ident">std::slice</span>;
+
+    <span class="kw">use</span> <span class="ident">kvm_bindings::kvm_userspace_memory_region</span>;
+    <span class="kw">use</span> <span class="ident">kvm_bindings::KVM_MEM_LOG_DIRTY_PAGES</span>;
+
+    <span class="kw">let</span> <span class="ident">mem_size</span> <span class="op">=</span> <span class="number">0x4000</span>;
+    <span class="kw">let</span> <span class="ident">guest_addr</span> <span class="op">=</span> <span class="number">0x1000</span>;
+    <span class="kw">let</span> <span class="ident">asm_code</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>];
+
+    <span class="comment">// Setting up architectural dependent values.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
+    {
+        <span class="ident">asm_code</span> <span class="op">=</span> <span class="kw-2">&amp;</span>[
+            <span class="number">0xba</span>, <span class="number">0xf8</span>, <span class="number">0x03</span>, <span class="comment">/* mov $0x3f8, %dx */</span>
+            <span class="number">0x00</span>, <span class="number">0xd8</span>, <span class="comment">/* add %bl, %al */</span>
+            <span class="number">0x04</span>, <span class="string">b&#39;0&#39;</span>, <span class="comment">/* add $&#39;0&#39;, %al */</span>
+            <span class="number">0xee</span>, <span class="comment">/* out %al, %dx */</span>
+            <span class="number">0xec</span>, <span class="comment">/* in %dx, %al */</span>
+            <span class="number">0xc6</span>, <span class="number">0x06</span>, <span class="number">0x00</span>, <span class="number">0x80</span>,
+            <span class="number">0x00</span>, <span class="comment">/* movl $0, (0x8000); This generates a MMIO Write. */</span>
+            <span class="number">0x8a</span>, <span class="number">0x16</span>, <span class="number">0x00</span>, <span class="number">0x80</span>, <span class="comment">/* movl (0x8000), %dl; This generates a MMIO Read. */</span>
+            <span class="number">0xf4</span>, <span class="comment">/* hlt */</span>
+        ];
+    }
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>)]</span>
+    {
+        <span class="ident">asm_code</span> <span class="op">=</span> <span class="kw-2">&amp;</span>[
+            <span class="number">0x01</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x10</span>, <span class="comment">/* adr x1, &lt;this address&gt; */</span>
+            <span class="number">0x22</span>, <span class="number">0x10</span>, <span class="number">0x00</span>, <span class="number">0xb9</span>, <span class="comment">/* str w2, [x1, #16]; write to this page */</span>
+            <span class="number">0x02</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0xb9</span>, <span class="comment">/* str w2, [x0]; This generates a MMIO Write. */</span>
+            <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>,
+            <span class="number">0x14</span>, <span class="comment">/* b &lt;this address&gt;; shouldn&#39;t get here, but if so loop forever */</span>
+        ];
+    }
+
+    <span class="comment">// 1. Instantiate KVM.</span>
+    <span class="kw">let</span> <span class="ident">kvm</span> <span class="op">=</span> <span class="ident">Kvm::new</span>().<span class="ident">unwrap</span>();
+
+    <span class="comment">// 2. Create a VM.</span>
+    <span class="kw">let</span> <span class="ident">vm</span> <span class="op">=</span> <span class="ident">kvm</span>.<span class="ident">create_vm</span>().<span class="ident">unwrap</span>();
+
+    <span class="comment">// 3. Initialize Guest Memory.</span>
+    <span class="kw">let</span> <span class="ident">load_addr</span>: <span class="kw-2">*mut</span> <span class="ident">u8</span> <span class="op">=</span> <span class="kw">unsafe</span> {
+        <span class="ident">libc::mmap</span>(
+            <span class="ident">null_mut</span>(),
+            <span class="ident">mem_size</span>,
+            <span class="ident">libc::PROT_READ</span> <span class="op">|</span> <span class="ident">libc::PROT_WRITE</span>,
+            <span class="ident">libc::MAP_ANONYMOUS</span> <span class="op">|</span> <span class="ident">libc::MAP_SHARED</span> <span class="op">|</span> <span class="ident">libc::MAP_NORESERVE</span>,
+            <span class="op">-</span><span class="number">1</span>,
+            <span class="number">0</span>,
+        ) <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">u8</span>
+    };
+
+    <span class="kw">let</span> <span class="ident">slot</span> <span class="op">=</span> <span class="number">0</span>;
+    <span class="comment">// When initializing the guest memory slot specify the</span>
+    <span class="comment">// `KVM_MEM_LOG_DIRTY_PAGES` to enable the dirty log.</span>
+    <span class="kw">let</span> <span class="ident">mem_region</span> <span class="op">=</span> <span class="ident">kvm_userspace_memory_region</span> {
+        <span class="ident">slot</span>,
+        <span class="ident">guest_phys_addr</span>: <span class="ident">guest_addr</span>,
+        <span class="ident">memory_size</span>: <span class="ident">mem_size</span> <span class="kw">as</span> <span class="ident">u64</span>,
+        <span class="ident">userspace_addr</span>: <span class="ident">load_addr</span> <span class="kw">as</span> <span class="ident">u64</span>,
+        <span class="ident">flags</span>: <span class="ident">KVM_MEM_LOG_DIRTY_PAGES</span>,
+    };
+    <span class="kw">unsafe</span> { <span class="ident">vm</span>.<span class="ident">set_user_memory_region</span>(<span class="ident">mem_region</span>).<span class="ident">unwrap</span>() };
+
+    <span class="comment">// Write the code in the guest memory. This will generate a dirty page.</span>
+    <span class="kw">unsafe</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">slice</span> <span class="op">=</span> <span class="ident">slice::from_raw_parts_mut</span>(<span class="ident">load_addr</span>, <span class="ident">mem_size</span>);
+        <span class="ident">slice</span>.<span class="ident">write</span>(<span class="kw-2">&amp;</span><span class="ident">asm_code</span>).<span class="ident">unwrap</span>();
+    }
+
+    <span class="comment">// 4. Create one vCPU.</span>
+    <span class="kw">let</span> <span class="ident">vcpu_fd</span> <span class="op">=</span> <span class="ident">vm</span>.<span class="ident">create_vcpu</span>(<span class="number">0</span>).<span class="ident">unwrap</span>();
+
+    <span class="comment">// 5. Initialize general purpose and special registers.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
+    {
+        <span class="comment">// x86_64 specific registry setup.</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vcpu_sregs</span> <span class="op">=</span> <span class="ident">vcpu_fd</span>.<span class="ident">get_sregs</span>().<span class="ident">unwrap</span>();
+        <span class="ident">vcpu_sregs</span>.<span class="ident">cs</span>.<span class="ident">base</span> <span class="op">=</span> <span class="number">0</span>;
+        <span class="ident">vcpu_sregs</span>.<span class="ident">cs</span>.<span class="ident">selector</span> <span class="op">=</span> <span class="number">0</span>;
+        <span class="ident">vcpu_fd</span>.<span class="ident">set_sregs</span>(<span class="kw-2">&amp;</span><span class="ident">vcpu_sregs</span>).<span class="ident">unwrap</span>();
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vcpu_regs</span> <span class="op">=</span> <span class="ident">vcpu_fd</span>.<span class="ident">get_regs</span>().<span class="ident">unwrap</span>();
+        <span class="ident">vcpu_regs</span>.<span class="ident">rip</span> <span class="op">=</span> <span class="ident">guest_addr</span>;
+        <span class="ident">vcpu_regs</span>.<span class="ident">rax</span> <span class="op">=</span> <span class="number">2</span>;
+        <span class="ident">vcpu_regs</span>.<span class="ident">rbx</span> <span class="op">=</span> <span class="number">3</span>;
+        <span class="ident">vcpu_regs</span>.<span class="ident">rflags</span> <span class="op">=</span> <span class="number">2</span>;
+        <span class="ident">vcpu_fd</span>.<span class="ident">set_regs</span>(<span class="kw-2">&amp;</span><span class="ident">vcpu_regs</span>).<span class="ident">unwrap</span>();
+    }
+
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>)]</span>
+    {
+        <span class="comment">// aarch64 specific registry setup.</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">kvi</span> <span class="op">=</span> <span class="ident">kvm_bindings::kvm_vcpu_init::default</span>();
+        <span class="ident">vm</span>.<span class="ident">get_preferred_target</span>(<span class="kw-2">&amp;mut</span> <span class="ident">kvi</span>).<span class="ident">unwrap</span>();
+        <span class="ident">vcpu_fd</span>.<span class="ident">vcpu_init</span>(<span class="kw-2">&amp;</span><span class="ident">kvi</span>).<span class="ident">unwrap</span>();
+
+        <span class="kw">let</span> <span class="ident">core_reg_base</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="number">0x6030_0000_0010_0000</span>;
+        <span class="kw">let</span> <span class="ident">mmio_addr</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="ident">guest_addr</span> <span class="op">+</span> <span class="ident">mem_size</span> <span class="kw">as</span> <span class="ident">u64</span>;
+        <span class="ident">vcpu_fd</span>.<span class="ident">set_one_reg</span>(<span class="ident">core_reg_base</span> <span class="op">+</span> <span class="number">2</span> <span class="op">*</span> <span class="number">32</span>, <span class="ident">guest_addr</span>); <span class="comment">// set PC</span>
+        <span class="ident">vcpu_fd</span>.<span class="ident">set_one_reg</span>(<span class="ident">core_reg_base</span> <span class="op">+</span> <span class="number">2</span> <span class="op">*</span> <span class="number">0</span>, <span class="ident">mmio_addr</span>); <span class="comment">// set X0</span>
+    }
+
+    <span class="comment">// 6. Run code on the vCPU.</span>
+    <span class="kw">loop</span> {
+        <span class="kw">match</span> <span class="ident">vcpu_fd</span>.<span class="ident">run</span>().<span class="ident">expect</span>(<span class="string">&quot;run failed&quot;</span>) {
+            <span class="ident">VcpuExit::IoIn</span>(<span class="ident">addr</span>, <span class="ident">data</span>) =&gt; {
+                <span class="macro">println!</span>(
+                    <span class="string">&quot;Received an I/O in exit. Address: {:#x}. Data: {:#x}&quot;</span>,
+                    <span class="ident">addr</span>, <span class="ident">data</span>[<span class="number">0</span>],
+                );
+            }
+            <span class="ident">VcpuExit::IoOut</span>(<span class="ident">addr</span>, <span class="ident">data</span>) =&gt; {
+                <span class="macro">println!</span>(
+                    <span class="string">&quot;Received an I/O out exit. Address: {:#x}. Data: {:#x}&quot;</span>,
+                    <span class="ident">addr</span>, <span class="ident">data</span>[<span class="number">0</span>],
+                );
+            }
+            <span class="ident">VcpuExit::MmioRead</span>(<span class="ident">addr</span>, <span class="ident">data</span>) =&gt; {
+                <span class="macro">println!</span>(<span class="string">&quot;Received an MMIO Read Request for the address {:#x}.&quot;</span>, <span class="ident">addr</span>,);
+            }
+            <span class="ident">VcpuExit::MmioWrite</span>(<span class="ident">addr</span>, <span class="ident">data</span>) =&gt; {
+                <span class="macro">println!</span>(<span class="string">&quot;Received an MMIO Write Request to the address {:#x}.&quot;</span>, <span class="ident">addr</span>,);
+                <span class="comment">// The code snippet dirties 1 page when it is loaded in memory</span>
+                <span class="kw">let</span> <span class="ident">dirty_pages_bitmap</span> <span class="op">=</span> <span class="ident">vm</span>.<span class="ident">get_dirty_log</span>(<span class="ident">slot</span>, <span class="ident">mem_size</span>).<span class="ident">unwrap</span>();
+                <span class="kw">let</span> <span class="ident">dirty_pages</span> <span class="op">=</span> <span class="ident">dirty_pages_bitmap</span>
+                    .<span class="ident">into_iter</span>()
+                    .<span class="ident">map</span>(<span class="op">|</span><span class="ident">page</span><span class="op">|</span> <span class="ident">page</span>.<span class="ident">count_ones</span>())
+                    .<span class="ident">fold</span>(<span class="number">0</span>, <span class="op">|</span><span class="ident">dirty_page_count</span>, <span class="ident">i</span><span class="op">|</span> <span class="ident">dirty_page_count</span> <span class="op">+</span> <span class="ident">i</span>);
+                <span class="macro">assert_eq!</span>(<span class="ident">dirty_pages</span>, <span class="number">1</span>);
+                <span class="comment">// Since on aarch64 there is not halt instruction,</span>
+                <span class="comment">// we break immediately after the last known instruction</span>
+                <span class="comment">// of the asm code example so that we avoid an infinite loop.</span>
+                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>)]</span>
+                <span class="kw">break</span>;
+            }
+            <span class="ident">VcpuExit::Hlt</span> =&gt; {
+                <span class="kw">break</span>;
+            }
+            <span class="ident">r</span> =&gt; <span class="macro">panic!</span>(<span class="string">&quot;Unexpected exit reason: {:?}&quot;</span>, <span class="ident">r</span>),
+        }
+    }
+}</code></pre></div>
+</div></details><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.DeviceFd.html" title="kvm_ioctls::DeviceFd struct">DeviceFd</a></div><div class="item-right docblock-short"><p>Wrapper over the file descriptor obtained when creating an emulated device in the kernel.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Error.html" title="kvm_ioctls::Error struct">Error</a></div><div class="item-right docblock-short"><p>Wrapper over <a href="http://man7.org/linux/man-pages/man3/errno.3.html"><code>errno</code></a>.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Kvm.html" title="kvm_ioctls::Kvm struct">Kvm</a></div><div class="item-right docblock-short"><p>Wrapper over KVM system ioctls.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.KvmRunWrapper.html" title="kvm_ioctls::KvmRunWrapper struct">KvmRunWrapper</a></div><div class="item-right docblock-short"><p>Safe wrapper over the <code>kvm_run</code> struct.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.NoDatamatch.html" title="kvm_ioctls::NoDatamatch struct">NoDatamatch</a></div><div class="item-right docblock-short"><p>Helper structure for disabling datamatch.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.VcpuFd.html" title="kvm_ioctls::VcpuFd struct">VcpuFd</a></div><div class="item-right docblock-short"><p>Wrapper over KVM vCPU ioctls.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.VmFd.html" title="kvm_ioctls::VmFd struct">VmFd</a></div><div class="item-right docblock-short"><p>Wrapper over KVM VM ioctls.</p>
+</div></div></div><h2 id="enums" class="small-section-header"><a href="#enums">Enums</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.Cap.html" title="kvm_ioctls::Cap enum">Cap</a></div><div class="item-right docblock-short"><p>Capabilities exposed by KVM.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.IoEventAddress.html" title="kvm_ioctls::IoEventAddress enum">IoEventAddress</a></div><div class="item-right docblock-short"><p>An address either in programmable I/O space or in memory mapped I/O space.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.VcpuExit.html" title="kvm_ioctls::VcpuExit enum">VcpuExit</a></div><div class="item-right docblock-short"><p>Reasons for vCPU exits.</p>
+</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="kvm_ioctls" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (0b42deacc 2021-12-09)" ></div>
+</body></html>

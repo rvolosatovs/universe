@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["TimerFd","A safe wrapper around a Linux `timerfd`."]]});

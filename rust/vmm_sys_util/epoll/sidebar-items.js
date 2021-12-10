@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["ControlOperation","Wrapper over `EPOLL_CTL_*` operations that can be performed on a file descriptor."]],"struct":[["Epoll","Wrapper over epoll functionality."],["EpollEvent","Wrapper over ‘libc::epoll_event’."],["EventSet","The type of events we can monitor a file descriptor for."]]});
