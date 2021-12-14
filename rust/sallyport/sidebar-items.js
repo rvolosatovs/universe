@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["block","Block-specific functionality shared between guest and host."],["guest","Guest-specific functionality."],["host","Host-specific functionality."]],"type":[["Error","Error type used within this crate."],["Result","Result type returned by functionality exposed by this crate."]]});
+initSidebarItems({"mod":[["guest","Guest-specific functionality."],["host","Host-specific functionality."]],"type":[["Error","Error type used within this crate."],["Result","Result type returned by functionality exposed by this crate."]]});
