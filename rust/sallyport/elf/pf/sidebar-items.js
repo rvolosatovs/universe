@@ -1,1 +1,0 @@
-initSidebarItems({"mod":[["kvm","KVM Program Headers Flags"],["sgx","SGX Program Header Flags"],["snp","SNP Program Headers Flags"]]});

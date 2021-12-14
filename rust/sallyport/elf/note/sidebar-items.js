@@ -1,1 +1,0 @@
-initSidebarItems({"constant":[["NAME","The name used for all note sections"],["REQUIRES","The minimum sallyport semver requires"]],"mod":[["sgx","SGX ELF Notes"]]});

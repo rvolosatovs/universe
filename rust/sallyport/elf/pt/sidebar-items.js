@@ -1,1 +1,0 @@
-initSidebarItems({"constant":[["EXEC","The exec program header type"]]});

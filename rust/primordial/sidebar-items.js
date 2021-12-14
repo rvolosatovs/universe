@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["Address","An address"],["Offset","An offset of a number of items of type `T` from a base"],["Page","A single page of memory"],["Pages","A wrapper type around types that provide page slices"],["Register","A register"]],"trait":[["One","Defines the multiplicative identity value"],["Zero","Defines the additive identity value"]]});

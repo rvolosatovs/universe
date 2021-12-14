@@ -1,1 +1,0 @@
-initSidebarItems({"mod":[["note","ELF Notes"],["pf","Program Header Flags"],["pt","Program Header Types"]]});

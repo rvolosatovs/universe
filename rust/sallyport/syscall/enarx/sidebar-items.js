@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["MemInfo","Basic information about the host memory, the shim requests from the loader via the `SYS_ENARX_MEM_INFO` syscall"]],"trait":[["EnarxSyscallHandler","enarx syscalls"]]});

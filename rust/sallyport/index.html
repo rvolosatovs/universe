@@ -1,98 +1,41 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API for the hypervisor-microkernel boundary"><meta name="keywords" content="rust, rustlang, rust-lang, sallyport"><title>sallyport - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../dark.css" disabled><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><script defer src="../main.js"></script>
-    <noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a class="sidebar-logo" href='../sallyport/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><h2 class="location">Crate sallyport</h2><div class="block version"><div class="narrow-helper"></div><p>Version 0.1.0</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all sallyport's items</p></a><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#constants">Constants</a></li><li><a href="#types">Type Definitions</a></li><li><a href="#unions">Unions</a></li></ul></div><div id="sidebar-vars" data-name="sallyport" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container rust-logo" href='../sallyport/index.html'><img src='../rust-logo.png' alt='logo'></a><nav class="sub"><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">sallyport</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/sallyport/lib.rs.html#3-475" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>API for the hypervisor-microkernel boundary</p>
+    <noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a class="sidebar-logo" href='../sallyport/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><h2 class="location">Crate sallyport</h2><div class="block version"><div class="narrow-helper"></div><p>Version 0.2.0</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all sallyport's items</p></a><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#types">Type Definitions</a></li></ul></div><div id="sidebar-vars" data-name="sallyport" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container rust-logo" href='../sallyport/index.html'><img src='../rust-logo.png' alt='logo'></a><nav class="sub"><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">sallyport</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/sallyport/lib.rs.html#3-91" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>API for the hypervisor-microkernel boundary</p>
 <p><code>sallyport</code> is a protocol crate for proxying service requests (such as syscalls) from an Enarx Keep
 to the host. A <a href="https://en.wikipedia.org/wiki/Sally_port">sally port</a> is a secure gateway through
 which a defending army might “sally forth” from the protection of their fortification.</p>
-<p>An astute reader may notice that <code>sallyport</code> is a thin layer around the Linux syscall ABI as it is
-predicated on the conveyance of a service request number (such as <code>rax</code> for x86_64) as well as the
-maximum number (6) of syscall parameter registers:</p>
-<div><table><thead><tr><th>Architecture</th><th>arg 1</th><th>arg 2</th><th>arg 3</th><th>arg 4</th><th>arg 5</th><th>arg 6</th></tr></thead><tbody>
-<tr><td>x86_64</td><td>rdi</td><td>rsi</td><td>rdx</td><td>r10</td><td>r8</td><td>r9</td></tr>
-</tbody></table>
-</div>
-<p><em>The above table was taken from the syscall(2) man page</em></p>
-<p>Note that <code>sallyport</code> is meant to generalize over all architectures that Enarx anticipates proxying
-syscalls to, not just x86_64 which was listed in the above table for illustration purposes.</p>
-<h3 id="usage" class="section-header"><a href="#usage">Usage</a></h3>
+<h2 id="mechanism-of-action" class="section-header"><a href="#mechanism-of-action">Mechanism of action</a></h2>
 <p><code>sallyport</code> works by providing the host with the most minimal register context it requires to
 perform the syscall on the Keep’s behalf. In doing so, the host can immediately call the desired
-syscall without any additional logic required. This “register context” is known as a <code>Message</code> in
-<code>sallyport</code> parlance.</p>
-<p>The <code>Message</code> union has two representations:</p>
-<ol>
-<li><code>Request</code>: The register context needed to perform a request or syscall. This includes an identifier
-and up to the 6 maximum syscall parameter registers expected by the Linux syscall ABI.</li>
-<li><code>Reply</code>: A response from the host. This representation exists to cater to how each architecture
-indicates a return value.</li>
-</ol>
-<p>The <code>Message</code> union serves as the header for a <code>Block</code> struct, which will be examined next.</p>
-<p>The <code>Block</code> struct is a page-sized buffer which must be written to a page that is accessible
-to both the host and the Keep to facilitate request proxying. The region of memory that is
-left over after storing the <code>Message</code> header on the block should be used for storing additional
-parameters that must be shared with the host so it can complete the service request. In the
-context of a syscall, this would be the sequence bytes to be written with a <code>write</code> syscall.</p>
-<p>If the Keep forms a request that requires additional parameter data to be written to the <code>Block</code>,
-the register context <em>must</em> reflect this. For example, the second parameter to the <code>write</code> syscall
-is a pointer to the string of bytes to be written. In this case, the <code>Keep</code> must ensure the
-second register parameter points to the location where the bytes have been written <em>within the <code>Block</code>,
-<strong>NOT</strong> a pointer to its protected address space</em>. Furthermore, once the request has been proxied, it is
-the Keep’s responsibility to propagate any potentially modified data back to its protected pages.</p>
-<h3 id="example" class="section-header"><a href="#example">Example</a></h3>
-<p>Here’s an example of how the <code>sallyport</code> protocol might be used to proxy a syscall between
-the host and a protected virtual machine:</p>
-<ol>
-<li>The workload within the Keep makes a <code>write</code> syscall.</li>
-<li>The shim traps all syscalls, and notices this is a <code>write</code> syscall.</li>
-<li>The shim writes an empty <code>Block</code> onto the page it shares with the untrusted host.</li>
-<li>The shim copies the bytes that the workload wants to write onto the data region of the <code>Block</code>. It is now
-accessible to the host.</li>
-<li>The shim modifies the <code>Message</code> header to be a <code>Request</code> variant. In the case of the <code>write</code> syscall, the shim:
-<ol>
-<li>Sets the request <code>num</code> to the Linux integral value for <code>SYS_write</code>.</li>
-<li>Furnishes the register context’s syscall arguments:
-<ol>
-<li><code>arg[0]</code> = The file descriptor to write to.</li>
-<li><code>arg[1]</code> = The address <em>within the <code>Block</code></em> where the bytes have been copied to.</li>
-<li><code>arg[2]</code> = The number of bytes that the <code>write</code> syscall should emit from the bytes pointed to
-in the second parameter.</li>
-</ol>
-</li>
-</ol>
-</li>
-<li>The shim yields control to the untrusted host, in which host-side Enarx code realizes it must proxy a syscall.</li>
-<li>The host-side Enarx code can invoke the syscall immediately using the values in the <code>Block</code>’s <code>Message</code> header.</li>
-<li>Once the syscall is complete, the host-side Enarx code can update the <code>Block</code>’s header and set it to a
-<code>Reply</code> variant of the <code>Message</code> union and write the syscall return code to it.</li>
-<li>The host-side Enarx code returns control to the shim.</li>
-<li>The shim examines the <code>Reply</code> in the <code>Message</code> header of the <code>Block</code> and propagates any mutated data back to
-the protected address space. It may then return control to its workload.</li>
-</ol>
+syscall without any additional logic required.</p>
+<p><a href="guest/index.html">Guest</a> and <a href="host/index.html">host</a> side communicate via a mutually-distrusted shared block of memory.</p>
+<p>This crate provides functionality for the guest to <a href="guest/struct.Handler.html#method.execute">execute</a> arbitary
+requests by means of using a <a href="guest/struct.Handler.html">Handler</a> to proxy requests to the host via the untrusted block
+and corresponding functionality for the host to <a href="host/fn.execute.html">execute</a> the requests contained within the untrusted block.</p>
+<h3 id="phase-based-request-allocation" class="section-header"><a href="#phase-based-request-allocation">Phase-based request allocation</a></h3>
+<p>The crate identifies 3 distinct phases of an arbitrary call lifetime:</p>
+<h4 id="stage" class="section-header"><a href="#stage">Stage</a></h4>
+<p>In this phase <a href="guest/alloc/struct.InputRef.html">input references</a> and <a href="guest/alloc/struct.OutputRef.html">output references</a> are sequentially allocated within the untrusted sallyport block.</p>
+<p>Once this phase is finished, no more allocations can be made within the untrusted sallyport block.</p>
+<p>Entities that can be staged implement the <a href="guest/alloc/trait.Stage.html"><code>Stage</code></a> trait.</p>
+<h4 id="commit" class="section-header"><a href="#commit">Commit</a></h4>
+<p>In this phase data is written to <a href="guest/alloc/struct.InputRef.html">input references</a> allocated in the stage phase.
+This may happen concurrently for <code>N</code> staged requests.</p>
+<p>Once this phase is finished, the untrusted sallyport block is ready to be passed to the host for execution
+via <a href="guest/trait.Platform.html#tymethod.sally">platform-specific <code>sally</code></a> implementation.</p>
+<p>Entities that can be committed implement the <a href="guest/alloc/trait.Commit.html"><code>Commit</code></a> trait.</p>
+<h4 id="collect" class="section-header"><a href="#collect">Collect</a></h4>
+<p>In this phase data is read from <a href="guest/alloc/struct.OutputRef.html">output references</a> allocated in the stage phase.
+This may happen concurrently for <code>N</code> staged requests.</p>
+<p>This phase starts after the control returns to the guest.
+Once this phase is finished, the data within block is considered to be invalid, it may be left unchanged,
+but it may also be overwritten or dropped depending on request implementation</p>
+<p>Entities that can be collected implement the <a href="guest/alloc/trait.Collect.html"><code>Collect</code></a> trait.</p>
 </div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="elf/index.html" title="sallyport::elf mod">elf</a></div><div class="item-right docblock-short"><p>Defines constants for use in ELF parsing</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="syscall/index.html" title="sallyport::syscall mod">syscall</a></div><div class="item-right docblock-short"><p>Common syscall handling across shims.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="untrusted/index.html" title="sallyport::untrusted mod">untrusted</a></div><div class="item-right docblock-short"><p>New Types to validate untrusted memory</p>
-</div></div></div><h2 id="macros" class="small-section-header"><a href="#macros">Macros</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="macro" href="macro.request.html" title="sallyport::request macro">request</a></div><div class="item-right docblock-short"><p>Creates a Request instance</p>
-</div></div></div><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Block.html" title="sallyport::Block struct">Block</a></div><div class="item-right docblock-short"><p>The <code>Block</code> struct encloses the Message’s register contexts but also provides
-a data buffer used to store data that might be required to service the request.
-For example, bytes that must be written out by the host could be stored in the
-<code>Block</code>’s <code>buf</code> field. It is expected that the trusted microkernel has copied
-the necessary data components into the <code>Block</code>’s <code>buf</code> field and has updated
-the <code>msg</code> register context fields accordingly in the event those registers
-must point to those data components within the <code>buf</code>.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Cursor.html" title="sallyport::Cursor struct">Cursor</a></div><div class="item-right docblock-short"><p>Helper for allocation of untrusted memory in a Block.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.OutOfSpace.html" title="sallyport::OutOfSpace struct">OutOfSpace</a></div><div class="item-right docblock-short"><p>Out of space</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Reply.html" title="sallyport::Reply struct">Reply</a></div><div class="item-right docblock-short"><p>A reply</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Request.html" title="sallyport::Request struct">Request</a></div><div class="item-right docblock-short"><p>A request</p>
-</div></div></div><h2 id="constants" class="small-section-header"><a href="#constants">Constants</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.KVM_SYSCALL_TRIGGER_PORT.html" title="sallyport::KVM_SYSCALL_TRIGGER_PORT constant">KVM_SYSCALL_TRIGGER_PORT</a></div><div class="item-right docblock-short"><p>I/O port used to trigger an exit to the host (<code>#VMEXIT</code>) for KVM driven shims.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.MAX_UDP_PACKET_SIZE.html" title="sallyport::MAX_UDP_PACKET_SIZE constant">MAX_UDP_PACKET_SIZE</a></div><div class="item-right docblock-short"><p>The maximum size of a UDP packet</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.REQUIRES.html" title="sallyport::REQUIRES constant">REQUIRES</a></div><div class="item-right docblock-short"><p>The sallyport version requires</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.VERSION.html" title="sallyport::VERSION constant">VERSION</a></div><div class="item-right docblock-short"><p>The sallyport version</p>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="block/index.html" title="sallyport::block mod">block</a></div><div class="item-right docblock-short"><p>Block-specific functionality shared between guest and host.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="guest/index.html" title="sallyport::guest mod">guest</a></div><div class="item-right docblock-short"><p>Guest-specific functionality.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="host/index.html" title="sallyport::host mod">host</a></div><div class="item-right docblock-short"><p>Host-specific functionality.</p>
 </div></div></div><h2 id="types" class="small-section-header"><a href="#types">Type Definitions</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Result.html" title="sallyport::Result type">Result</a></div><div class="item-right docblock-short"><p>The result of a syscall</p>
-</div></div></div><h2 id="unions" class="small-section-header"><a href="#unions">Unions</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="union" href="union.Message.html" title="sallyport::Message union">Message</a></div><div class="item-right docblock-short"><p>A message, which is either a request or a reply</p>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Error.html" title="sallyport::Error type">Error</a></div><div class="item-right docblock-short"><p>Error type used within this crate.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Result.html" title="sallyport::Result type">Result</a></div><div class="item-right docblock-short"><p>Result type returned by functionality exposed by this crate.</p>
 </div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="sallyport" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (0b42deacc 2021-12-09)" ></div>
 </body></html>
