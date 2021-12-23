@@ -34,7 +34,7 @@ attempts to <a href="struct.Handler.html#method.exit"><code>exit</code></a> imme
 <p>In this phase data is written to <a href="alloc/struct.InRef.html">input references</a> and <a href="alloc/struct.InOutRef.html">inout references</a> allocated in the stage phase.
 This may happen concurrently for <code>N</code> staged requests.</p>
 <p>Once this phase is finished, the untrusted sallyport block is ready to be passed to the host for execution
-via platform-specific <code>sally</code> implementation.</p>
+via <a href="trait.Platform.html#tymethod.sally">platform-specific <code>sally</code></a>.</p>
 <p>Entities that can be committed implement the <a href="alloc/trait.Commit.html"><code>Commit</code></a> trait.</p>
 <h3 id="collect" class="section-header"><a href="#collect">Collect</a></h3>
 <p>In this phase data is read from <a href="alloc/struct.OutRef.html">output references</a> and <a href="alloc/struct.InOutRef.html">inout references</a> allocated in the stage phase.
