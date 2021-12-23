@@ -1,1 +1,1 @@
-initSidebarItems({"type":[["Error","Error type used within this crate."],["Result","Result type returned by functionality exposed by this crate."]]});
+initSidebarItems({"mod":[["guest","Guest entrypoint into the sallyport."],["host","Host-specific functionality."],["item","Shared `sallyport` item definitions."],["iter","Consuming, tail-recursive iterators."]],"type":[["Error","Error type used within this crate."],["Result","Result type returned by functionality exposed by this crate."]]});
