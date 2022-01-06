@@ -1,1 +1,1 @@
-initSidebarItems({"constant":[["ERRNO_START",""],["MAX_ERRNO",""]],"struct":[["Argv",""],["Exit",""],["Read",""],["Result",""],["StagedWrite",""],["Write",""]]});
+initSidebarItems({"constant":[["ERRNO_START",""],["MAX_ERRNO",""]],"struct":[["Argv",""],["Close",""],["Exit",""],["Fcntl",""],["Fstat",""],["Read",""],["Readv",""],["Recv",""],["Recvfrom",""],["Result",""],["StagedWrite",""],["Sync",""],["Write",""]]});
