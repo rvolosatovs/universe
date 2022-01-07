@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Argv",""],["Close",""],["Exit",""],["Fcntl",""],["Fstat",""],["Read",""],["Readv",""],["Recv",""],["Recvfrom",""],["Result",""],["Sync",""],["Write",""]]});
+initSidebarItems({"struct":[["Argv",""],["Close",""],["Exit",""],["Fcntl",""],["Fstat",""],["Read",""],["Result",""],["Sync",""],["Write",""]]});

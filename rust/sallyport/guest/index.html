@@ -10,7 +10,7 @@ attempts to <a href="struct.Handler.html#method.exit"><code>exit</code></a> imme
 <p><a href="struct.Handler.html" title="Handler"><code>Handler</code></a> provides:</p>
 <ul>
 <li>
-<p>API for execution of an arbitrary call:</p>
+<p>API for execution of an arbitrary <a href="trait.Call.html" title="Call"><code>Call</code></a>:</p>
 <ul>
 <li><a href="struct.Handler.html#method.execute"><code>execute</code></a></li>
 </ul>
@@ -29,7 +29,6 @@ attempts to <a href="struct.Handler.html#method.exit"><code>exit</code></a> imme
 <h3 id="stage" class="section-header"><a href="#stage">Stage</a></h3>
 <p>In this phase <a href="alloc/struct.InRef.html">input references</a>, <a href="alloc/struct.OutRef.html">output references</a> and <a href="alloc/struct.InOutRef.html">inout references</a> are sequentially allocated within the untrusted sallyport block.</p>
 <p>Once this phase is finished, no more allocations can be made within the untrusted sallyport block.</p>
-<p>Entities that can be staged implement the <a href="alloc/trait.Stage.html"><code>Stage</code></a> trait.</p>
 <h3 id="commit" class="section-header"><a href="#commit">Commit</a></h3>
 <p>In this phase data is written to <a href="alloc/struct.InRef.html">input references</a> and <a href="alloc/struct.InOutRef.html">inout references</a> allocated in the stage phase.
 This may happen concurrently for <code>N</code> staged requests.</p>
@@ -49,6 +48,7 @@ but it may also be overwritten or dropped depending on request implementation</p
 </div></div></div><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Handler.html" title="sallyport::guest::Handler struct">Handler</a></div><div class="item-right docblock-short"><p>Guest request handler.</p>
 </div></div></div><h2 id="traits" class="small-section-header"><a href="#traits">Traits</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.Execute.html" title="sallyport::guest::Execute trait">Execute</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.Platform.html" title="sallyport::guest::Platform trait">Platform</a></div><div class="item-right docblock-short"><p>Platform-specific functionality.</p>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.Call.html" title="sallyport::guest::Call trait">Call</a></div><div class="item-right docblock-short"><p>An <a href="trait.Execute.html#method.execute">executable</a> call.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.Execute.html" title="sallyport::guest::Execute trait">Execute</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.Platform.html" title="sallyport::guest::Platform trait">Platform</a></div><div class="item-right docblock-short"><p>Platform-specific functionality.</p>
 </div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="sallyport" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (34926f0a1 2021-12-22)" ></div>
 </body></html>
