@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Argv",""],["CommittedSockaddrOutput",""],["SockaddrOutput",""],["StagedSockaddrOutput",""]]});
+initSidebarItems({"struct":[["Argv",""],["CommittedSockaddrOutput",""],["SockaddrInput",""],["SockaddrOutput",""],["StagedSockaddrOutput",""]],"type":[["StagedSockaddrInput",""]]});
