@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["CommittedCall","Committed call, which holds allocated reference to opaque committed value."],["StagedCall","Staged call, which holds allocated reference to item header within the block and opaque staged value."]],"trait":[["Alloc","A generic call, which can be allocated within the block."]]});

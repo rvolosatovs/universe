@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Payload","Payload of an `Item` of `Kind::Syscall`."]]});

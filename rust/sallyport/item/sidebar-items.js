@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Item","`sallyport` item."],["Kind","`sallyport` item kind."]],"struct":[["Block","Untrusted `sallyport` block."],["Header","`sallyport` item header."],["Syscall","Payload of an [Item] of [Kind::Syscall]."]]});
+initSidebarItems({"enum":[["Item","`sallyport` item."],["Kind","`sallyport` item kind."]],"mod":[["gdbcall",""],["syscall",""]],"struct":[["Block","Untrusted `sallyport` block."],["Header","`sallyport` item header."]]});
