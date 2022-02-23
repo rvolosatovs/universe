@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `&#x2F;home&#x2F;runner&#x2F;.cargo&#x2F;git&#x2F;checkouts&#x2F;sallyport-87d2f89630049c63&#x2F;df13224&#x2F;src&#x2F;guest&#x2F;handler.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>handler.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `&#x2F;home&#x2F;runner&#x2F;.cargo&#x2F;git&#x2F;checkouts&#x2F;sallyport-87d2f89630049c63&#x2F;8330f2e&#x2F;src&#x2F;guest&#x2F;handler.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>handler.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a class="sidebar-logo" href="../../../sallyport/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.png" alt="logo"></div>
         </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../sallyport/index.html"><img class="rust-logo" src="../../../rust-logo.png" alt="logo"></a><nav class="sub"><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
@@ -803,22 +803,9 @@
 <span id="801">801</span>
 <span id="802">802</span>
 <span id="803">803</span>
-<span id="804">804</span>
-<span id="805">805</span>
-<span id="806">806</span>
-<span id="807">807</span>
-<span id="808">808</span>
-<span id="809">809</span>
-<span id="810">810</span>
-<span id="811">811</span>
-<span id="812">812</span>
-<span id="813">813</span>
-<span id="814">814</span>
-<span id="815">815</span>
-<span id="816">816</span>
 </pre><pre class="rust"><code><span class="comment">// SPDX-License-Identifier: Apache-2.0</span>
 
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::alloc</span>::{<span class="ident">phase</span>, <span class="ident">Alloc</span>, <span class="ident">Allocator</span>, <span class="ident">Collect</span>, <span class="ident">Commit</span>, <span class="ident">Committer</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::alloc</span>::{<span class="ident">Alloc</span>, <span class="ident">Allocator</span>, <span class="ident">Collect</span>, <span class="ident">Commit</span>, <span class="ident">Committer</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::call::kind</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::syscall::types</span>::{<span class="ident">SockaddrInput</span>, <span class="ident">SockaddrOutput</span>, <span class="ident">SockoptInput</span>};
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">gdbcall</span>, <span class="ident">syscall</span>, <span class="ident">Call</span>, <span class="ident">Platform</span>, <span class="ident">ThreadLocalStorage</span>, <span class="ident">SIGRTMAX</span>};
@@ -834,7 +821,14 @@
     <span class="ident">TIOCGWINSZ</span>,
 };
 
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Execute</span> {
+<span class="doccomment">/// Guest request handler.</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Handler</span>: <span class="ident">Platform</span> {
+    <span class="doccomment">/// Returns a mutable borrow of the sallyport block.</span>
+    <span class="kw">fn</span> <span class="ident">block_mut</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span>: <span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="kw-2">mut</span> [<span class="ident">usize</span>];
+
+    <span class="doccomment">/// Returns a mutable borrow of shared [ThreadLocalStorage].</span>
+    <span class="kw">fn</span> <span class="ident">thread_local_storage</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>: <span class="lifetime">&#39;b</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="kw-2">mut</span> <span class="ident">ThreadLocalStorage</span>;
+
     <span class="doccomment">/// Executes an arbitrary call.</span>
     <span class="doccomment">/// Examples of calls that this method can execute are:</span>
     <span class="doccomment">/// - [`syscall::Exit`]</span>
@@ -842,17 +836,31 @@
     <span class="doccomment">/// - [`syscall::Write`]</span>
     <span class="doccomment">/// - [`gdbcall::Read`]</span>
     <span class="doccomment">/// - [`gdbcall::Write`]</span>
-    <span class="kw">fn</span> <span class="ident">execute</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span>: <span class="ident">kind::Kind</span>, <span class="ident">T</span>: <span class="ident">Call</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">call</span>: <span class="ident">T</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T::Collected</span><span class="op">&gt;</span>;
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">fn</span> <span class="ident">execute</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span>: <span class="ident">kind::Kind</span>, <span class="ident">T</span>: <span class="ident">Call</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">call</span>: <span class="ident">T</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T::Collected</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">alloc</span> <span class="op">=</span> <span class="ident">Alloc::new</span>(<span class="self">self</span>.<span class="ident">block_mut</span>()).<span class="ident">stage</span>();
+        <span class="kw">let</span> ((<span class="ident">call</span>, <span class="ident">len</span>), <span class="kw-2">mut</span> <span class="ident">end_ref</span>) <span class="op">=</span>
+            <span class="ident">alloc</span>.<span class="ident">reserve_input</span>(<span class="op">|</span><span class="ident">alloc</span><span class="op">|</span> <span class="ident">alloc</span>.<span class="ident">section</span>(<span class="op">|</span><span class="ident">alloc</span><span class="op">|</span> <span class="ident">call</span>.<span class="ident">stage</span>(<span class="ident">alloc</span>)))<span class="question-mark">?</span>;
 
-    <span class="doccomment">/// Executes a supported syscall expressed as an opaque 7-word array akin to [`libc::syscall`].</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Safety</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This method is unsafe, because it allows execution arbitrary syscalls on the host, which is</span>
-    <span class="doccomment">/// intrinsically unsafe.</span>
-    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">syscall</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">registers</span>: [<span class="ident">usize</span>; <span class="number">7</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>[<span class="ident">usize</span>; <span class="number">2</span>]<span class="op">&gt;</span>;
+        <span class="kw">let</span> <span class="ident">alloc</span> <span class="op">=</span> <span class="ident">alloc</span>.<span class="ident">commit</span>();
+        <span class="kw">let</span> <span class="ident">call</span> <span class="op">=</span> <span class="ident">call</span>.<span class="ident">commit</span>(<span class="kw-2">&amp;</span><span class="ident">alloc</span>);
+        <span class="kw">if</span> <span class="ident">len</span> <span class="op">&gt;</span> <span class="number">0</span> {
+            <span class="ident">end_ref</span>.<span class="ident">copy_from</span>(
+                <span class="kw-2">&amp;</span><span class="ident">alloc</span>,
+                <span class="ident">item::Header</span> {
+                    <span class="ident">kind</span>: <span class="ident">item::Kind::End</span>,
+                    <span class="ident">size</span>: <span class="number">0</span>,
+                },
+            );
+            <span class="self">self</span>.<span class="ident">sally</span>()<span class="question-mark">?</span>;
+        }
+
+        <span class="kw">let</span> <span class="ident">alloc</span> <span class="op">=</span> <span class="ident">alloc</span>.<span class="ident">collect</span>();
+        <span class="prelude-val">Ok</span>(<span class="ident">call</span>.<span class="ident">collect</span>(<span class="kw-2">&amp;</span><span class="ident">alloc</span>))
+    }
 
     <span class="doccomment">/// Loops infinitely trying to exit.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">attacked</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="op">!</span> {
         <span class="kw">loop</span> {
             <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">exit</span>(<span class="number">1</span>);
@@ -862,6 +870,7 @@
     <span class="comment">// Syscalls, sorted alphabetically.</span>
 
     <span class="doccomment">/// Executes [`accept`](https://man7.org/linux/man-pages/man2/accept.2.html) syscall akin to [`libc::accept`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">accept</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">sockfd</span>: <span class="ident">c_int</span>,
@@ -871,6 +880,7 @@
     }
 
     <span class="doccomment">/// Executes [`accept4`](https://man7.org/linux/man-pages/man2/accept4.2.html) syscall akin to [`libc::accept4`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">accept4</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">sockfd</span>: <span class="ident">c_int</span>,
@@ -888,39 +898,46 @@
     <span class="kw">fn</span> <span class="ident">arch_prctl</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">code</span>: <span class="ident">c_int</span>, <span class="ident">addr</span>: <span class="ident">c_ulong</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 
     <span class="doccomment">/// Executes [`bind`](https://man7.org/linux/man-pages/man2/bind.2.html) syscall akin to [`libc::bind`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">bind</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">sockfd</span>: <span class="ident">c_int</span>, <span class="ident">addr</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">SockaddrInput</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Bind</span> { <span class="ident">sockfd</span>, <span class="ident">addr</span> })<span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Executes [`clock_gettime`](https://man7.org/linux/man-pages/man2/clock_gettime.2.html) syscall akin to [`libc::clock_gettime`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">clock_gettime</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">clockid</span>: <span class="ident">clockid_t</span>, <span class="ident">tp</span>: <span class="kw-2">&amp;mut</span> <span class="ident">timespec</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::ClockGettime</span> { <span class="ident">clockid</span>, <span class="ident">tp</span> })<span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Executes [`brk`](https://man7.org/linux/man-pages/man2/brk.2.html) syscall akin to [`libc::brk`].</span>
-    <span class="kw">fn</span> <span class="ident">brk</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">addr</span>: <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">c_void</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">brk</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">c_void</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">c_void</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Executes [`close`](https://man7.org/linux/man-pages/man2/close.2.html) syscall akin to [`libc::close`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">close</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Close</span> { <span class="ident">fd</span> })<span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Executes [`connect`](https://man7.org/linux/man-pages/man2/connect.2.html) syscall akin to [`libc::connect`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">connect</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">sockfd</span>: <span class="ident">c_int</span>, <span class="ident">addr</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">SockaddrInput</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Connect</span> { <span class="ident">sockfd</span>, <span class="ident">addr</span> })<span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Executes [`dup`](https://man7.org/linux/man-pages/man2/dup.2.html) syscall akin to [`libc::dup`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">dup</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">oldfd</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Dup</span> { <span class="ident">oldfd</span> })<span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Executes [`dup2`](https://man7.org/linux/man-pages/man2/dup2.2.html) syscall akin to [`libc::dup2`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">dup2</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">oldfd</span>: <span class="ident">c_int</span>, <span class="ident">newfd</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Dup2</span> { <span class="ident">oldfd</span>, <span class="ident">newfd</span> })<span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Executes [`dup3`](https://man7.org/linux/man-pages/man2/dup3.2.html) syscall akin to [`libc::dup3`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">dup3</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">oldfd</span>: <span class="ident">c_int</span>, <span class="ident">newfd</span>: <span class="ident">c_int</span>, <span class="ident">flags</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Dup3</span> {
             <span class="ident">oldfd</span>,
@@ -930,11 +947,13 @@
     }
 
     <span class="doccomment">/// Executes [`epoll_create1`](https://man7.org/linux/man-pages/man2/epoll_create1.2.html) syscall akin to [`libc::epoll_create1`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">epoll_create1</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">flags</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_int</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::EpollCreate1</span> { <span class="ident">flags</span> })<span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Executes [`epoll_ctl`](https://man7.org/linux/man-pages/man2/epoll_ctl.2.html) syscall akin to [`libc::epoll_ctl`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">epoll_ctl</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">epfd</span>: <span class="ident">c_int</span>, <span class="ident">op</span>: <span class="ident">c_int</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">event</span>: <span class="kw-2">&amp;</span><span class="ident">epoll_event</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::EpollCtl</span> {
             <span class="ident">epfd</span>,
@@ -945,6 +964,7 @@
     }
 
     <span class="doccomment">/// Executes [`epoll_wait`](https://man7.org/linux/man-pages/man2/epoll_wait.2.html) syscall akin to [`libc::epoll_wait`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">epoll_wait</span>(
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">epfd</span>: <span class="ident">c_int</span>,
@@ -960,6 +980,7 @@
     }
 
     <span class="doccomment">/// Executes [`epoll_pwait`](https://man7.org/linux/man-pages/man2/epoll_pwait.2.html) syscall akin to [`libc::epoll_pwait`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">epoll_pwait</span>(
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">epfd</span>: <span class="ident">c_int</span>,
@@ -977,58 +998,69 @@
     }
 
     <span class="doccomment">/// Executes [`eventfd2`](https://man7.org/linux/man-pages/man2/eventfd2.2.html).</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">eventfd2</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">initval</span>: <span class="ident">c_int</span>, <span class="ident">flags</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_int</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Eventfd2</span> { <span class="ident">initval</span>, <span class="ident">flags</span> })<span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Executes [`exit`](https://man7.org/linux/man-pages/man2/exit.2.html) syscall akin to [`libc::exit`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">exit</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">status</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Exit</span> { <span class="ident">status</span> })<span class="question-mark">?</span><span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">attacked</span>()
     }
 
     <span class="doccomment">/// Executes [`exit_group`](https://man7.org/linux/man-pages/man2/exit_group.2.html).</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">exit_group</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">status</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::ExitGroup</span> { <span class="ident">status</span> })<span class="question-mark">?</span><span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">attacked</span>()
     }
 
     <span class="doccomment">/// Executes [`fcntl`](https://man7.org/linux/man-pages/man2/fcntl.2.html) syscall akin to [`libc::fcntl`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">fcntl</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">cmd</span>: <span class="ident">c_int</span>, <span class="ident">arg</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_int</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Fcntl</span> { <span class="ident">fd</span>, <span class="ident">cmd</span>, <span class="ident">arg</span> })<span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Executes [`fstat`](https://man7.org/linux/man-pages/man2/fstat.2.html) syscall akin to [`libc::fstat`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">fstat</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">statbuf</span>: <span class="kw-2">&amp;mut</span> <span class="ident">stat</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Fstat</span> { <span class="ident">fd</span>, <span class="ident">statbuf</span> })<span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Executes [`getegid`](https://man7.org/linux/man-pages/man2/getegid.2.html) syscall akin to [`libc::getegid`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">getegid</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">gid_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Getegid</span>)
     }
 
     <span class="doccomment">/// Executes [`geteuid`](https://man7.org/linux/man-pages/man2/geteuid.2.html) syscall akin to [`libc::geteuid`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">geteuid</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">uid_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Geteuid</span>)
     }
 
     <span class="doccomment">/// Executes [`getgid`](https://man7.org/linux/man-pages/man2/getgid.2.html) syscall akin to [`libc::getgid`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">getgid</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">gid_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Getgid</span>)
     }
 
     <span class="doccomment">/// Executes [`getpid`](https://man7.org/linux/man-pages/man2/getpid.2.html) syscall akin to [`libc::getpid`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">getpid</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">pid_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Getpid</span>)
     }
 
     <span class="doccomment">/// Executes [`getrandom`](https://man7.org/linux/man-pages/man2/getrandom.2.html) syscall akin to [`libc::getrandom`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">getrandom</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>], <span class="ident">flags</span>: <span class="ident">c_uint</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Getrandom</span> { <span class="ident">buf</span>, <span class="ident">flags</span> })<span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Executes [`getsockname`](https://man7.org/linux/man-pages/man2/getsockname.2.html) syscall akin to [`libc::getsockname`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">getsockname</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">sockfd</span>: <span class="ident">c_int</span>,
@@ -1038,11 +1070,13 @@
     }
 
     <span class="doccomment">/// Executes [`getuid`](https://man7.org/linux/man-pages/man2/getuid.2.html) syscall akin to [`libc::getuid`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">getuid</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">uid_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Getuid</span>)
     }
 
     <span class="doccomment">/// Executes [`ioctl`](https://man7.org/linux/man-pages/man2/ioctl.2.html) syscall akin to [`libc::ioctl`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">ioctl</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">request</span>: <span class="ident">Ioctl</span>, <span class="ident">argp</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>]<span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_int</span><span class="op">&gt;</span> {
         <span class="kw">match</span> (<span class="ident">fd</span>, <span class="ident">request</span>) {
             (<span class="ident">STDIN_FILENO</span> <span class="op">|</span> <span class="ident">STDOUT_FILENO</span> <span class="op">|</span> <span class="ident">STDERR_FILENO</span>, <span class="ident">TIOCGWINSZ</span>) =&gt; {
@@ -1056,6 +1090,7 @@
     }
 
     <span class="doccomment">/// Executes [`listen`](https://man7.org/linux/man-pages/man2/listen.2.html) syscall akin to [`libc::listen`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">listen</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">sockfd</span>: <span class="ident">c_int</span>, <span class="ident">backlog</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Listen</span> { <span class="ident">sockfd</span>, <span class="ident">backlog</span> })<span class="question-mark">?</span>
     }
@@ -1081,18 +1116,21 @@
     <span class="kw">fn</span> <span class="ident">munmap</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">addr</span>: <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">c_void</span><span class="op">&gt;</span>, <span class="ident">length</span>: <span class="ident">size_t</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 
     <span class="doccomment">/// Executes [`poll`](https://man7.org/linux/man-pages/man2/poll.2.html) syscall akin to [`libc::poll`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fds</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">pollfd</span>], <span class="ident">timeout</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_int</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Poll</span> { <span class="ident">fds</span>, <span class="ident">timeout</span> })<span class="question-mark">?</span>
             .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">attacked</span>())
     }
 
     <span class="doccomment">/// Executes [`read`](https://man7.org/linux/man-pages/man2/read.2.html) syscall akin to [`libc::read`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">read</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Read</span> { <span class="ident">fd</span>, <span class="ident">buf</span> })<span class="question-mark">?</span>
             .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">attacked</span>())
     }
 
     <span class="doccomment">/// Executes [`readlink`](https://man7.org/linux/man-pages/man2/readlink.2.html) syscall akin to [`libc::readlink`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">readlink</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">pathname</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Readlink</span> { <span class="ident">pathname</span>, <span class="ident">buf</span> })<span class="question-mark">?</span>
             .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">attacked</span>())
@@ -1100,6 +1138,7 @@
 
     <span class="doccomment">/// Executes [`readv`](https://man7.org/linux/man-pages/man2/readv.2.html) syscall by mapping</span>
     <span class="doccomment">/// it onto a single [`read`](https://man7.org/linux/man-pages/man2/read.2.html).</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">readv</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span>, <span class="ident">U</span>, <span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">iovs</span>: <span class="kw-2">&amp;mut</span> <span class="ident">T</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">U</span><span class="op">&gt;</span>,
@@ -1112,12 +1151,14 @@
     }
 
     <span class="doccomment">/// Executes [`recv`](https://man7.org/linux/man-pages/man2/recv.2.html) syscall akin to [`libc::recv`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">recv</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">sockfd</span>: <span class="ident">c_int</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>], <span class="ident">flags</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Recv</span> { <span class="ident">sockfd</span>, <span class="ident">buf</span>, <span class="ident">flags</span> })<span class="question-mark">?</span>
             .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">attacked</span>())
     }
 
     <span class="doccomment">/// Executes [`recvfrom`](https://man7.org/linux/man-pages/man2/recvfrom.2.html) syscall akin to [`libc::recvfrom`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">recvfrom</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">sockfd</span>: <span class="ident">c_int</span>,
@@ -1135,15 +1176,29 @@
     }
 
     <span class="doccomment">/// Executes [`rt_sigaction`](https://man7.org/linux/man-pages/man2/rt_sigaction.2.html).</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">rt_sigaction</span>(
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">signum</span>: <span class="ident">c_int</span>,
         <span class="ident">act</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">sigaction</span><span class="op">&gt;</span>,
         <span class="ident">oldact</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">sigaction</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">sigsetsize</span>: <span class="ident">size_t</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="ident">signum</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">SIGRTMAX</span> <span class="op">|</span><span class="op">|</span> <span class="ident">sigsetsize</span> <span class="op">!</span><span class="op">=</span> <span class="number">8</span> {
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">libc::EINVAL</span>);
+        }
+        <span class="kw">let</span> <span class="ident">tls</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">thread_local_storage</span>();
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">oldact</span>) <span class="op">=</span> <span class="ident">oldact</span> {
+            <span class="kw-2">*</span><span class="ident">oldact</span> <span class="op">=</span> <span class="ident">tls</span>.<span class="ident">actions</span>[<span class="ident">signum</span> <span class="kw">as</span> <span class="ident">usize</span>];
+        }
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">act</span>) <span class="op">=</span> <span class="ident">act</span> {
+            <span class="ident">tls</span>.<span class="ident">actions</span>[<span class="ident">signum</span> <span class="kw">as</span> <span class="ident">usize</span>] <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="kw-2">*</span><span class="ident">act</span>);
+        }
+        <span class="prelude-val">Ok</span>(())
+    }
 
     <span class="doccomment">/// Executes [`rt_sigprocmask`](https://man7.org/linux/man-pages/man2/rt_sigprocmask.2.html).</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">rt_sigprocmask</span>(
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">how</span>: <span class="ident">c_int</span>,
@@ -1160,17 +1215,20 @@
     }
 
     <span class="doccomment">/// Executes [`sigaltstack`](https://man7.org/linux/man-pages/man2/sigaltstack.2.html) syscall akin to [`libc::sigaltstack`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">sigaltstack</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">ss</span>: <span class="kw-2">&amp;</span><span class="ident">stack_t</span>, <span class="ident">old_ss</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="ident">stack_t</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Sigaltstack</span> { <span class="ident">ss</span>, <span class="ident">old_ss</span> })<span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Executes [`send`](https://man7.org/linux/man-pages/man2/send.2.html) syscall akin to [`libc::send`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">send</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">sockfd</span>: <span class="ident">c_int</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">flags</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Send</span> { <span class="ident">sockfd</span>, <span class="ident">buf</span>, <span class="ident">flags</span> })<span class="question-mark">?</span>
             .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">attacked</span>())
     }
 
     <span class="doccomment">/// Executes [`sendto`](https://man7.org/linux/man-pages/man2/sendto.2.html) syscall akin to [`libc::sendto`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">sendto</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">sockfd</span>: <span class="ident">c_int</span>,
@@ -1188,6 +1246,7 @@
     }
 
     <span class="doccomment">/// Executes [`setsockopt`](https://man7.org/linux/man-pages/man2/setsockopt.2.html) syscall akin to [`libc::setsockopt`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">setsockopt</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">sockfd</span>: <span class="ident">c_int</span>,
@@ -1204,11 +1263,13 @@
     }
 
     <span class="doccomment">/// Executes [`set_tid_address`](https://man7.org/linux/man-pages/man2/set_tid_address.2.html).</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">set_tid_address</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">tidptr</span>: <span class="kw-2">&amp;mut</span> <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">pid_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::SetTidAddress</span> { <span class="ident">tidptr</span> })
     }
 
     <span class="doccomment">/// Executes [`socket`](https://man7.org/linux/man-pages/man2/socket.2.html) syscall akin to [`libc::socket`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">socket</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">domain</span>: <span class="ident">c_int</span>, <span class="ident">typ</span>: <span class="ident">c_int</span>, <span class="ident">protocol</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_int</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Socket</span> {
             <span class="ident">domain</span>,
@@ -1218,16 +1279,19 @@
     }
 
     <span class="doccomment">/// Executes [`sync`](https://man7.org/linux/man-pages/man2/sync.2.html) syscall akin to [`libc::sync`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">sync</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Sync</span>)<span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Executes [`uname`](https://man7.org/linux/man-pages/man2/uname.2.html) syscall akin to [`libc::uname`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">uname</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> <span class="ident">utsname</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Uname</span> { <span class="ident">buf</span> })<span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Executes [`write`](https://man7.org/linux/man-pages/man2/write.2.html) syscall akin to [`libc::write`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">write</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Write</span> { <span class="ident">fd</span>, <span class="ident">buf</span> })<span class="question-mark">?</span>
             .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">attacked</span>())
@@ -1235,6 +1299,7 @@
 
     <span class="doccomment">/// Executes [`writev`](https://man7.org/linux/man-pages/man2/writev.2.html) syscall by mapping</span>
     <span class="doccomment">/// it onto a single [`write`](https://man7.org/linux/man-pages/man2/write.2.html).</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">writev</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span>, <span class="ident">U</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">iovs</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">U</span><span class="op">&gt;</span>,
@@ -1247,6 +1312,7 @@
     <span class="comment">// GDB calls, sorted alphabetically.</span>
 
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;doc&quot;</span>, <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;Executes [gdbstub::conn::Connection::flush]&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">gdb_flush</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">gdbcall::Flush</span>)<span class="question-mark">?</span>
     }
@@ -1255,21 +1321,25 @@
         <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;doc&quot;</span>,
         <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;Executes [gdbstub::conn::Connection::on_session_start]&quot;</span>
     )]</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">gdb_on_session_start</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">gdbcall::OnSessionStart</span>)<span class="question-mark">?</span>
     }
 
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;doc&quot;</span>, <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;Executes [gdbstub::conn::ConnectionExt::peek]&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">gdb_peek</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">gdbcall::Peek</span>)<span class="question-mark">?</span>
     }
 
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;doc&quot;</span>, <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;Executes [gdbstub::conn::ConnectionExt::read]&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">gdb_read</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">gdbcall::Read</span>)<span class="question-mark">?</span>
     }
 
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;doc&quot;</span>, <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;Executes [gdbstub::conn::Connection::write]&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">gdb_write</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">byte</span>: <span class="ident">u8</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">gdbcall::Write</span> { <span class="ident">byte</span> })<span class="question-mark">?</span>
     }
@@ -1278,54 +1348,19 @@
         <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;doc&quot;</span>,
         <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;Executes [gdbstub::conn::Connection::write_all] and returns the amount of bytes written&quot;</span>
     )]</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">gdb_write_all</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">gdbcall::WriteAll</span> { <span class="ident">buf</span> })<span class="question-mark">?</span>
             .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">attacked</span>())
     }
-}
 
-<span class="doccomment">/// Guest request handler.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">P</span>: <span class="ident">Platform</span><span class="op">&gt;</span> {
-    <span class="ident">alloc</span>: <span class="ident">Alloc</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">phase::Init</span><span class="op">&gt;</span>,
-    <span class="ident">platform</span>: <span class="ident">P</span>,
-    <span class="ident">tls</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">ThreadLocalStorage</span>,
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">P</span>: <span class="ident">Platform</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">P</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Creates a new [`Handler`] given a mutable borrow of the sallyport block,</span>
-    <span class="doccomment">/// [`Platform`] and [`ThreadLocalStorage`].</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">block</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> [<span class="ident">usize</span>], <span class="ident">platform</span>: <span class="ident">P</span>, <span class="ident">tls</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">ThreadLocalStorage</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">alloc</span>: <span class="ident">Alloc::new</span>(<span class="ident">block</span>),
-            <span class="ident">platform</span>,
-            <span class="ident">tls</span>,
-        }
-    }
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">P</span>: <span class="ident">Platform</span><span class="op">&gt;</span> <span class="ident">Execute</span> <span class="kw">for</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">P</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">execute</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span>, <span class="ident">K</span>: <span class="ident">kind::Kind</span>, <span class="ident">T</span>: <span class="ident">Call</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span>, <span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">call</span>: <span class="ident">T</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T::Collected</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">alloc</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">alloc</span>.<span class="ident">stage</span>();
-        <span class="kw">let</span> ((<span class="ident">call</span>, <span class="ident">len</span>), <span class="kw-2">mut</span> <span class="ident">end_ref</span>) <span class="op">=</span>
-            <span class="ident">alloc</span>.<span class="ident">reserve_input</span>(<span class="op">|</span><span class="ident">alloc</span><span class="op">|</span> <span class="ident">alloc</span>.<span class="ident">section</span>(<span class="op">|</span><span class="ident">alloc</span><span class="op">|</span> <span class="ident">call</span>.<span class="ident">stage</span>(<span class="ident">alloc</span>)))<span class="question-mark">?</span>;
-
-        <span class="kw">let</span> <span class="ident">alloc</span> <span class="op">=</span> <span class="ident">alloc</span>.<span class="ident">commit</span>();
-        <span class="kw">let</span> <span class="ident">call</span> <span class="op">=</span> <span class="ident">call</span>.<span class="ident">commit</span>(<span class="kw-2">&amp;</span><span class="ident">alloc</span>);
-        <span class="kw">if</span> <span class="ident">len</span> <span class="op">&gt;</span> <span class="number">0</span> {
-            <span class="ident">end_ref</span>.<span class="ident">copy_from</span>(
-                <span class="kw-2">&amp;</span><span class="ident">alloc</span>,
-                <span class="ident">item::Header</span> {
-                    <span class="ident">kind</span>: <span class="ident">item::Kind::End</span>,
-                    <span class="ident">size</span>: <span class="number">0</span>,
-                },
-            );
-            <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">sally</span>()<span class="question-mark">?</span>;
-        }
-
-        <span class="kw">let</span> <span class="ident">alloc</span> <span class="op">=</span> <span class="ident">alloc</span>.<span class="ident">collect</span>();
-        <span class="prelude-val">Ok</span>(<span class="ident">call</span>.<span class="ident">collect</span>(<span class="kw-2">&amp;</span><span class="ident">alloc</span>))
-    }
-
+    <span class="doccomment">/// Executes a supported syscall expressed as an opaque 7-word array akin to [`libc::syscall`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Safety</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This method is unsafe, because it allows execution of arbitrary syscalls on the host, which is</span>
+    <span class="doccomment">/// intrinsically unsafe.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">syscall</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">registers</span>: [<span class="ident">usize</span>; <span class="number">7</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>[<span class="ident">usize</span>; <span class="number">2</span>]<span class="op">&gt;</span> {
         <span class="kw">let</span> [<span class="ident">num</span>, <span class="ident">argv</span> @ ..] <span class="op">=</span> <span class="ident">registers</span>;
         <span class="kw">match</span> (<span class="ident">num</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">argv</span>) {
@@ -1333,9 +1368,7 @@
                 <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">addr</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
-                    <span class="self">self</span>.<span class="ident">platform</span>
-                        .<span class="ident">validate_sockaddr_output</span>(<span class="ident">addr</span>, <span class="ident">addrlen</span>)
-                        .<span class="ident">map</span>(<span class="prelude-val">Some</span>)<span class="question-mark">?</span>
+                    <span class="self">self</span>.<span class="ident">validate_sockaddr_output</span>(<span class="ident">addr</span>, <span class="ident">addrlen</span>).<span class="ident">map</span>(<span class="prelude-val">Some</span>)<span class="question-mark">?</span>
                 };
                 <span class="self">self</span>.<span class="ident">accept</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">addr</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
@@ -1343,9 +1376,7 @@
                 <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">addr</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
-                    <span class="self">self</span>.<span class="ident">platform</span>
-                        .<span class="ident">validate_sockaddr_output</span>(<span class="ident">addr</span>, <span class="ident">addrlen</span>)
-                        .<span class="ident">map</span>(<span class="prelude-val">Some</span>)<span class="question-mark">?</span>
+                    <span class="self">self</span>.<span class="ident">validate_sockaddr_output</span>(<span class="ident">addr</span>, <span class="ident">addrlen</span>).<span class="ident">map</span>(<span class="prelude-val">Some</span>)<span class="question-mark">?</span>
                 };
                 <span class="self">self</span>.<span class="ident">accept4</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">addr</span>, <span class="ident">flags</span> <span class="kw">as</span> <span class="kw">_</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
@@ -1354,20 +1385,19 @@
                 <span class="self">self</span>.<span class="ident">arch_prctl</span>(<span class="ident">code</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">addr</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_bind</span>, [<span class="ident">sockfd</span>, <span class="ident">addr</span>, <span class="ident">addrlen</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_slice</span>(<span class="ident">addr</span>, <span class="ident">addrlen</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_slice</span>(<span class="ident">addr</span>, <span class="ident">addrlen</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">bind</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">addr</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_brk</span>, [<span class="ident">addr</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="ident">NonNull::new</span>(<span class="ident">addr</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">ok_or</span>(<span class="ident">EFAULT</span>)<span class="question-mark">?</span>;
-                <span class="self">self</span>.<span class="ident">brk</span>(<span class="ident">addr</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
-            }
+            (<span class="ident">libc::SYS_brk</span>, [<span class="ident">addr</span>, ..]) =&gt; <span class="self">self</span>
+                .<span class="ident">brk</span>(<span class="ident">NonNull::new</span>(<span class="ident">addr</span> <span class="kw">as</span> <span class="kw">_</span>))
+                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
             (<span class="ident">libc::SYS_clock_gettime</span>, [<span class="ident">clockid</span>, <span class="ident">tp</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">tp</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_mut</span>(<span class="ident">tp</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">tp</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_mut</span>(<span class="ident">tp</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">clock_gettime</span>(<span class="ident">clockid</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">tp</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_close</span>, [<span class="ident">fd</span>, ..]) =&gt; <span class="self">self</span>.<span class="ident">close</span>(<span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>]),
             (<span class="ident">libc::SYS_connect</span>, [<span class="ident">sockfd</span>, <span class="ident">addr</span>, <span class="ident">addrlen</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_slice</span>(<span class="ident">addr</span>, <span class="ident">addrlen</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_slice</span>(<span class="ident">addr</span>, <span class="ident">addrlen</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">connect</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">addr</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_dup</span>, [<span class="ident">oldfd</span>, ..]) =&gt; <span class="self">self</span>.<span class="ident">dup</span>(<span class="ident">oldfd</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>]),
@@ -1381,22 +1411,22 @@
                 <span class="self">self</span>.<span class="ident">epoll_create1</span>(<span class="ident">flags</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_epoll_ctl</span>, [<span class="ident">epfd</span>, <span class="ident">op</span>, <span class="ident">fd</span>, <span class="ident">event</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">event</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate</span>(<span class="ident">event</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">event</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate</span>(<span class="ident">event</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">epoll_ctl</span>(<span class="ident">epfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">op</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">event</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_epoll_pwait</span>, [<span class="ident">epfd</span>, <span class="ident">events</span>, <span class="ident">maxevents</span>, <span class="ident">timeout</span>, <span class="ident">sigmask</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">events</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">events</span>, <span class="ident">maxevents</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">events</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">events</span>, <span class="ident">maxevents</span>)<span class="question-mark">?</span>;
                 <span class="kw">if</span> <span class="ident">sigmask</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="self">self</span>.<span class="ident">epoll_wait</span>(<span class="ident">epfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">events</span>, <span class="ident">timeout</span> <span class="kw">as</span> <span class="kw">_</span>)
                 } <span class="kw">else</span> {
-                    <span class="kw">let</span> <span class="ident">sigmask</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate</span>(<span class="ident">sigmask</span>)<span class="question-mark">?</span>;
+                    <span class="kw">let</span> <span class="ident">sigmask</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate</span>(<span class="ident">sigmask</span>)<span class="question-mark">?</span>;
                     <span class="self">self</span>.<span class="ident">epoll_pwait</span>(<span class="ident">epfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">events</span>, <span class="ident">timeout</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">sigmask</span>)
                 }
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_epoll_wait</span>, [<span class="ident">epfd</span>, <span class="ident">events</span>, <span class="ident">maxevents</span>, <span class="ident">timeout</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">events</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">events</span>, <span class="ident">maxevents</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">events</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">events</span>, <span class="ident">maxevents</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">epoll_wait</span>(<span class="ident">epfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">events</span>, <span class="ident">timeout</span> <span class="kw">as</span> <span class="kw">_</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
@@ -1411,7 +1441,7 @@
                 .<span class="ident">fcntl</span>(<span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">cmd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">arg</span> <span class="kw">as</span> <span class="kw">_</span>)
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
             (<span class="ident">libc::SYS_fstat</span>, [<span class="ident">fd</span>, <span class="ident">statbuf</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">statbuf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_mut</span>(<span class="ident">statbuf</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">statbuf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_mut</span>(<span class="ident">statbuf</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">fstat</span>(<span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">statbuf</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_getegid</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">getegid</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
@@ -1419,11 +1449,11 @@
             (<span class="ident">libc::SYS_getgid</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">getgid</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
             (<span class="ident">libc::SYS_getpid</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">getpid</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
             (<span class="ident">libc::SYS_getrandom</span>, [<span class="ident">buf</span>, <span class="ident">buflen</span>, <span class="ident">flags</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">buf</span>, <span class="ident">buflen</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">buf</span>, <span class="ident">buflen</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">getrandom</span>(<span class="ident">buf</span>, <span class="ident">flags</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_getsockname</span>, [<span class="ident">sockfd</span>, <span class="ident">addr</span>, <span class="ident">addrlen</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_sockaddr_output</span>(<span class="ident">addr</span>, <span class="ident">addrlen</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_sockaddr_output</span>(<span class="ident">addr</span>, <span class="ident">addrlen</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">getsockname</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">addr</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_getuid</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">getuid</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
@@ -1432,14 +1462,12 @@
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
                     <span class="kw">match</span> <span class="ident">request</span> <span class="kw">as</span> <span class="kw">_</span> {
-                        <span class="ident">FIONBIO</span> <span class="op">|</span> <span class="ident">FIONREAD</span> =&gt; {
-                            <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_mut</span>::<span class="op">&lt;</span><span class="ident">c_int</span><span class="op">&gt;</span>(<span class="ident">argp</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">argp</span><span class="op">|</span> {
-                                <span class="prelude-val">Some</span>(<span class="ident">slice::from_raw_parts_mut</span>(
-                                    <span class="ident">argp</span> <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="kw">_</span> <span class="kw">as</span> <span class="kw">_</span>,
-                                    <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">c_int</span><span class="op">&gt;</span>(),
-                                ))
-                            })<span class="question-mark">?</span>
-                        }
+                        <span class="ident">FIONBIO</span> <span class="op">|</span> <span class="ident">FIONREAD</span> =&gt; <span class="self">self</span>.<span class="ident">validate_mut</span>::<span class="op">&lt;</span><span class="ident">c_int</span><span class="op">&gt;</span>(<span class="ident">argp</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">argp</span><span class="op">|</span> {
+                            <span class="prelude-val">Some</span>(<span class="ident">slice::from_raw_parts_mut</span>(
+                                <span class="ident">argp</span> <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="kw">_</span> <span class="kw">as</span> <span class="kw">_</span>,
+                                <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">c_int</span><span class="op">&gt;</span>(),
+                            ))
+                        })<span class="question-mark">?</span>,
                         <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ENOTSUP</span>),
                     }
                 };
@@ -1472,28 +1500,28 @@
                 <span class="self">self</span>.<span class="ident">munmap</span>(<span class="ident">addr</span>, <span class="ident">length</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_poll</span>, [<span class="ident">fds</span>, <span class="ident">nfds</span>, <span class="ident">timeout</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">fds</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">fds</span>, <span class="ident">nfds</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">fds</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">fds</span>, <span class="ident">nfds</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">poll</span>(<span class="ident">fds</span>, <span class="ident">timeout</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_read</span>, [<span class="ident">fd</span>, <span class="ident">buf</span>, <span class="ident">count</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">buf</span>, <span class="ident">count</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">buf</span>, <span class="ident">count</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">read</span>(<span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">buf</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_readlink</span>, [<span class="ident">pathname</span>, <span class="ident">buf</span>, <span class="ident">bufsiz</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">pathname</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_str</span>(<span class="ident">pathname</span>)<span class="question-mark">?</span>;
-                <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">buf</span>, <span class="ident">bufsiz</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">pathname</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_str</span>(<span class="ident">pathname</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">buf</span>, <span class="ident">bufsiz</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">readlink</span>(<span class="ident">pathname</span>, <span class="ident">buf</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_readv</span>, [<span class="ident">fd</span>, <span class="ident">iov</span>, <span class="ident">iovcnt</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">iovs</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_iovec_slice_mut</span>(<span class="ident">iov</span>, <span class="ident">iovcnt</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">iovs</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_iovec_slice_mut</span>(<span class="ident">iov</span>, <span class="ident">iovcnt</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">readv</span>(<span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">iovs</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_recvfrom</span>, [<span class="ident">sockfd</span>, <span class="ident">buf</span>, <span class="ident">len</span>, <span class="ident">flags</span>, <span class="ident">src_addr</span>, <span class="ident">addrlen</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">buf</span>, <span class="ident">len</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">buf</span>, <span class="ident">len</span>)<span class="question-mark">?</span>;
                 <span class="kw">if</span> <span class="ident">src_addr</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="self">self</span>.<span class="ident">recv</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">buf</span>, <span class="ident">flags</span> <span class="kw">as</span> <span class="kw">_</span>)
                 } <span class="kw">else</span> {
-                    <span class="kw">let</span> <span class="ident">src_addr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_sockaddr_output</span>(<span class="ident">src_addr</span>, <span class="ident">addrlen</span>)<span class="question-mark">?</span>;
+                    <span class="kw">let</span> <span class="ident">src_addr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_sockaddr_output</span>(<span class="ident">src_addr</span>, <span class="ident">addrlen</span>)<span class="question-mark">?</span>;
                     <span class="self">self</span>.<span class="ident">recvfrom</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">buf</span>, <span class="ident">flags</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">src_addr</span>)
                 }
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>, <span class="number">0</span>])
@@ -1502,12 +1530,12 @@
                 <span class="kw">let</span> <span class="ident">act</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">act</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
-                    <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate</span>(<span class="ident">act</span>).<span class="ident">map</span>(<span class="prelude-val">Some</span>)<span class="question-mark">?</span>
+                    <span class="self">self</span>.<span class="ident">validate</span>(<span class="ident">act</span>).<span class="ident">map</span>(<span class="prelude-val">Some</span>)<span class="question-mark">?</span>
                 };
                 <span class="kw">let</span> <span class="ident">oldact</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">oldact</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
-                    <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_mut</span>(<span class="ident">oldact</span>).<span class="ident">map</span>(<span class="prelude-val">Some</span>)<span class="question-mark">?</span>
+                    <span class="self">self</span>.<span class="ident">validate_mut</span>(<span class="ident">oldact</span>).<span class="ident">map</span>(<span class="prelude-val">Some</span>)<span class="question-mark">?</span>
                 };
                 <span class="self">self</span>.<span class="ident">rt_sigaction</span>(<span class="ident">signum</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">act</span>, <span class="ident">oldact</span>, <span class="ident">sigsetsize</span> <span class="kw">as</span> <span class="kw">_</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
@@ -1516,22 +1544,22 @@
                 <span class="kw">let</span> <span class="ident">set</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">set</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
-                    <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate</span>(<span class="ident">set</span>).<span class="ident">map</span>(<span class="prelude-val">Some</span>)<span class="question-mark">?</span>
+                    <span class="self">self</span>.<span class="ident">validate</span>(<span class="ident">set</span>).<span class="ident">map</span>(<span class="prelude-val">Some</span>)<span class="question-mark">?</span>
                 };
                 <span class="kw">let</span> <span class="ident">oldset</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">oldset</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
-                    <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_mut</span>(<span class="ident">oldset</span>).<span class="ident">map</span>(<span class="prelude-val">Some</span>)<span class="question-mark">?</span>
+                    <span class="self">self</span>.<span class="ident">validate_mut</span>(<span class="ident">oldset</span>).<span class="ident">map</span>(<span class="prelude-val">Some</span>)<span class="question-mark">?</span>
                 };
                 <span class="self">self</span>.<span class="ident">rt_sigprocmask</span>(<span class="ident">how</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">set</span>, <span class="ident">oldset</span>, <span class="ident">sigsetsize</span> <span class="kw">as</span> <span class="kw">_</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_sendto</span>, [<span class="ident">sockfd</span>, <span class="ident">buf</span>, <span class="ident">len</span>, <span class="ident">flags</span>, <span class="ident">dest_addr</span>, <span class="ident">addrlen</span>]) =&gt; {
-                <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_slice</span>(<span class="ident">buf</span>, <span class="ident">len</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_slice</span>(<span class="ident">buf</span>, <span class="ident">len</span>)<span class="question-mark">?</span>;
                 <span class="kw">if</span> <span class="ident">dest_addr</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="self">self</span>.<span class="ident">send</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">buf</span>, <span class="ident">flags</span> <span class="kw">as</span> <span class="kw">_</span>)
                 } <span class="kw">else</span> {
-                    <span class="kw">let</span> <span class="ident">dest_addr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_slice</span>(<span class="ident">dest_addr</span>, <span class="ident">addrlen</span>)<span class="question-mark">?</span>;
+                    <span class="kw">let</span> <span class="ident">dest_addr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_slice</span>(<span class="ident">dest_addr</span>, <span class="ident">addrlen</span>)<span class="question-mark">?</span>;
                     <span class="self">self</span>.<span class="ident">sendto</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">buf</span>, <span class="ident">flags</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">dest_addr</span>)
                 }
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>, <span class="number">0</span>])
@@ -1540,23 +1568,21 @@
                 <span class="kw">let</span> <span class="ident">optval</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">optval</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
-                    <span class="self">self</span>.<span class="ident">platform</span>
-                        .<span class="ident">validate_slice</span>::<span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>(<span class="ident">optval</span>, <span class="ident">optlen</span>)
-                        .<span class="ident">map</span>(<span class="prelude-val">Some</span>)<span class="question-mark">?</span>
+                    <span class="self">self</span>.<span class="ident">validate_slice</span>::<span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>(<span class="ident">optval</span>, <span class="ident">optlen</span>).<span class="ident">map</span>(<span class="prelude-val">Some</span>)<span class="question-mark">?</span>
                 };
                 <span class="self">self</span>.<span class="ident">setsockopt</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">level</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">optname</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">optval</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_set_tid_address</span>, [<span class="ident">tidptr</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">tidptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_mut</span>(<span class="ident">tidptr</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">tidptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_mut</span>(<span class="ident">tidptr</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">set_tid_address</span>(<span class="ident">tidptr</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_sigaltstack</span>, [<span class="ident">ss</span>, <span class="ident">old_ss</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">ss</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate</span>(<span class="ident">ss</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">ss</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate</span>(<span class="ident">ss</span>)<span class="question-mark">?</span>;
                 <span class="kw">let</span> <span class="ident">old_ss</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">old_ss</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
-                    <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_mut</span>(<span class="ident">old_ss</span>).<span class="ident">map</span>(<span class="prelude-val">Some</span>)<span class="question-mark">?</span>
+                    <span class="self">self</span>.<span class="ident">validate_mut</span>(<span class="ident">old_ss</span>).<span class="ident">map</span>(<span class="prelude-val">Some</span>)<span class="question-mark">?</span>
                 };
                 <span class="self">self</span>.<span class="ident">sigaltstack</span>(<span class="ident">ss</span>, <span class="ident">old_ss</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
@@ -1565,71 +1591,19 @@
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
             (<span class="ident">libc::SYS_sync</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">sync</span>().<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>]),
             (<span class="ident">libc::SYS_uname</span>, [<span class="ident">buf</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_mut</span>(<span class="ident">buf</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_mut</span>(<span class="ident">buf</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">uname</span>(<span class="ident">buf</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_write</span>, [<span class="ident">fd</span>, <span class="ident">buf</span>, <span class="ident">count</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_slice</span>(<span class="ident">buf</span>, <span class="ident">count</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_slice</span>(<span class="ident">buf</span>, <span class="ident">count</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">write</span>(<span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">buf</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>, <span class="number">0</span>])
             }
             (<span class="ident">libc::SYS_writev</span>, [<span class="ident">fd</span>, <span class="ident">iov</span>, <span class="ident">iovcnt</span>, ..]) =&gt; {
-                <span class="kw">let</span> <span class="ident">iovs</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">platform</span>.<span class="ident">validate_iovec_slice</span>(<span class="ident">iov</span>, <span class="ident">iovcnt</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">iovs</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">validate_iovec_slice</span>(<span class="ident">iov</span>, <span class="ident">iovcnt</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">writev</span>(<span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">iovs</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>, <span class="number">0</span>])
             }
             <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ENOSYS</span>),
         }
-    }
-
-    <span class="kw">fn</span> <span class="ident">arch_prctl</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="ident">c_int</span>, <span class="kw">_</span>: <span class="ident">c_ulong</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="prelude-val">Err</span>(<span class="ident">ENOSYS</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">brk</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">c_void</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="prelude-val">Err</span>(<span class="ident">ENOSYS</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">madvise</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">c_void</span><span class="op">&gt;</span>, <span class="kw">_</span>: <span class="ident">size_t</span>, <span class="kw">_</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="prelude-val">Err</span>(<span class="ident">ENOSYS</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">mmap</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-        <span class="kw">_</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">c_void</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="kw">_</span>: <span class="ident">size_t</span>,
-        <span class="kw">_</span>: <span class="ident">c_int</span>,
-        <span class="kw">_</span>: <span class="ident">c_int</span>,
-        <span class="kw">_</span>: <span class="ident">c_int</span>,
-        <span class="kw">_</span>: <span class="ident">off_t</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">c_void</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Err</span>(<span class="ident">ENOSYS</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">mprotect</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">c_void</span><span class="op">&gt;</span>, <span class="kw">_</span>: <span class="ident">size_t</span>, <span class="kw">_</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="prelude-val">Err</span>(<span class="ident">ENOSYS</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">munmap</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">c_void</span><span class="op">&gt;</span>, <span class="kw">_</span>: <span class="ident">size_t</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="prelude-val">Err</span>(<span class="ident">ENOSYS</span>)
-    }
-
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">rt_sigaction</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-        <span class="ident">signum</span>: <span class="ident">c_int</span>,
-        <span class="ident">act</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">sigaction</span><span class="op">&gt;</span>,
-        <span class="ident">oldact</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">sigaction</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">sigsetsize</span>: <span class="ident">size_t</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">signum</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">SIGRTMAX</span> <span class="op">|</span><span class="op">|</span> <span class="ident">sigsetsize</span> <span class="op">!</span><span class="op">=</span> <span class="number">8</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">libc::EINVAL</span>);
-        }
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">oldact</span>) <span class="op">=</span> <span class="ident">oldact</span> {
-            <span class="kw-2">*</span><span class="ident">oldact</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">tls</span>.<span class="ident">actions</span>[<span class="ident">signum</span> <span class="kw">as</span> <span class="ident">usize</span>];
-        }
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">act</span>) <span class="op">=</span> <span class="ident">act</span> {
-            <span class="self">self</span>.<span class="ident">tls</span>.<span class="ident">actions</span>[<span class="ident">signum</span> <span class="kw">as</span> <span class="ident">usize</span>] <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="kw-2">*</span><span class="ident">act</span>);
-        }
-        <span class="prelude-val">Ok</span>(())
     }
 }
 </code></pre></div>

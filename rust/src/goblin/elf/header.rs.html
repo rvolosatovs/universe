@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `&#x2F;home&#x2F;runner&#x2F;.cargo&#x2F;registry&#x2F;src&#x2F;github.com-1ecc6299db9ec823&#x2F;goblin-0.4.3&#x2F;src&#x2F;elf&#x2F;header.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>header.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `&#x2F;home&#x2F;runner&#x2F;.cargo&#x2F;registry&#x2F;src&#x2F;github.com-1ecc6299db9ec823&#x2F;goblin-0.5.1&#x2F;src&#x2F;elf&#x2F;header.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>header.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a class="sidebar-logo" href="../../../goblin/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.png" alt="logo"></div>
         </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../goblin/index.html"><img class="rust-logo" src="../../../rust-logo.png" alt="logo"></a><nav class="sub"><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
@@ -588,6 +588,48 @@
 <span id="586">586</span>
 <span id="587">587</span>
 <span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
+<span id="600">600</span>
+<span id="601">601</span>
+<span id="602">602</span>
+<span id="603">603</span>
+<span id="604">604</span>
+<span id="605">605</span>
+<span id="606">606</span>
+<span id="607">607</span>
+<span id="608">608</span>
+<span id="609">609</span>
+<span id="610">610</span>
+<span id="611">611</span>
+<span id="612">612</span>
+<span id="613">613</span>
+<span id="614">614</span>
+<span id="615">615</span>
+<span id="616">616</span>
+<span id="617">617</span>
+<span id="618">618</span>
+<span id="619">619</span>
+<span id="620">620</span>
+<span id="621">621</span>
+<span id="622">622</span>
+<span id="623">623</span>
+<span id="624">624</span>
+<span id="625">625</span>
+<span id="626">626</span>
+<span id="627">627</span>
+<span id="628">628</span>
+<span id="629">629</span>
+<span id="630">630</span>
 </pre><pre class="rust"><code><span class="macro">include!</span>(<span class="string">&quot;constants_header.rs&quot;</span>);
 
 <span class="macro">macro_rules!</span> <span class="ident">elf_header</span> {
@@ -674,6 +716,14 @@
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ET_CORE</span>: <span class="ident">u16</span> <span class="op">=</span> <span class="number">4</span>;
 <span class="doccomment">/// Number of defined types.</span>
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ET_NUM</span>: <span class="ident">u16</span> <span class="op">=</span> <span class="number">5</span>;
+<span class="doccomment">/// OS-specific range start</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ET_LOOS</span>: <span class="ident">u16</span> <span class="op">=</span> <span class="number">0xfe00</span>;
+<span class="doccomment">/// OS-specific range end</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ET_HIOS</span>: <span class="ident">u16</span> <span class="op">=</span> <span class="number">0xfeff</span>;
+<span class="doccomment">/// Processor-specific range start</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ET_LOPROC</span>: <span class="ident">u16</span> <span class="op">=</span> <span class="number">0xff00</span>;
+<span class="doccomment">/// Processor-specific range end</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ET_HIPROC</span>: <span class="ident">u16</span> <span class="op">=</span> <span class="number">0xffff</span>;
 
 <span class="doccomment">/// The ELF magic number.</span>
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFMAG</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>; <span class="number">4</span>] <span class="op">=</span> <span class="string">b&quot;\x7FELF&quot;</span>;
@@ -709,6 +759,40 @@
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">EI_OSABI</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">7</span>;
 <span class="doccomment">/// UNIX System V ABI.</span>
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFOSABI_NONE</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">0</span>;
+<span class="doccomment">/// UNIX System V ABI.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Alias.</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFOSABI_SYSV</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="ident">ELFOSABI_NONE</span>;
+<span class="doccomment">/// HP-UX.</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFOSABI_HPUX</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">1</span>;
+<span class="doccomment">/// NetBSD.</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFOSABI_NETBSD</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">2</span>;
+<span class="doccomment">/// Object uses GNU ELF extensions.</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFOSABI_GNU</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">3</span>;
+<span class="doccomment">/// Object uses GNU ELF extensions.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Alias.</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFOSABI_LINUX</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="ident">ELFOSABI_GNU</span>;
+<span class="doccomment">/// Sun Solaris.</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFOSABI_SOLARIS</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">6</span>;
+<span class="doccomment">/// IBM AIX.</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFOSABI_AIX</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">7</span>;
+<span class="doccomment">/// SGI Irix.</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFOSABI_IRIX</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">8</span>;
+<span class="doccomment">/// FreeBSD</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFOSABI_FREEBSD</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">9</span>;
+<span class="doccomment">/// Compaq TRU64 UNIX.</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFOSABI_TRU64</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">10</span>;
+<span class="doccomment">/// Novell Modesto.</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFOSABI_MODESTO</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">11</span>;
+<span class="doccomment">/// OpenBSD.</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFOSABI_OPENBSD</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">12</span>;
+<span class="doccomment">/// ARM EABI.</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFOSABI_ARM_AEABI</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">64</span>;
+<span class="doccomment">/// ARM.</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFOSABI_ARM</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">97</span>;
+<span class="doccomment">/// Standalone (embedded) application.</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ELFOSABI_STANDALONE</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">255</span>;
 
 <span class="doccomment">/// ABI version byte index.</span>
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">EI_ABIVERSION</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">8</span>;

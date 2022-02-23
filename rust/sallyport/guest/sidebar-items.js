@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["alloc","Allocation-specific functionality."],["call",""]],"struct":[["Handler","Guest request handler."],["ThreadLocalStorage",""]],"trait":[["Execute",""],["Platform","Platform-specific functionality."]]});
+initSidebarItems({"mod":[["alloc","Allocation-specific functionality."],["call",""]],"struct":[["ThreadLocalStorage",""]],"trait":[["Handler","Guest request handler."],["Platform","Platform-specific functionality."]]});
