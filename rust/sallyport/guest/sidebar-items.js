@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["alloc","Allocation-specific functionality."],["call",""]],"struct":[["ThreadLocalStorage",""]],"trait":[["Handler","Guest request handler."],["Platform","Platform-specific functionality."]]});
+initSidebarItems({"mod":[["alloc","Allocation-specific functionality."],["call","Calls executable by `Handler::execute` and utilities to operate upon them."]],"struct":[["ThreadLocalStorage","Thread-local storage shared between `Handler` instances."]],"trait":[["Handler","Guest request handler."],["Platform","Platform-specific functionality."]]});

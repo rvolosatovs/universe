@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["SYS_GETATT","`get_attestation` syscall number used by the shim."]],"enum":[["Number","Number of an `Item` of `Kind::Enarxcall`."]],"mod":[["sev","SEV microarchitecture-specific constants."],["sgx","SGX microarchitecture-specific structures and constants."]],"struct":[["Payload","Payload of an `Item` of `Kind::Enarxcall`."]]});

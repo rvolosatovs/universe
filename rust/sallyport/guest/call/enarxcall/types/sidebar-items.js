@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["ERRNO_START",""],["MAX_ERRNO",""]],"struct":[["CommittedAlloc","Committed Enarx call, which holds allocated reference to Enarx call return values within the block and opaque committed value."],["Result",""],["StagedAlloc","Staged Enarx call, which holds allocated reference to Enarx call item within the block and opaque staged value."]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["TECH","`get_attestation` technology return value"]]});
