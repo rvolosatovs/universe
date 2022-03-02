@@ -1,1 +1,1 @@
-initSidebarItems({"constant":[["NAME","The name used for all note sections"],["REQUIRES","The minimum sallyport semver requires"]],"mod":[["sgx","SGX ELF Notes"]]});
+initSidebarItems({"constant":[["BLOCK_SIZE","The sallyport block size of the shim (u64)"],["NAME","The name used for all note sections"],["NUM_BLOCKS","The number of sallyport blocks of the shim (u64)"],["REQUIRES","The minimum sallyport semver requires"]],"mod":[["sgx","SGX ELF Notes"]]});
