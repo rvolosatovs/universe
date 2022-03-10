@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["is_aligned_non_null","Validates that `ptr` is aligned and non-null"]]});
