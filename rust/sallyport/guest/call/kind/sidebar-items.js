@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Alloc",""],["Stub",""]],"trait":[["Kind",""]]});
+initSidebarItems({"struct":[["Alloc",""],["MaybeAlloc",""],["Stub",""]],"trait":[["Kind",""]]});

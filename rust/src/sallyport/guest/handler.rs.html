@@ -1,104 +1,107 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `&#x2F;home&#x2F;runner&#x2F;.cargo&#x2F;git&#x2F;checkouts&#x2F;sallyport-87d2f89630049c63&#x2F;b476123&#x2F;src&#x2F;guest&#x2F;handler.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>handler.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
-    <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a class="sidebar-logo" href="../../../sallyport/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.png" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../sallyport/index.html"><img class="rust-logo" src="../../../rust-logo.png" alt="logo"></a><nav class="sub"><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/git/checkouts/sallyport-490daae613c5f7e9/6a0ba98/src/guest/handler.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>handler.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../sallyport/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../../sallyport/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../sallyport/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 <span id="100">100</span>
 <span id="101">101</span>
 <span id="102">102</span>
@@ -919,6 +922,22 @@
 <span id="917">917</span>
 <span id="918">918</span>
 <span id="919">919</span>
+<span id="920">920</span>
+<span id="921">921</span>
+<span id="922">922</span>
+<span id="923">923</span>
+<span id="924">924</span>
+<span id="925">925</span>
+<span id="926">926</span>
+<span id="927">927</span>
+<span id="928">928</span>
+<span id="929">929</span>
+<span id="930">930</span>
+<span id="931">931</span>
+<span id="932">932</span>
+<span id="933">933</span>
+<span id="934">934</span>
+<span id="935">935</span>
 </pre><pre class="rust"><code><span class="comment">// SPDX-License-Identifier: Apache-2.0</span>
 
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::alloc</span>::{<span class="ident">Alloc</span>, <span class="ident">Allocator</span>, <span class="ident">Collect</span>, <span class="ident">Commit</span>, <span class="ident">Committer</span>};
@@ -927,17 +946,24 @@
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">enarxcall</span>, <span class="ident">gdbcall</span>, <span class="ident">syscall</span>, <span class="ident">Call</span>, <span class="ident">Platform</span>, <span class="ident">ThreadLocalStorage</span>, <span class="ident">SIGRTMAX</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::item::enarxcall::sgx</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::item::syscall::sigaction</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::libc</span>::{
+    <span class="ident">c_int</span>, <span class="ident">c_uint</span>, <span class="ident">c_ulong</span>, <span class="ident">c_void</span>, <span class="ident">clockid_t</span>, <span class="ident">epoll_event</span>, <span class="ident">gid_t</span>, <span class="ident">mode_t</span>, <span class="ident">off_t</span>, <span class="ident">pid_t</span>, <span class="ident">pollfd</span>,
+    <span class="ident">sigset_t</span>, <span class="ident">size_t</span>, <span class="ident">stack_t</span>, <span class="ident">stat</span>, <span class="ident">timespec</span>, <span class="ident">uid_t</span>, <span class="ident">utsname</span>, <span class="ident">Ioctl</span>, <span class="ident">SYS_accept</span>, <span class="ident">SYS_accept4</span>,
+    <span class="ident">SYS_arch_prctl</span>, <span class="ident">SYS_bind</span>, <span class="ident">SYS_brk</span>, <span class="ident">SYS_clock_gettime</span>, <span class="ident">SYS_close</span>, <span class="ident">SYS_connect</span>, <span class="ident">SYS_dup</span>,
+    <span class="ident">SYS_dup2</span>, <span class="ident">SYS_dup3</span>, <span class="ident">SYS_epoll_create1</span>, <span class="ident">SYS_epoll_ctl</span>, <span class="ident">SYS_epoll_pwait</span>, <span class="ident">SYS_epoll_wait</span>,
+    <span class="ident">SYS_eventfd2</span>, <span class="ident">SYS_exit</span>, <span class="ident">SYS_exit_group</span>, <span class="ident">SYS_fcntl</span>, <span class="ident">SYS_fstat</span>, <span class="ident">SYS_getegid</span>, <span class="ident">SYS_geteuid</span>,
+    <span class="ident">SYS_getgid</span>, <span class="ident">SYS_getpid</span>, <span class="ident">SYS_getrandom</span>, <span class="ident">SYS_getsockname</span>, <span class="ident">SYS_getuid</span>, <span class="ident">SYS_ioctl</span>, <span class="ident">SYS_listen</span>,
+    <span class="ident">SYS_madvise</span>, <span class="ident">SYS_mmap</span>, <span class="ident">SYS_mprotect</span>, <span class="ident">SYS_munmap</span>, <span class="ident">SYS_nanosleep</span>, <span class="ident">SYS_open</span>, <span class="ident">SYS_poll</span>, <span class="ident">SYS_read</span>,
+    <span class="ident">SYS_readlink</span>, <span class="ident">SYS_readv</span>, <span class="ident">SYS_recvfrom</span>, <span class="ident">SYS_rt_sigaction</span>, <span class="ident">SYS_rt_sigprocmask</span>, <span class="ident">SYS_sendto</span>,
+    <span class="ident">SYS_set_tid_address</span>, <span class="ident">SYS_setsockopt</span>, <span class="ident">SYS_sigaltstack</span>, <span class="ident">SYS_socket</span>, <span class="ident">SYS_sync</span>, <span class="ident">SYS_uname</span>,
+    <span class="ident">SYS_write</span>, <span class="ident">SYS_writev</span>, <span class="ident">EFAULT</span>, <span class="ident">EINVAL</span>, <span class="ident">ENOSYS</span>, <span class="ident">ENOTSUP</span>, <span class="ident">FIONBIO</span>, <span class="ident">FIONREAD</span>,
+};
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">item</span>, <span class="prelude-ty">Result</span>};
+
 <span class="kw">use</span> <span class="ident">core::arch::x86_64::CpuidResult</span>;
 <span class="kw">use</span> <span class="ident">core::mem::size_of</span>;
 <span class="kw">use</span> <span class="ident">core::ptr::NonNull</span>;
 <span class="kw">use</span> <span class="ident">core::slice</span>;
-
-<span class="kw">use</span> <span class="ident">libc</span>::{
-    <span class="ident">c_int</span>, <span class="ident">c_uint</span>, <span class="ident">c_ulong</span>, <span class="ident">c_void</span>, <span class="ident">clockid_t</span>, <span class="ident">epoll_event</span>, <span class="ident">gid_t</span>, <span class="ident">off_t</span>, <span class="ident">pid_t</span>, <span class="ident">pollfd</span>, <span class="ident">sigset_t</span>,
-    <span class="ident">size_t</span>, <span class="ident">stack_t</span>, <span class="ident">stat</span>, <span class="ident">timespec</span>, <span class="ident">uid_t</span>, <span class="ident">utsname</span>, <span class="ident">Ioctl</span>, <span class="ident">EBADFD</span>, <span class="ident">EFAULT</span>, <span class="ident">EINVAL</span>, <span class="ident">ENOSYS</span>,
-    <span class="ident">ENOTSUP</span>, <span class="ident">ENOTTY</span>, <span class="ident">FIONBIO</span>, <span class="ident">FIONREAD</span>, <span class="ident">STDERR_FILENO</span>, <span class="ident">STDIN_FILENO</span>, <span class="ident">STDOUT_FILENO</span>, <span class="ident">TIOCGWINSZ</span>,
-};
 
 <span class="doccomment">/// Guest request handler.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Handler</span> {
@@ -1209,15 +1235,7 @@
     <span class="doccomment">/// Executes [`ioctl`](https://man7.org/linux/man-pages/man2/ioctl.2.html) syscall akin to [`libc::ioctl`].</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">ioctl</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">request</span>: <span class="ident">Ioctl</span>, <span class="ident">argp</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>]<span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_int</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> (<span class="ident">fd</span>, <span class="ident">request</span>) {
-            (<span class="ident">STDIN_FILENO</span> <span class="op">|</span> <span class="ident">STDOUT_FILENO</span> <span class="op">|</span> <span class="ident">STDERR_FILENO</span>, <span class="ident">TIOCGWINSZ</span>) =&gt; {
-                <span class="comment">// the keep has no tty</span>
-                <span class="prelude-val">Err</span>(<span class="ident">ENOTTY</span>)
-            }
-            (<span class="ident">STDIN_FILENO</span> <span class="op">|</span> <span class="ident">STDOUT_FILENO</span> <span class="op">|</span> <span class="ident">STDERR_FILENO</span>, <span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">EINVAL</span>),
-            (<span class="kw">_</span>, <span class="ident">FIONBIO</span> <span class="op">|</span> <span class="ident">FIONREAD</span>) =&gt; <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Ioctl</span> { <span class="ident">fd</span>, <span class="ident">request</span>, <span class="ident">argp</span> })<span class="question-mark">?</span>,
-            <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">EBADFD</span>),
-        }
+        <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Ioctl</span> { <span class="ident">fd</span>, <span class="ident">request</span>, <span class="ident">argp</span> })<span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Executes [`listen`](https://man7.org/linux/man-pages/man2/listen.2.html) syscall akin to [`libc::listen`].</span>
@@ -1266,8 +1284,20 @@
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 
     <span class="doccomment">/// Executes [`nanosleep`](https://man7.org/linux/man-pages/man2/nanosleep.2.html) syscall akin to [`libc::nanosleep`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">nanosleep</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">timespec</span>, <span class="ident">rem</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="ident">timespec</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Nanosleep</span> { <span class="ident">req</span>, <span class="ident">rem</span> })<span class="question-mark">?</span>
+    }
+
+    <span class="doccomment">/// Executes [`open`](https://man7.org/linux/man-pages/man2/open.2.html) syscall akin to [`libc::open`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// `pathname` argument must contain the trailing nul terminator byte.</span>
+    <span class="kw">fn</span> <span class="ident">open</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">pathname</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">flags</span>: <span class="ident">c_int</span>, <span class="ident">mode</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">mode_t</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_int</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Open</span> {
+            <span class="ident">pathname</span>,
+            <span class="ident">flags</span>,
+            <span class="ident">mode</span>,
+        })<span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Executes [`poll`](https://man7.org/linux/man-pages/man2/poll.2.html) syscall akin to [`libc::poll`].</span>
@@ -1285,6 +1315,8 @@
     }
 
     <span class="doccomment">/// Executes [`readlink`](https://man7.org/linux/man-pages/man2/readlink.2.html) syscall akin to [`libc::readlink`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// `pathname` argument must contain the trailing nul terminator byte.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">readlink</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">pathname</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Readlink</span> { <span class="ident">pathname</span>, <span class="ident">buf</span> })<span class="question-mark">?</span>
@@ -1340,7 +1372,7 @@
         <span class="ident">sigsetsize</span>: <span class="ident">size_t</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="ident">signum</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">SIGRTMAX</span> <span class="op">|</span><span class="op">|</span> <span class="ident">sigsetsize</span> <span class="op">!</span><span class="op">=</span> <span class="number">8</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">libc::EINVAL</span>);
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">EINVAL</span>);
         }
         <span class="kw">let</span> <span class="ident">tls</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">thread_local_storage</span>();
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">oldact</span>) <span class="op">=</span> <span class="ident">oldact</span> {
@@ -1479,8 +1511,9 @@
         <span class="ident">registers</span>: [<span class="ident">usize</span>; <span class="number">7</span>],
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>[<span class="ident">usize</span>; <span class="number">2</span>]<span class="op">&gt;</span> {
         <span class="kw">let</span> [<span class="ident">num</span>, <span class="ident">argv</span> @ ..] <span class="op">=</span> <span class="ident">registers</span>;
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_upper_case_globals</span>)]</span>
         <span class="kw">match</span> (<span class="ident">num</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">argv</span>) {
-            (<span class="ident">libc::SYS_accept</span>, [<span class="ident">sockfd</span>, <span class="ident">addr</span>, <span class="ident">addrlen</span>, ..]) =&gt; {
+            (<span class="ident">SYS_accept</span>, [<span class="ident">sockfd</span>, <span class="ident">addr</span>, <span class="ident">addrlen</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">addr</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
@@ -1488,7 +1521,7 @@
                 };
                 <span class="self">self</span>.<span class="ident">accept</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">addr</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_accept4</span>, [<span class="ident">sockfd</span>, <span class="ident">addr</span>, <span class="ident">addrlen</span>, <span class="ident">flags</span>, ..]) =&gt; {
+            (<span class="ident">SYS_accept4</span>, [<span class="ident">sockfd</span>, <span class="ident">addr</span>, <span class="ident">addrlen</span>, <span class="ident">flags</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">addr</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
@@ -1497,41 +1530,39 @@
                 <span class="self">self</span>.<span class="ident">accept4</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">addr</span>, <span class="ident">flags</span> <span class="kw">as</span> <span class="kw">_</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_arch_prctl</span>, [<span class="ident">code</span>, <span class="ident">addr</span>, ..]) =&gt; <span class="self">self</span>
+            (<span class="ident">SYS_arch_prctl</span>, [<span class="ident">code</span>, <span class="ident">addr</span>, ..]) =&gt; <span class="self">self</span>
                 .<span class="ident">arch_prctl</span>(<span class="ident">platform</span>, <span class="ident">code</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">addr</span> <span class="kw">as</span> <span class="kw">_</span>)
                 .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>]),
-            (<span class="ident">libc::SYS_bind</span>, [<span class="ident">sockfd</span>, <span class="ident">addr</span>, <span class="ident">addrlen</span>, ..]) =&gt; {
+            (<span class="ident">SYS_bind</span>, [<span class="ident">sockfd</span>, <span class="ident">addr</span>, <span class="ident">addrlen</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_slice</span>(<span class="ident">addr</span>, <span class="ident">addrlen</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">bind</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">addr</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_brk</span>, [<span class="ident">addr</span>, ..]) =&gt; <span class="self">self</span>
+            (<span class="ident">SYS_brk</span>, [<span class="ident">addr</span>, ..]) =&gt; <span class="self">self</span>
                 .<span class="ident">brk</span>(<span class="ident">platform</span>, <span class="ident">NonNull::new</span>(<span class="ident">addr</span> <span class="kw">as</span> <span class="kw">_</span>))
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
-            (<span class="ident">libc::SYS_clock_gettime</span>, [<span class="ident">clockid</span>, <span class="ident">tp</span>, ..]) =&gt; {
+            (<span class="ident">SYS_clock_gettime</span>, [<span class="ident">clockid</span>, <span class="ident">tp</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">tp</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_mut</span>(<span class="ident">tp</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">clock_gettime</span>(<span class="ident">clockid</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">tp</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_close</span>, [<span class="ident">fd</span>, ..]) =&gt; <span class="self">self</span>.<span class="ident">close</span>(<span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>]),
-            (<span class="ident">libc::SYS_connect</span>, [<span class="ident">sockfd</span>, <span class="ident">addr</span>, <span class="ident">addrlen</span>, ..]) =&gt; {
+            (<span class="ident">SYS_close</span>, [<span class="ident">fd</span>, ..]) =&gt; <span class="self">self</span>.<span class="ident">close</span>(<span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>]),
+            (<span class="ident">SYS_connect</span>, [<span class="ident">sockfd</span>, <span class="ident">addr</span>, <span class="ident">addrlen</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_slice</span>(<span class="ident">addr</span>, <span class="ident">addrlen</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">connect</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">addr</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_dup</span>, [<span class="ident">oldfd</span>, ..]) =&gt; <span class="self">self</span>.<span class="ident">dup</span>(<span class="ident">oldfd</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>]),
-            (<span class="ident">libc::SYS_dup2</span>, [<span class="ident">oldfd</span>, <span class="ident">newfd</span>, ..]) =&gt; {
-                <span class="self">self</span>.<span class="ident">dup2</span>(<span class="ident">oldfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">newfd</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
-            }
-            (<span class="ident">libc::SYS_dup3</span>, [<span class="ident">oldfd</span>, <span class="ident">newfd</span>, <span class="ident">flags</span>, ..]) =&gt; <span class="self">self</span>
+            (<span class="ident">SYS_dup</span>, [<span class="ident">oldfd</span>, ..]) =&gt; <span class="self">self</span>.<span class="ident">dup</span>(<span class="ident">oldfd</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>]),
+            (<span class="ident">SYS_dup2</span>, [<span class="ident">oldfd</span>, <span class="ident">newfd</span>, ..]) =&gt; <span class="self">self</span>.<span class="ident">dup2</span>(<span class="ident">oldfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">newfd</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>]),
+            (<span class="ident">SYS_dup3</span>, [<span class="ident">oldfd</span>, <span class="ident">newfd</span>, <span class="ident">flags</span>, ..]) =&gt; <span class="self">self</span>
                 .<span class="ident">dup3</span>(<span class="ident">oldfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">newfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">flags</span> <span class="kw">as</span> <span class="kw">_</span>)
                 .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>]),
-            (<span class="ident">libc::SYS_epoll_create1</span>, [<span class="ident">flags</span>, ..]) =&gt; {
+            (<span class="ident">SYS_epoll_create1</span>, [<span class="ident">flags</span>, ..]) =&gt; {
                 <span class="self">self</span>.<span class="ident">epoll_create1</span>(<span class="ident">flags</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_epoll_ctl</span>, [<span class="ident">epfd</span>, <span class="ident">op</span>, <span class="ident">fd</span>, <span class="ident">event</span>, ..]) =&gt; {
+            (<span class="ident">SYS_epoll_ctl</span>, [<span class="ident">epfd</span>, <span class="ident">op</span>, <span class="ident">fd</span>, <span class="ident">event</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">event</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate</span>(<span class="ident">event</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">epoll_ctl</span>(<span class="ident">epfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">op</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">event</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_epoll_pwait</span>, [<span class="ident">epfd</span>, <span class="ident">events</span>, <span class="ident">maxevents</span>, <span class="ident">timeout</span>, <span class="ident">sigmask</span>, ..]) =&gt; {
+            (<span class="ident">SYS_epoll_pwait</span>, [<span class="ident">epfd</span>, <span class="ident">events</span>, <span class="ident">maxevents</span>, <span class="ident">timeout</span>, <span class="ident">sigmask</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">events</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">events</span>, <span class="ident">maxevents</span>)<span class="question-mark">?</span>;
                 <span class="kw">if</span> <span class="ident">sigmask</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="self">self</span>.<span class="ident">epoll_wait</span>(<span class="ident">epfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">events</span>, <span class="ident">timeout</span> <span class="kw">as</span> <span class="kw">_</span>)
@@ -1541,39 +1572,37 @@
                 }
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_epoll_wait</span>, [<span class="ident">epfd</span>, <span class="ident">events</span>, <span class="ident">maxevents</span>, <span class="ident">timeout</span>, ..]) =&gt; {
+            (<span class="ident">SYS_epoll_wait</span>, [<span class="ident">epfd</span>, <span class="ident">events</span>, <span class="ident">maxevents</span>, <span class="ident">timeout</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">events</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">events</span>, <span class="ident">maxevents</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">epoll_wait</span>(<span class="ident">epfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">events</span>, <span class="ident">timeout</span> <span class="kw">as</span> <span class="kw">_</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_eventfd2</span>, [<span class="ident">initval</span>, <span class="ident">flags</span>, ..]) =&gt; <span class="self">self</span>
+            (<span class="ident">SYS_eventfd2</span>, [<span class="ident">initval</span>, <span class="ident">flags</span>, ..]) =&gt; <span class="self">self</span>
                 .<span class="ident">eventfd2</span>(<span class="ident">initval</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">flags</span> <span class="kw">as</span> <span class="kw">_</span>)
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
-            (<span class="ident">libc::SYS_exit</span>, [<span class="ident">status</span>, ..]) =&gt; <span class="self">self</span>.<span class="ident">exit</span>(<span class="ident">status</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">attacked</span>()),
-            (<span class="ident">libc::SYS_exit_group</span>, [<span class="ident">status</span>, ..]) =&gt; {
-                <span class="self">self</span>.<span class="ident">exit_group</span>(<span class="ident">status</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">attacked</span>())
-            }
-            (<span class="ident">libc::SYS_fcntl</span>, [<span class="ident">fd</span>, <span class="ident">cmd</span>, <span class="ident">arg</span>, ..]) =&gt; <span class="self">self</span>
+            (<span class="ident">SYS_exit</span>, [<span class="ident">status</span>, ..]) =&gt; <span class="self">self</span>.<span class="ident">exit</span>(<span class="ident">status</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">attacked</span>()),
+            (<span class="ident">SYS_exit_group</span>, [<span class="ident">status</span>, ..]) =&gt; <span class="self">self</span>.<span class="ident">exit_group</span>(<span class="ident">status</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">attacked</span>()),
+            (<span class="ident">SYS_fcntl</span>, [<span class="ident">fd</span>, <span class="ident">cmd</span>, <span class="ident">arg</span>, ..]) =&gt; <span class="self">self</span>
                 .<span class="ident">fcntl</span>(<span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">cmd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">arg</span> <span class="kw">as</span> <span class="kw">_</span>)
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
-            (<span class="ident">libc::SYS_fstat</span>, [<span class="ident">fd</span>, <span class="ident">statbuf</span>, ..]) =&gt; {
+            (<span class="ident">SYS_fstat</span>, [<span class="ident">fd</span>, <span class="ident">statbuf</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">statbuf</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_mut</span>(<span class="ident">statbuf</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">fstat</span>(<span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">statbuf</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_getegid</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">getegid</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
-            (<span class="ident">libc::SYS_geteuid</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">geteuid</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
-            (<span class="ident">libc::SYS_getgid</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">getgid</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
-            (<span class="ident">libc::SYS_getpid</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">getpid</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
-            (<span class="ident">libc::SYS_getrandom</span>, [<span class="ident">buf</span>, <span class="ident">buflen</span>, <span class="ident">flags</span>, ..]) =&gt; {
+            (<span class="ident">SYS_getegid</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">getegid</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
+            (<span class="ident">SYS_geteuid</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">geteuid</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
+            (<span class="ident">SYS_getgid</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">getgid</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
+            (<span class="ident">SYS_getpid</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">getpid</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
+            (<span class="ident">SYS_getrandom</span>, [<span class="ident">buf</span>, <span class="ident">buflen</span>, <span class="ident">flags</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">buf</span>, <span class="ident">buflen</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">getrandom</span>(<span class="ident">buf</span>, <span class="ident">flags</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_getsockname</span>, [<span class="ident">sockfd</span>, <span class="ident">addr</span>, <span class="ident">addrlen</span>, ..]) =&gt; {
+            (<span class="ident">SYS_getsockname</span>, [<span class="ident">sockfd</span>, <span class="ident">addr</span>, <span class="ident">addrlen</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_sockaddr_output</span>(<span class="ident">addr</span>, <span class="ident">addrlen</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">getsockname</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">addr</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_getuid</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">getuid</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
-            (<span class="ident">libc::SYS_ioctl</span>, [<span class="ident">fd</span>, <span class="ident">request</span>, <span class="ident">argp</span>, ..]) =&gt; {
+            (<span class="ident">SYS_getuid</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">getuid</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
+            (<span class="ident">SYS_ioctl</span>, [<span class="ident">fd</span>, <span class="ident">request</span>, <span class="ident">argp</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">argp</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">argp</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
@@ -1590,15 +1619,15 @@
                 <span class="self">self</span>.<span class="ident">ioctl</span>(<span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">request</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">argp</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_listen</span>, [<span class="ident">sockfd</span>, <span class="ident">backlog</span>, ..]) =&gt; {
+            (<span class="ident">SYS_listen</span>, [<span class="ident">sockfd</span>, <span class="ident">backlog</span>, ..]) =&gt; {
                 <span class="self">self</span>.<span class="ident">listen</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">backlog</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_madvise</span>, [<span class="ident">addr</span>, <span class="ident">length</span>, <span class="ident">advice</span>, ..]) =&gt; {
+            (<span class="ident">SYS_madvise</span>, [<span class="ident">addr</span>, <span class="ident">length</span>, <span class="ident">advice</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="ident">NonNull::new</span>(<span class="ident">addr</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">ok_or</span>(<span class="ident">EFAULT</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">madvise</span>(<span class="ident">platform</span>, <span class="ident">addr</span>, <span class="ident">length</span>, <span class="ident">advice</span> <span class="kw">as</span> <span class="kw">_</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_mmap</span>, [<span class="ident">addr</span>, <span class="ident">length</span>, <span class="ident">prot</span>, <span class="ident">flags</span>, <span class="ident">fd</span>, <span class="ident">offset</span>, ..]) =&gt; <span class="self">self</span>
+            (<span class="ident">SYS_mmap</span>, [<span class="ident">addr</span>, <span class="ident">length</span>, <span class="ident">prot</span>, <span class="ident">flags</span>, <span class="ident">fd</span>, <span class="ident">offset</span>, ..]) =&gt; <span class="self">self</span>
                 .<span class="ident">mmap</span>(
                     <span class="ident">platform</span>,
                     <span class="ident">NonNull::new</span>(<span class="ident">addr</span> <span class="kw">as</span> <span class="kw">_</span>),
@@ -1609,16 +1638,16 @@
                     <span class="ident">offset</span> <span class="kw">as</span> <span class="kw">_</span>,
                 )
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
-            (<span class="ident">libc::SYS_mprotect</span>, [<span class="ident">addr</span>, <span class="ident">len</span>, <span class="ident">prot</span>, ..]) =&gt; {
+            (<span class="ident">SYS_mprotect</span>, [<span class="ident">addr</span>, <span class="ident">len</span>, <span class="ident">prot</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="ident">NonNull::new</span>(<span class="ident">addr</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">ok_or</span>(<span class="ident">EFAULT</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">mprotect</span>(<span class="ident">platform</span>, <span class="ident">addr</span>, <span class="ident">len</span>, <span class="ident">prot</span> <span class="kw">as</span> <span class="kw">_</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_munmap</span>, [<span class="ident">addr</span>, <span class="ident">length</span>, ..]) =&gt; {
+            (<span class="ident">SYS_munmap</span>, [<span class="ident">addr</span>, <span class="ident">length</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="ident">NonNull::new</span>(<span class="ident">addr</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">ok_or</span>(<span class="ident">EFAULT</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">munmap</span>(<span class="ident">platform</span>, <span class="ident">addr</span>, <span class="ident">length</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_nanosleep</span>, [<span class="ident">req</span>, <span class="ident">rem</span>, ..]) =&gt; {
+            (<span class="ident">SYS_nanosleep</span>, [<span class="ident">req</span>, <span class="ident">rem</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate</span>(<span class="ident">req</span>)<span class="question-mark">?</span>;
                 <span class="kw">let</span> <span class="ident">rem</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">rem</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="prelude-val">None</span>
@@ -1627,24 +1656,30 @@
                 };
                 <span class="self">self</span>.<span class="ident">nanosleep</span>(<span class="ident">req</span>, <span class="ident">rem</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_poll</span>, [<span class="ident">fds</span>, <span class="ident">nfds</span>, <span class="ident">timeout</span>, ..]) =&gt; {
+            (<span class="ident">SYS_open</span>, [<span class="ident">pathname</span>, <span class="ident">flags</span>, <span class="ident">mode</span>, ..]) =&gt; {
+                <span class="kw">let</span> <span class="ident">pathname</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_str</span>(<span class="ident">pathname</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">mode</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">mode</span> <span class="op">==</span> <span class="number">0</span> { <span class="prelude-val">None</span> } <span class="kw">else</span> { <span class="prelude-val">Some</span>(<span class="ident">mode</span> <span class="kw">as</span> <span class="kw">_</span>) };
+                <span class="self">self</span>.<span class="ident">open</span>(<span class="ident">pathname</span>, <span class="ident">flags</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">mode</span>)
+                    .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
+            }
+            (<span class="ident">SYS_poll</span>, [<span class="ident">fds</span>, <span class="ident">nfds</span>, <span class="ident">timeout</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">fds</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">fds</span>, <span class="ident">nfds</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">poll</span>(<span class="ident">fds</span>, <span class="ident">timeout</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_read</span>, [<span class="ident">fd</span>, <span class="ident">buf</span>, <span class="ident">count</span>, ..]) =&gt; {
+            (<span class="ident">SYS_read</span>, [<span class="ident">fd</span>, <span class="ident">buf</span>, <span class="ident">count</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">buf</span>, <span class="ident">count</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">read</span>(<span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">buf</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_readlink</span>, [<span class="ident">pathname</span>, <span class="ident">buf</span>, <span class="ident">bufsiz</span>, ..]) =&gt; {
+            (<span class="ident">SYS_readlink</span>, [<span class="ident">pathname</span>, <span class="ident">buf</span>, <span class="ident">bufsiz</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">pathname</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_str</span>(<span class="ident">pathname</span>)<span class="question-mark">?</span>;
                 <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">buf</span>, <span class="ident">bufsiz</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">readlink</span>(<span class="ident">pathname</span>, <span class="ident">buf</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_readv</span>, [<span class="ident">fd</span>, <span class="ident">iov</span>, <span class="ident">iovcnt</span>, ..]) =&gt; {
+            (<span class="ident">SYS_readv</span>, [<span class="ident">fd</span>, <span class="ident">iov</span>, <span class="ident">iovcnt</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">iovs</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_iovec_slice_mut</span>(<span class="ident">iov</span>, <span class="ident">iovcnt</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">readv</span>(<span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">iovs</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_recvfrom</span>, [<span class="ident">sockfd</span>, <span class="ident">buf</span>, <span class="ident">len</span>, <span class="ident">flags</span>, <span class="ident">src_addr</span>, <span class="ident">addrlen</span>, ..]) =&gt; {
+            (<span class="ident">SYS_recvfrom</span>, [<span class="ident">sockfd</span>, <span class="ident">buf</span>, <span class="ident">len</span>, <span class="ident">flags</span>, <span class="ident">src_addr</span>, <span class="ident">addrlen</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_slice_mut</span>(<span class="ident">buf</span>, <span class="ident">len</span>)<span class="question-mark">?</span>;
                 <span class="kw">if</span> <span class="ident">src_addr</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="self">self</span>.<span class="ident">recv</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">buf</span>, <span class="ident">flags</span> <span class="kw">as</span> <span class="kw">_</span>)
@@ -1654,7 +1689,7 @@
                 }
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_rt_sigaction</span>, [<span class="ident">signum</span>, <span class="ident">act</span>, <span class="ident">oldact</span>, <span class="ident">sigsetsize</span>, ..]) =&gt; {
+            (<span class="ident">SYS_rt_sigaction</span>, [<span class="ident">signum</span>, <span class="ident">act</span>, <span class="ident">oldact</span>, <span class="ident">sigsetsize</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">act</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">act</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
@@ -1668,7 +1703,7 @@
                 <span class="self">self</span>.<span class="ident">rt_sigaction</span>(<span class="ident">signum</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">act</span>, <span class="ident">oldact</span>, <span class="ident">sigsetsize</span> <span class="kw">as</span> <span class="kw">_</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_rt_sigprocmask</span>, [<span class="ident">how</span>, <span class="ident">set</span>, <span class="ident">oldset</span>, <span class="ident">sigsetsize</span>, ..]) =&gt; {
+            (<span class="ident">SYS_rt_sigprocmask</span>, [<span class="ident">how</span>, <span class="ident">set</span>, <span class="ident">oldset</span>, <span class="ident">sigsetsize</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">set</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">set</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
@@ -1682,7 +1717,7 @@
                 <span class="self">self</span>.<span class="ident">rt_sigprocmask</span>(<span class="ident">how</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">set</span>, <span class="ident">oldset</span>, <span class="ident">sigsetsize</span> <span class="kw">as</span> <span class="kw">_</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_sendto</span>, [<span class="ident">sockfd</span>, <span class="ident">buf</span>, <span class="ident">len</span>, <span class="ident">flags</span>, <span class="ident">dest_addr</span>, <span class="ident">addrlen</span>]) =&gt; {
+            (<span class="ident">SYS_sendto</span>, [<span class="ident">sockfd</span>, <span class="ident">buf</span>, <span class="ident">len</span>, <span class="ident">flags</span>, <span class="ident">dest_addr</span>, <span class="ident">addrlen</span>]) =&gt; {
                 <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_slice</span>(<span class="ident">buf</span>, <span class="ident">len</span>)<span class="question-mark">?</span>;
                 <span class="kw">if</span> <span class="ident">dest_addr</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="self">self</span>.<span class="ident">send</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">buf</span>, <span class="ident">flags</span> <span class="kw">as</span> <span class="kw">_</span>)
@@ -1692,7 +1727,7 @@
                 }
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_setsockopt</span>, [<span class="ident">sockfd</span>, <span class="ident">level</span>, <span class="ident">optname</span>, <span class="ident">optval</span>, <span class="ident">optlen</span>, ..]) =&gt; {
+            (<span class="ident">SYS_setsockopt</span>, [<span class="ident">sockfd</span>, <span class="ident">level</span>, <span class="ident">optname</span>, <span class="ident">optval</span>, <span class="ident">optlen</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">optval</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">optval</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
@@ -1701,11 +1736,11 @@
                 <span class="self">self</span>.<span class="ident">setsockopt</span>(<span class="ident">sockfd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">level</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">optname</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">optval</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_set_tid_address</span>, [<span class="ident">tidptr</span>, ..]) =&gt; {
+            (<span class="ident">SYS_set_tid_address</span>, [<span class="ident">tidptr</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">tidptr</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_mut</span>(<span class="ident">tidptr</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">set_tid_address</span>(<span class="ident">tidptr</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_sigaltstack</span>, [<span class="ident">ss</span>, <span class="ident">old_ss</span>, ..]) =&gt; {
+            (<span class="ident">SYS_sigaltstack</span>, [<span class="ident">ss</span>, <span class="ident">old_ss</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">ss</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">ss</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
@@ -1718,19 +1753,19 @@
                 };
                 <span class="self">self</span>.<span class="ident">sigaltstack</span>(<span class="ident">ss</span>, <span class="ident">old_ss</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_socket</span>, [<span class="ident">domain</span>, <span class="ident">typ</span>, <span class="ident">protocol</span>, ..]) =&gt; <span class="self">self</span>
+            (<span class="ident">SYS_socket</span>, [<span class="ident">domain</span>, <span class="ident">typ</span>, <span class="ident">protocol</span>, ..]) =&gt; <span class="self">self</span>
                 .<span class="ident">socket</span>(<span class="ident">domain</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">typ</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">protocol</span> <span class="kw">as</span> <span class="kw">_</span>)
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="number">0</span>]),
-            (<span class="ident">libc::SYS_sync</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">sync</span>().<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>]),
-            (<span class="ident">libc::SYS_uname</span>, [<span class="ident">buf</span>, ..]) =&gt; {
+            (<span class="ident">SYS_sync</span>, ..) =&gt; <span class="self">self</span>.<span class="ident">sync</span>().<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>]),
+            (<span class="ident">SYS_uname</span>, [<span class="ident">buf</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_mut</span>(<span class="ident">buf</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">uname</span>(<span class="ident">buf</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> [<span class="number">0</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_write</span>, [<span class="ident">fd</span>, <span class="ident">buf</span>, <span class="ident">count</span>, ..]) =&gt; {
+            (<span class="ident">SYS_write</span>, [<span class="ident">fd</span>, <span class="ident">buf</span>, <span class="ident">count</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_slice</span>(<span class="ident">buf</span>, <span class="ident">count</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">write</span>(<span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">buf</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>, <span class="number">0</span>])
             }
-            (<span class="ident">libc::SYS_writev</span>, [<span class="ident">fd</span>, <span class="ident">iov</span>, <span class="ident">iovcnt</span>, ..]) =&gt; {
+            (<span class="ident">SYS_writev</span>, [<span class="ident">fd</span>, <span class="ident">iov</span>, <span class="ident">iovcnt</span>, ..]) =&gt; {
                 <span class="kw">let</span> <span class="ident">iovs</span> <span class="op">=</span> <span class="ident">platform</span>.<span class="ident">validate_iovec_slice</span>(<span class="ident">iov</span>, <span class="ident">iovcnt</span>)<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">writev</span>(<span class="ident">fd</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">iovs</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">ret</span><span class="op">|</span> [<span class="ident">ret</span>, <span class="number">0</span>])
             }
@@ -1839,5 +1874,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="sallyport" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (34926f0a1 2021-12-22)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="sallyport" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (e95b10ba4 2022-03-13)" ></div>
 </body></html>
