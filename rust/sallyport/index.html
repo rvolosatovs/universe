@@ -4,7 +4,7 @@
     </nav>
     <nav class="sidebar"><a class="sidebar-logo" href="../sallyport/index.html"><div class="logo-container"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"><a href="#">Crate sallyport</a></h2><div class="sidebar-elems"><div class="block"><ul><li class="version">Version 0.3.0</li><li><a id="all-types" href="all.html">All Items</a></li></div></ul><section><div class="block"><ul><li><a href="#modules">Modules</a></li><li><a href="#constants">Constants</a></li><li><a href="#types">Type Definitions</a></li></ul></div></section><div id="sidebar-vars" data-name="sallyport" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../sallyport/index.html"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
-    <h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">sallyport</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../src/sallyport/lib.rs.html#3-135">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>API for the hypervisor-microkernel boundary</p>
+    <h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">sallyport</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../src/sallyport/lib.rs.html#3-161">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>API for the hypervisor-microkernel boundary</p>
 <p><code>sallyport</code> is a protocol crate for proxying service requests (such as syscalls) from an Enarx Keep
 to the host. A <a href="https://en.wikipedia.org/wiki/Sally_port">sally port</a> is a secure gateway through
 which a defending army might “sally forth” from the protection of their fortification.</p>
@@ -27,14 +27,15 @@ All items contain the following <a href="item/struct.Header.html">header</a>:</p
 <ul>
 <li><code>END</code>: <code>0</code></li>
 <li><code>SYSCALL</code>: <code>1</code></li>
-<li>…</li>
+<li><code>GDBCALL</code>: <code>2</code></li>
+<li><code>ENARXCALL</code>: <code>3</code></li>
 </ul>
 <h4 id="end"><a href="#end">End</a></h4>
 <p>An <a href="item/enum.Kind.html#variant.End"><code>END</code></a> item MUST have a <code>size</code> of <code>0</code>. It has no contents and simply marks the end of items in the block. This communicates the end of the items list to the host. However, the guest MUST NOT rely on the presence of a terminator upon return to the guest.</p>
-<h4 id="syscall"><a href="#syscall">Syscall</a></h4>
+<h4 id="system-call"><a href="#system-call">System call</a></h4>
 <p>A <code>SYSCALL</code> item has the following contents:</p>
 <ul>
-<li><code>nmbr</code>: <code>usize</code> - the syscall number</li>
+<li><code>nmbr</code>: <code>usize</code> - the system call number</li>
 <li><code>arg0</code>: <code>usize</code> - the first argument</li>
 <li><code>arg1</code>: <code>usize</code> - the second argument</li>
 <li><code>arg2</code>: <code>usize</code> - the third argument</li>
@@ -43,6 +44,28 @@ All items contain the following <a href="item/struct.Header.html">header</a>:</p
 <li><code>arg5</code>: <code>usize</code> - the sixth argument</li>
 <li><code>ret0</code>: <code>usize</code> - the first return value</li>
 <li><code>ret1</code>: <code>usize</code> - the second return value</li>
+<li><code>data</code>: <code>...</code> - data that can be referenced (optional)</li>
+</ul>
+<h4 id="gdb-call"><a href="#gdb-call">GDB call</a></h4>
+<p>A <code>GDBCALL</code> item has the following contents:</p>
+<ul>
+<li><code>nmbr</code>: <code>usize</code> - the <a href="item/gdbcall/enum.Number.html">GDB call number</a></li>
+<li><code>arg0</code>: <code>usize</code> - the first argument</li>
+<li><code>arg1</code>: <code>usize</code> - the second argument</li>
+<li><code>arg2</code>: <code>usize</code> - the third argument</li>
+<li><code>arg3</code>: <code>usize</code> - the fourth argument</li>
+<li><code>ret</code>: <code>usize</code> - the return value</li>
+<li><code>data</code>: <code>...</code> - data that can be referenced (optional)</li>
+</ul>
+<h4 id="enarx-call"><a href="#enarx-call">Enarx call</a></h4>
+<p>A <code>ENARXCALL</code> item has the following contents:</p>
+<ul>
+<li><code>nmbr</code>: <code>usize</code> - the <a href="item/enarxcall/enum.Number.html">Enarx call number</a></li>
+<li><code>arg0</code>: <code>usize</code> - the first argument</li>
+<li><code>arg1</code>: <code>usize</code> - the second argument</li>
+<li><code>arg2</code>: <code>usize</code> - the third argument</li>
+<li><code>arg3</code>: <code>usize</code> - the fourth argument</li>
+<li><code>ret</code>: <code>usize</code> - the return value</li>
 <li><code>data</code>: <code>...</code> - data that can be referenced (optional)</li>
 </ul>
 <p>The argument values may contain numeric values. However, all pointers MUST be translated to an offset from the beginning of the data section.</p>
@@ -84,7 +107,8 @@ the host and a protected virtual machine:</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="guest/index.html" title="sallyport::guest mod">guest</a></div><div class="item-right docblock-short"><p>Guest entrypoint into the sallyport.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="host/index.html" title="sallyport::host mod">host</a></div><div class="item-right docblock-short"><p>Host-specific functionality.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="item/index.html" title="sallyport::item mod">item</a></div><div class="item-right docblock-short"><p>Shared <code>sallyport</code> item definitions.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="libc/index.html" title="sallyport::libc mod">libc</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="util/index.html" title="sallyport::util mod">util</a></div><div class="item-right docblock-short"><p>Utilities</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="libc/index.html" title="sallyport::libc mod">libc</a></div><div class="item-right docblock-short"><p>Definitions of upstream <a href="../libc/index.html" title="libc">libc</a> items used within the crate.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="util/index.html" title="sallyport::util mod">util</a></div><div class="item-right docblock-short"><p>Utilities</p>
 </div></div></div><h2 id="constants" class="small-section-header"><a href="#constants">Constants</a></h2>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.KVM_SYSCALL_TRIGGER_PORT.html" title="sallyport::KVM_SYSCALL_TRIGGER_PORT constant">KVM_SYSCALL_TRIGGER_PORT</a></div><div class="item-right docblock-short"><p>I/O port used to trigger an exit to the host (<code>#VMEXIT</code>) for KVM driven shims.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.NULL.html" title="sallyport::NULL constant">NULL</a></div><div class="item-right docblock-short"><p>Internal representation of a null pointer or <a href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html#variant.None" title="Option::None"><code>Option::None</code></a> value in the sallyport block.</p>
@@ -93,5 +117,5 @@ the host and a protected virtual machine:</p>
 </div></div></div><h2 id="types" class="small-section-header"><a href="#types">Type Definitions</a></h2>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Error.html" title="sallyport::Error type">Error</a></div><div class="item-right docblock-short"><p>Error type used within this crate.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Result.html" title="sallyport::Result type">Result</a></div><div class="item-right docblock-short"><p>Result type returned by functionality exposed by this crate.</p>
-</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="sallyport" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (e95b10ba4 2022-03-13)" ></div>
+</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="sallyport" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (285fa7ecd 2022-03-14)" ></div>
 </body></html>

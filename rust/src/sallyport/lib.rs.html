@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/git/checkouts/sallyport-87d2f89630049c63/969e389/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/git/checkouts/sallyport-87d2f89630049c63/ca03b82/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../sallyport/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -138,6 +138,32 @@
 <span id="133">133</span>
 <span id="134">134</span>
 <span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
 </pre><pre class="rust"><code><span class="comment">// SPDX-License-Identifier: Apache-2.0</span>
 
 <span class="doccomment">//! API for the hypervisor-microkernel boundary</span>
@@ -171,17 +197,18 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! * `END`: `0`</span>
 <span class="doccomment">//! * `SYSCALL`: `1`</span>
-<span class="doccomment">//! * ...</span>
+<span class="doccomment">//! * `GDBCALL`: `2`</span>
+<span class="doccomment">//! * `ENARXCALL`: `3`</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ### End</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! An [`END`](item::Kind::End) item MUST have a `size` of `0`. It has no contents and simply marks the end of items in the block. This communicates the end of the items list to the host. However, the guest MUST NOT rely on the presence of a terminator upon return to the guest.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ### Syscall</span>
+<span class="doccomment">//! ### System call</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! A `SYSCALL` item has the following contents:</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! * `nmbr`: `usize` - the syscall number</span>
+<span class="doccomment">//! * `nmbr`: `usize` - the system call number</span>
 <span class="doccomment">//! * `arg0`: `usize` - the first argument</span>
 <span class="doccomment">//! * `arg1`: `usize` - the second argument</span>
 <span class="doccomment">//! * `arg2`: `usize` - the third argument</span>
@@ -191,6 +218,31 @@
 <span class="doccomment">//! * `ret0`: `usize` - the first return value</span>
 <span class="doccomment">//! * `ret1`: `usize` - the second return value</span>
 <span class="doccomment">//! * `data`: `...` - data that can be referenced (optional)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ### GDB call</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! A `GDBCALL` item has the following contents:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! * `nmbr`: `usize` - the [GDB call number](item::gdbcall::Number)</span>
+<span class="doccomment">//! * `arg0`: `usize` - the first argument</span>
+<span class="doccomment">//! * `arg1`: `usize` - the second argument</span>
+<span class="doccomment">//! * `arg2`: `usize` - the third argument</span>
+<span class="doccomment">//! * `arg3`: `usize` - the fourth argument</span>
+<span class="doccomment">//! * `ret`: `usize` - the return value</span>
+<span class="doccomment">//! * `data`: `...` - data that can be referenced (optional)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ### Enarx call</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! A `ENARXCALL` item has the following contents:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! * `nmbr`: `usize` - the [Enarx call number](item::enarxcall::Number)</span>
+<span class="doccomment">//! * `arg0`: `usize` - the first argument</span>
+<span class="doccomment">//! * `arg1`: `usize` - the second argument</span>
+<span class="doccomment">//! * `arg2`: `usize` - the third argument</span>
+<span class="doccomment">//! * `arg3`: `usize` - the fourth argument</span>
+<span class="doccomment">//! * `ret`: `usize` - the return value</span>
+<span class="doccomment">//! * `data`: `...` - data that can be referenced (optional)</span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! The argument values may contain numeric values. However, all pointers MUST be translated to an offset from the beginning of the data section.</span>
 <span class="doccomment">//!</span>
@@ -274,5 +326,5 @@
 <span class="doccomment">/// I/O port used to trigger an exit to the host (`#VMEXIT`) for KVM driven shims.</span>
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">KVM_SYSCALL_TRIGGER_PORT</span>: <span class="ident">u16</span> <span class="op">=</span> <span class="number">0xFF</span>;
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="sallyport" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (e95b10ba4 2022-03-13)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="sallyport" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (285fa7ecd 2022-03-14)" ></div>
 </body></html>
