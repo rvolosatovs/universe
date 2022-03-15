@@ -8,6 +8,6 @@ clap = "2"
 hyper = "0"
 kvm-ioctls = "0"
 reqwest = "0"
-sallyport = { git = "https://github.com/enarx/sallyport" }
+sallyport = { git = "https://github.com/enarx/sallyport", features = [ "doc" ]}
 serde = "1"
 tokio = { version = "1", features = ["full"] }
