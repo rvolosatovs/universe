@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["Connection","A trait to perform in-order, serial, byte-wise I/O."],["ConnectionExt","Extends [`Connection`] with `read` and `peek` methods."]]});

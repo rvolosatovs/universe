@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["SingleRegisterAccess","Target Extension - Support for single-register access."]],"type":[["SingleRegisterAccessOps","See [`SingleRegisterAccess`]"]]});

@@ -1,0 +1,1536 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/gdbstub-0.6.1/src/target/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../gdbstub/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../../gdbstub/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../gdbstub/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+<span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
+<span id="584">584</span>
+<span id="585">585</span>
+<span id="586">586</span>
+<span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
+<span id="600">600</span>
+<span id="601">601</span>
+<span id="602">602</span>
+<span id="603">603</span>
+<span id="604">604</span>
+<span id="605">605</span>
+<span id="606">606</span>
+<span id="607">607</span>
+<span id="608">608</span>
+<span id="609">609</span>
+<span id="610">610</span>
+<span id="611">611</span>
+<span id="612">612</span>
+<span id="613">613</span>
+<span id="614">614</span>
+<span id="615">615</span>
+<span id="616">616</span>
+<span id="617">617</span>
+<span id="618">618</span>
+<span id="619">619</span>
+<span id="620">620</span>
+<span id="621">621</span>
+<span id="622">622</span>
+<span id="623">623</span>
+<span id="624">624</span>
+<span id="625">625</span>
+<span id="626">626</span>
+<span id="627">627</span>
+<span id="628">628</span>
+<span id="629">629</span>
+<span id="630">630</span>
+<span id="631">631</span>
+<span id="632">632</span>
+<span id="633">633</span>
+<span id="634">634</span>
+<span id="635">635</span>
+<span id="636">636</span>
+<span id="637">637</span>
+<span id="638">638</span>
+<span id="639">639</span>
+<span id="640">640</span>
+<span id="641">641</span>
+<span id="642">642</span>
+<span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
+<span id="650">650</span>
+<span id="651">651</span>
+<span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
+<span id="667">667</span>
+<span id="668">668</span>
+<span id="669">669</span>
+<span id="670">670</span>
+<span id="671">671</span>
+<span id="672">672</span>
+<span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
+<span id="676">676</span>
+<span id="677">677</span>
+<span id="678">678</span>
+<span id="679">679</span>
+<span id="680">680</span>
+<span id="681">681</span>
+<span id="682">682</span>
+<span id="683">683</span>
+<span id="684">684</span>
+<span id="685">685</span>
+<span id="686">686</span>
+<span id="687">687</span>
+<span id="688">688</span>
+<span id="689">689</span>
+<span id="690">690</span>
+<span id="691">691</span>
+<span id="692">692</span>
+<span id="693">693</span>
+<span id="694">694</span>
+<span id="695">695</span>
+<span id="696">696</span>
+<span id="697">697</span>
+<span id="698">698</span>
+<span id="699">699</span>
+<span id="700">700</span>
+<span id="701">701</span>
+<span id="702">702</span>
+<span id="703">703</span>
+<span id="704">704</span>
+<span id="705">705</span>
+<span id="706">706</span>
+<span id="707">707</span>
+<span id="708">708</span>
+<span id="709">709</span>
+<span id="710">710</span>
+<span id="711">711</span>
+<span id="712">712</span>
+<span id="713">713</span>
+<span id="714">714</span>
+<span id="715">715</span>
+<span id="716">716</span>
+<span id="717">717</span>
+<span id="718">718</span>
+<span id="719">719</span>
+<span id="720">720</span>
+<span id="721">721</span>
+<span id="722">722</span>
+<span id="723">723</span>
+<span id="724">724</span>
+<span id="725">725</span>
+<span id="726">726</span>
+<span id="727">727</span>
+<span id="728">728</span>
+<span id="729">729</span>
+<span id="730">730</span>
+<span id="731">731</span>
+<span id="732">732</span>
+<span id="733">733</span>
+<span id="734">734</span>
+<span id="735">735</span>
+<span id="736">736</span>
+<span id="737">737</span>
+<span id="738">738</span>
+<span id="739">739</span>
+<span id="740">740</span>
+<span id="741">741</span>
+<span id="742">742</span>
+<span id="743">743</span>
+<span id="744">744</span>
+<span id="745">745</span>
+<span id="746">746</span>
+<span id="747">747</span>
+<span id="748">748</span>
+<span id="749">749</span>
+<span id="750">750</span>
+<span id="751">751</span>
+<span id="752">752</span>
+<span id="753">753</span>
+<span id="754">754</span>
+<span id="755">755</span>
+<span id="756">756</span>
+<span id="757">757</span>
+<span id="758">758</span>
+<span id="759">759</span>
+<span id="760">760</span>
+<span id="761">761</span>
+<span id="762">762</span>
+<span id="763">763</span>
+<span id="764">764</span>
+</pre><pre class="rust"><code><span class="doccomment">//! The core [`Target`] trait, and all its various protocol extension traits.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The [`Target`] trait describes how to control and modify a system&#39;s</span>
+<span class="doccomment">//! execution state during a GDB debugging session, and serves as the</span>
+<span class="doccomment">//! primary bridge between `gdbstub`&#39;s generic protocol implementation and a</span>
+<span class="doccomment">//! target&#39;s project/platform-specific code.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! **`Target` is the most important trait in `gdbstub`, and must be implemented</span>
+<span class="doccomment">//! by all consumers of the library!**</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Implementing `Target`</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! `gdbstub` uses a technique called [&quot;Inlineable Dyn Extension Traits&quot;](ext)</span>
+<span class="doccomment">//! (IDETs) to expose an ergonomic and extensible interface to the GDB protocol.</span>
+<span class="doccomment">//! It&#39;s not a very common pattern, and can seem a little &quot;weird&quot; at first</span>
+<span class="doccomment">//! glance, but IDETs are actually very straightforward to use!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! **TL;DR:** Whenever you see a method that returns something that looks like</span>
+<span class="doccomment">//! `Option&lt;ProtocolExtOps&gt;`, you can enable that protocol extension by</span>
+<span class="doccomment">//! implementing the `ProtocolExt` type on your target, and overriding the</span>
+<span class="doccomment">//! `Option&lt;ProtocolExtOps&gt;` method to return `Some(self)`.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Please refer to the [documentation in the `ext` module](ext) for more</span>
+<span class="doccomment">//! information on IDETs, including a more in-depth explanation of how they</span>
+<span class="doccomment">//! work, and how `Target` leverages them to provide fine grained control over</span>
+<span class="doccomment">//! enabled protocol features.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Associated Types</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! - The [`Target::Arch`](trait.Target.html#associatedtype.Arch) associated</span>
+<span class="doccomment">//!   type encodes information about the target&#39;s architecture, such as its</span>
+<span class="doccomment">//!   pointer size, register layout, etc... `gdbstub` comes with several</span>
+<span class="doccomment">//!   built-in architecture definitions, which can be found under the</span>
+<span class="doccomment">//!   [`arch`](../arch/index.html) module.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! - The [`Target::Error`](trait.Target.html#associatedtype.Error) associated</span>
+<span class="doccomment">//!   type allows implementors to plumb-through their own project-specific fatal</span>
+<span class="doccomment">//!   error type into the `Target` trait. This is a big-boost to library</span>
+<span class="doccomment">//!   ergonomics, as it enables consumers of `gdbstub` to preserve</span>
+<span class="doccomment">//!   target-specific context while using `gdbstub`, without having to do any</span>
+<span class="doccomment">//!   &quot;error-stashing&quot;.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! For example: consider an emulated target where certain devices might return</span>
+<span class="doccomment">//! a `MyEmuError::ContractViolation` error whenever they&#39;re accessed</span>
+<span class="doccomment">//! &quot;improperly&quot; (e.g: setting registers in the wrong order). By setting `type</span>
+<span class="doccomment">//! Error = MyEmuError`, the method signature of the `Target`&#39;s `resume` method</span>
+<span class="doccomment">//! becomes `fn resume(&amp;mut self, ...) -&gt; Result&lt;_, MyEmuError&gt;`, which makes it</span>
+<span class="doccomment">//! possible to preserve the target-specific error while using `gdbstub`!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Required Methods (Base Protocol)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! A minimal `Target` implementation only needs to implement a single method:</span>
+<span class="doccomment">//! [`Target::base_ops`](trait.Target.html#tymethod.base_ops). This method is</span>
+<span class="doccomment">//! used to select which set of [`base`](crate::target::ext::base)</span>
+<span class="doccomment">//! debugging operations will be used to control the target. These are</span>
+<span class="doccomment">//! fundamental operations such as reading/writing memory, etc...</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! All other methods are entirely optional! Check out the</span>
+<span class="doccomment">//! [`ext`](ext#modules) module for a full list of currently supported protocol</span>
+<span class="doccomment">//! extensions.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Optional Protocol Extensions</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The GDB protocol is _massive_, and there are plenty of optional protocol</span>
+<span class="doccomment">//! extensions that targets can implement to enhance the base debugging</span>
+<span class="doccomment">//! experience.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! These protocol extensions range from relatively mundane things such as</span>
+<span class="doccomment">//! setting/removing breakpoints or reading/writing individual registers, but</span>
+<span class="doccomment">//! also include fancy things such as support for time travel debugging, running</span>
+<span class="doccomment">//! shell commands remotely, or even performing file IO on the target!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! `gdbstub` uses a somewhat unique approach to exposing these many features,</span>
+<span class="doccomment">//! called **Inlinable Dyn Extension Traits (IDETs)**. While this might sound a</span>
+<span class="doccomment">//! bit daunting, the API is actually quite straightforward, and described in</span>
+<span class="doccomment">//! great detail under the [`ext` module&#39;s documentation](ext).</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! After getting the base protocol up and running, do take a moment to skim</span>
+<span class="doccomment">//! through and familiarize yourself with the [many different protocol</span>
+<span class="doccomment">//! extensions](ext# modules) that `gdbstub` implements. There are some really</span>
+<span class="doccomment">//! nifty ones that you might not even realize you need!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! As a suggestion on where to start, consider implementing some of the</span>
+<span class="doccomment">//! breakpoint related extensions under</span>
+<span class="doccomment">//! [`breakpoints`](crate::target::ext::breakpoints). While setting/removing</span>
+<span class="doccomment">//! breakpoints is technically an &quot;optional&quot; part of the GDB protocol, I&#39;m sure</span>
+<span class="doccomment">//! you&#39;d be hard pressed to find a debugger that doesn&#39;t support breakpoints.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ### Note: Missing Protocol Extensions</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! `gdbstub`&#39;s development is guided by the needs of its contributors, with</span>
+<span class="doccomment">//! new features being added on an &quot;as-needed&quot; basis.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! If there&#39;s a GDB protocol extensions you&#39;re interested in that hasn&#39;t been</span>
+<span class="doccomment">//! implemented in `gdbstub` yet, (e.g: remote filesystem access, tracepoint</span>
+<span class="doccomment">//! support, etc...), consider opening an issue / filing a PR on the</span>
+<span class="doccomment">//! [`gdbstub` GitHub repo](https://github.com/daniel5151/gdbstub/).</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Check out the [GDB Remote Configuration Docs](https://sourceware.org/gdb/onlinedocs/gdb/Remote-Configuration.html)</span>
+<span class="doccomment">//! for a table of GDB commands + their corresponding Remote Serial Protocol</span>
+<span class="doccomment">//! packets.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ### Example: A fairly minimal Single Threaded `Target`</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! This example includes a handful of required and optional target features,</span>
+<span class="doccomment">//! and shows off the basics of how to work with IDETs.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```rust</span>
+<span class="doccomment">//! use gdbstub::common::Signal;</span>
+<span class="doccomment">//! use gdbstub::target::{Target, TargetResult};</span>
+<span class="doccomment">//! use gdbstub::target::ext::base::BaseOps;</span>
+<span class="doccomment">//! use gdbstub::target::ext::base::singlethread::{</span>
+<span class="doccomment">//!     SingleThreadResumeOps, SingleThreadSingleStepOps</span>
+<span class="doccomment">//! };</span>
+<span class="doccomment">//! use gdbstub::target::ext::base::singlethread::{</span>
+<span class="doccomment">//!     SingleThreadBase, SingleThreadResume, SingleThreadSingleStep</span>
+<span class="doccomment">//! };</span>
+<span class="doccomment">//! use gdbstub::target::ext::breakpoints::{Breakpoints, SwBreakpoint};</span>
+<span class="doccomment">//! use gdbstub::target::ext::breakpoints::{BreakpointsOps, SwBreakpointOps};</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! struct MyTarget;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! impl Target for MyTarget {</span>
+<span class="doccomment">//!     type Error = ();</span>
+<span class="doccomment">//!     type Arch = gdbstub_arch::arm::Armv4t; // as an example</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!     #[inline(always)]</span>
+<span class="doccomment">//!     fn base_ops(&amp;mut self) -&gt; BaseOps&lt;Self::Arch, Self::Error&gt; {</span>
+<span class="doccomment">//!         BaseOps::SingleThread(self)</span>
+<span class="doccomment">//!     }</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!     // opt-in to support for setting/removing breakpoints</span>
+<span class="doccomment">//!     #[inline(always)]</span>
+<span class="doccomment">//!     fn support_breakpoints(&amp;mut self) -&gt; Option&lt;BreakpointsOps&lt;Self&gt;&gt; {</span>
+<span class="doccomment">//!         Some(self)</span>
+<span class="doccomment">//!     }</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! impl SingleThreadBase for MyTarget {</span>
+<span class="doccomment">//!     fn read_registers(</span>
+<span class="doccomment">//!         &amp;mut self,</span>
+<span class="doccomment">//!         regs: &amp;mut gdbstub_arch::arm::reg::ArmCoreRegs,</span>
+<span class="doccomment">//!     ) -&gt; TargetResult&lt;(), Self&gt; { todo!() }</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!     fn write_registers(</span>
+<span class="doccomment">//!         &amp;mut self,</span>
+<span class="doccomment">//!         regs: &amp;gdbstub_arch::arm::reg::ArmCoreRegs</span>
+<span class="doccomment">//!     ) -&gt; TargetResult&lt;(), Self&gt; { todo!() }</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!     fn read_addrs(</span>
+<span class="doccomment">//!         &amp;mut self,</span>
+<span class="doccomment">//!         start_addr: u32,</span>
+<span class="doccomment">//!         data: &amp;mut [u8],</span>
+<span class="doccomment">//!     ) -&gt; TargetResult&lt;(), Self&gt; { todo!() }</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!     fn write_addrs(</span>
+<span class="doccomment">//!         &amp;mut self,</span>
+<span class="doccomment">//!         start_addr: u32,</span>
+<span class="doccomment">//!         data: &amp;[u8],</span>
+<span class="doccomment">//!     ) -&gt; TargetResult&lt;(), Self&gt; { todo!() }</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!     // most targets will want to support at resumption as well...</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!     #[inline(always)]</span>
+<span class="doccomment">//!     fn support_resume(&amp;mut self) -&gt; Option&lt;SingleThreadResumeOps&lt;Self&gt;&gt; {</span>
+<span class="doccomment">//!         Some(self)</span>
+<span class="doccomment">//!     }</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! impl SingleThreadResume for MyTarget {</span>
+<span class="doccomment">//!     fn resume(</span>
+<span class="doccomment">//!         &amp;mut self,</span>
+<span class="doccomment">//!         signal: Option&lt;Signal&gt;,</span>
+<span class="doccomment">//!     ) -&gt; Result&lt;(), Self::Error&gt; { todo!() }</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!     // ...and if the target supports resumption, it&#39;ll likely want to support</span>
+<span class="doccomment">//!     // single-step resume as well</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!     #[inline(always)]</span>
+<span class="doccomment">//!     fn support_single_step(</span>
+<span class="doccomment">//!         &amp;mut self</span>
+<span class="doccomment">//!     ) -&gt; Option&lt;SingleThreadSingleStepOps&lt;&#39;_, Self&gt;&gt; {</span>
+<span class="doccomment">//!         Some(self)</span>
+<span class="doccomment">//!     }</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! impl SingleThreadSingleStep for MyTarget {</span>
+<span class="doccomment">//!     fn step(</span>
+<span class="doccomment">//!         &amp;mut self,</span>
+<span class="doccomment">//!         signal: Option&lt;Signal&gt;,</span>
+<span class="doccomment">//!     ) -&gt; Result&lt;(), Self::Error&gt; { todo!() }</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! impl Breakpoints for MyTarget {</span>
+<span class="doccomment">//!     // there are several kinds of breakpoints - this target uses software breakpoints</span>
+<span class="doccomment">//!     #[inline(always)]</span>
+<span class="doccomment">//!     fn support_sw_breakpoint(&amp;mut self) -&gt; Option&lt;SwBreakpointOps&lt;Self&gt;&gt; {</span>
+<span class="doccomment">//!         Some(self)</span>
+<span class="doccomment">//!     }</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! impl SwBreakpoint for MyTarget {</span>
+<span class="doccomment">//!     fn add_sw_breakpoint(</span>
+<span class="doccomment">//!         &amp;mut self,</span>
+<span class="doccomment">//!         addr: u32,</span>
+<span class="doccomment">//!         kind: gdbstub_arch::arm::ArmBreakpointKind,</span>
+<span class="doccomment">//!     ) -&gt; TargetResult&lt;bool, Self&gt; { todo!() }</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!     fn remove_sw_breakpoint(</span>
+<span class="doccomment">//!         &amp;mut self,</span>
+<span class="doccomment">//!         addr: u32,</span>
+<span class="doccomment">//!         kind: gdbstub_arch::arm::ArmBreakpointKind,</span>
+<span class="doccomment">//!     ) -&gt; TargetResult&lt;bool, Self&gt; { todo!() }</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## A note on error handling</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! As you explore the various protocol extension traits, you&#39;ll often find that</span>
+<span class="doccomment">//! functions don&#39;t return a typical [`Result&lt;T, Self::Error&gt;`],</span>
+<span class="doccomment">//! and will instead return a [`TargetResult&lt;T, Self&gt;`].</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! At first glance this might look a bit strange, since it looks like the `Err`</span>
+<span class="doccomment">//! variant of `TargetResult` is `Self` instead of `Self::Error`!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Thankfully, there&#39;s a good reason for why that&#39;s the case. In a nutshell,</span>
+<span class="doccomment">//! `TargetResult` wraps a typical `Result&lt;T, Self::Error&gt;` with a few</span>
+<span class="doccomment">//! additional error types which can be reported back to the GDB client via the</span>
+<span class="doccomment">//! GDB RSP.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! For example, if the GDB client tried to read memory from invalid memory,</span>
+<span class="doccomment">//! instead of immediately terminating the entire debugging session, it&#39;s</span>
+<span class="doccomment">//! possible to simply return a `Err(TargetError::Errno(14)) // EFAULT`, which</span>
+<span class="doccomment">//! will notify the GDB client that the operation has failed.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! See the [`TargetError`] docs for more details.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## A note on all the `&lt;Self::Arch as Arch&gt;::` syntax</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! As you explore `Target` and its many extension traits, you&#39;ll enounter</span>
+<span class="doccomment">//! many method signatures that use this pretty gnarly bit of Rust type syntax.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! If [rust-lang/rust#38078](https://github.com/rust-lang/rust/issues/38078)</span>
+<span class="doccomment">//! gets fixed, then types like `&lt;Self::Arch as Arch&gt;::Foo` could be simplified</span>
+<span class="doccomment">//! to just `Self::Arch::Foo`, but until then, the much more explicit</span>
+<span class="doccomment">//! [fully qualified syntax](https://doc.rust-lang.org/book/ch19-03-advanced-traits.html#fully-qualified-syntax-for-disambiguation-calling-methods-with-the-same-name)</span>
+<span class="doccomment">//! must be used instead.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! To improve the readability and maintainability of your own implementation,</span>
+<span class="doccomment">//! it&#39;d be best to swap out the fully qualified syntax with whatever concrete</span>
+<span class="doccomment">//! type is being used. e.g: on a 32-bit target, instead of cluttering up a</span>
+<span class="doccomment">//! method implementation with a parameter passed as `(addr: &lt;Self::Arch as</span>
+<span class="doccomment">//! Arch&gt;::Usize)`, just write `(addr: u32)` directly.</span>
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::arch</span>::{<span class="ident">Arch</span>, <span class="ident">SingleStepGdbBehavior</span>};
+
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ext</span>;
+
+<span class="doccomment">/// The error type for various methods on `Target` and its assorted associated</span>
+<span class="doccomment">/// extension traits.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Error Handling over the GDB Remote Serial Protocol</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The GDB Remote Serial Protocol has less-than-stellar support for error</span>
+<span class="doccomment">/// handling, typically taking the form of a single-byte</span>
+<span class="doccomment">/// [`errno`-style error codes](https://chromium.googlesource.com/chromiumos/docs/+/HEAD/constants/errnos.md).</span>
+<span class="doccomment">/// Moreover, often times the GDB client will simply _ignore_ the specific error</span>
+<span class="doccomment">/// code returned by the stub, and print a generic failure message instead.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// As such, while it&#39;s certainly better to use appropriate error codes when</span>
+<span class="doccomment">/// possible (e.g: returning a `EFAULT` (14) when reading from invalid memory),</span>
+<span class="doccomment">/// it&#39;s often fine to simply return the more general `TargetError::NonFatal`</span>
+<span class="doccomment">/// instead, and avoid the headache of picking a &quot;descriptive&quot; error code. Under</span>
+<span class="doccomment">/// the good, `TargetError::NonFatal` is sent to the GDB client as a generic</span>
+<span class="doccomment">/// `EREMOTEIO` (121) error.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # `From` and `Into` implementations</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// - `From&lt;()&gt;` -&gt; `TargetError::NonFatal`</span>
+<span class="doccomment">/// - `From&lt;io::Error&gt;` -&gt; `TargetError::Io(io::Error)` (requires `std` feature)</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// When using a custom target-specific fatal error type, users are encouraged</span>
+<span class="doccomment">/// to write the following impl to simplify error handling in `Target` methods:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// use gdbstub::target::TargetError;</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// /// Target-specific Fatal Error</span>
+<span class="doccomment">/// enum MyTargetFatalError {</span>
+<span class="doccomment">///     // ...</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// impl From&lt;MyTargetFatalError&gt; for TargetError&lt;MyTargetFatalError&gt; {</span>
+<span class="doccomment">///     fn from(e: MyTargetFatalError) -&gt; Self {</span>
+<span class="doccomment">///         TargetError::Fatal(e)</span>
+<span class="doccomment">///     }</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Unfortunately, a blanket impl such as `impl&lt;T: Target&gt; From&lt;T::Error&gt; for</span>
+<span class="doccomment">/// TargetError&lt;T::Error&gt;` isn&#39;t possible, as it could result in impl conflicts.</span>
+<span class="doccomment">/// For example, if a Target decided to use `()` as its fatal error type, then</span>
+<span class="doccomment">/// there would be conflict with the existing `From&lt;()&gt;` impl.</span>
+<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">TargetError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// A non-specific, non-fatal error has occurred.</span>
+    <span class="ident">NonFatal</span>,
+    <span class="doccomment">/// Non-fatal I/O Error. Only available when the `std` feature is enabled.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// At the moment, this is just shorthand for</span>
+    <span class="doccomment">/// `TargetError::NonFatal(e.raw_os_err().unwrap_or(121))`. Error code `121`</span>
+    <span class="doccomment">/// corresponds to `EREMOTEIO`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// In the future, `gdbstub` may add support for the &quot;QEnableErrorStrings&quot;</span>
+    <span class="doccomment">/// LLDB protocol extension, which would allow sending additional error</span>
+    <span class="doccomment">/// context (in the form of an ASCII string) when an I/O error occurs. If</span>
+    <span class="doccomment">/// this is something you&#39;re interested in, consider opening a PR!</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
+    <span class="ident">Io</span>(<span class="ident">std::io::Error</span>),
+    <span class="doccomment">/// An operation-specific non-fatal error code.</span>
+    <span class="ident">Errno</span>(<span class="ident">u8</span>),
+    <span class="doccomment">/// A target-specific fatal error.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// **WARNING:** Returning this error will immediately terminate the GDB</span>
+    <span class="doccomment">/// debugging session, and return a top-level `GdbStubError::TargetError`!</span>
+    <span class="ident">Fatal</span>(<span class="ident">E</span>),
+}
+
+<span class="doccomment">/// Converts a `()` into a `TargetError::NonFatal`.</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">TargetError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw">_</span>: ()) -&gt; <span class="ident">TargetError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+        <span class="ident">TargetError::NonFatal</span>
+    }
+}
+
+<span class="doccomment">/// Converts a `std::io::Error` into a `TargetError::Io`.</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">std::io::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">TargetError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">e</span>: <span class="ident">std::io::Error</span>) -&gt; <span class="ident">TargetError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+        <span class="ident">TargetError::Io</span>(<span class="ident">e</span>)
+    }
+}
+
+<span class="doccomment">/// A specialized `Result` type for `Target` operations. Supports reporting</span>
+<span class="doccomment">/// non-fatal errors back to the GDB client.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// See [`TargetError`] for more details.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// _Note:_ While it&#39;s typically parameterized as `TargetResult&lt;T, Self&gt;`, the</span>
+<span class="doccomment">/// error value is in-fact `TargetError&lt;Self::Error&gt;` (not `Self`).</span>
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">TargetResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Tgt</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">TargetError</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">Tgt</span> <span class="kw">as</span> <span class="ident">Target</span><span class="op">&gt;</span><span class="ident">::Error</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+
+<span class="doccomment">/// Describes the architecture and capabilities of a target which can be</span>
+<span class="doccomment">/// debugged by [`GdbStub`](../struct.GdbStub.html).</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The [`Target`](trait.Target.html) trait describes how to control and modify</span>
+<span class="doccomment">/// a system&#39;s execution state during a GDB debugging session, and serves as the</span>
+<span class="doccomment">/// primary bridge between `gdbstub`&#39;s generic protocol implementation and a</span>
+<span class="doccomment">/// target&#39;s project/platform-specific code.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// **`Target` is the most important trait in `gdbstub`, and must be implemented</span>
+<span class="doccomment">/// by anyone who uses the library!**</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Please refer to the the documentation in the [`target` module](self)</span>
+<span class="doccomment">/// for more information on how to implement and work with `Target` and its</span>
+<span class="doccomment">/// various extension traits.</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Target</span> {
+    <span class="doccomment">/// The target&#39;s architecture.</span>
+    <span class="kw">type</span> <span class="ident">Arch</span>: <span class="ident">Arch</span>;
+
+    <span class="doccomment">/// A target-specific **fatal** error.</span>
+    <span class="kw">type</span> <span class="ident">Error</span>;
+
+    <span class="doccomment">/// Base operations such as reading/writing from memory/registers,</span>
+    <span class="doccomment">/// stopping/resuming the target, etc....</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// For example, on a single-threaded target:</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// use gdbstub::target::Target;</span>
+    <span class="doccomment">/// use gdbstub::target::ext::base::BaseOps;</span>
+    <span class="doccomment">/// use gdbstub::target::ext::base::singlethread::SingleThreadBase;</span>
+    <span class="doccomment">/// # use gdbstub::target::TargetResult;</span>
+    <span class="doccomment">/// # struct MyTarget;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// impl Target for MyTarget {</span>
+    <span class="doccomment">///     // ...</span>
+    <span class="doccomment">///     # type Arch = gdbstub_arch::arm::Armv4t;</span>
+    <span class="doccomment">///     # type Error = ();</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     fn base_ops(&amp;mut self) -&gt; BaseOps&lt;Self::Arch, Self::Error&gt; {</span>
+    <span class="doccomment">///         BaseOps::SingleThread(self)</span>
+    <span class="doccomment">///     }</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// // ...and then implement the associated base IDET</span>
+    <span class="doccomment">/// impl SingleThreadBase for MyTarget {</span>
+    <span class="doccomment">///     // ...</span>
+    <span class="doccomment">/// #   fn read_registers(</span>
+    <span class="doccomment">/// #       &amp;mut self,</span>
+    <span class="doccomment">/// #       regs: &amp;mut gdbstub_arch::arm::reg::ArmCoreRegs,</span>
+    <span class="doccomment">/// #   ) -&gt; TargetResult&lt;(), Self&gt; { todo!() }</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// #   fn write_registers(</span>
+    <span class="doccomment">/// #       &amp;mut self,</span>
+    <span class="doccomment">/// #       regs: &amp;gdbstub_arch::arm::reg::ArmCoreRegs</span>
+    <span class="doccomment">/// #   ) -&gt; TargetResult&lt;(), Self&gt; { todo!() }</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// #   fn read_addrs(</span>
+    <span class="doccomment">/// #       &amp;mut self,</span>
+    <span class="doccomment">/// #       start_addr: u32,</span>
+    <span class="doccomment">/// #       data: &amp;mut [u8],</span>
+    <span class="doccomment">/// #   ) -&gt; TargetResult&lt;(), Self&gt; { todo!() }</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// #   fn write_addrs(</span>
+    <span class="doccomment">/// #       &amp;mut self,</span>
+    <span class="doccomment">/// #       start_addr: u32,</span>
+    <span class="doccomment">/// #       data: &amp;[u8],</span>
+    <span class="doccomment">/// #   ) -&gt; TargetResult&lt;(), Self&gt; { todo!() }</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">fn</span> <span class="ident">base_ops</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">ext::base::BaseOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident"><span class="self">Self</span>::Arch</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span>;
+
+    <span class="doccomment">/// If the target supports resumption, but hasn&#39;t implemented explicit</span>
+    <span class="doccomment">/// support for software breakpoints (via</span>
+    <span class="doccomment">/// [`SwBreakpoints`](ext::breakpoints::SwBreakpoint)), notify the user</span>
+    <span class="doccomment">/// that the GDB client may set &quot;implicit&quot; software breakpoints by</span>
+    <span class="doccomment">/// rewriting the target&#39;s instruction stream.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Targets that wish to use the GDB client&#39;s implicit software breakpoint</span>
+    <span class="doccomment">/// handler must explicitly **opt-in** to this somewhat surprising GDB</span>
+    <span class="doccomment">/// feature by overriding this method to return `true`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If you are reading these docs after having encountered a</span>
+    <span class="doccomment">/// [`GdbStubError::ImplicitSwBreakpoints`] error, it&#39;s quite likely that</span>
+    <span class="doccomment">/// you&#39;ll want to implement explicit support for software breakpoints.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Context</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// An &quot;implicit&quot; software breakpoint is set by the GDB client by manually</span>
+    <span class="doccomment">/// writing a software breakpoint instruction into target memory via the</span>
+    <span class="doccomment">/// target&#39;s `write_addrs` implementation. i.e: the GDB client will</span>
+    <span class="doccomment">/// overwrite the target&#39;s instruction stream with a software breakpoint</span>
+    <span class="doccomment">/// instruction, with the expectation that the target has a implemented a</span>
+    <span class="doccomment">/// breakpoint exception handler.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Implications</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// While this is a reasonable (and useful!) bit of behavior when targeting</span>
+    <span class="doccomment">/// many classes of remote stub (e.g: bare-metal, separate process), there</span>
+    <span class="doccomment">/// are many `gdbstub` implementations that do _not_ implement &quot;software</span>
+    <span class="doccomment">/// breakpoints&quot; by naively rewriting the target&#39;s instruction stream.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// - e.g: a `gdbstub` implemented in an emulator is unlikely to implement</span>
+    <span class="doccomment">///   &quot;software breakpoints&quot; by hooking into the emulated hardware&#39;s</span>
+    <span class="doccomment">///   breakpoint handler, and would likely implement &quot;breakpoints&quot; by</span>
+    <span class="doccomment">///   maintaining a list of addresses to stop at as part of its core</span>
+    <span class="doccomment">///   interpreter loop.</span>
+    <span class="doccomment">/// - e.g: a `gdbstub` implemented in a hypervisor would require special</span>
+    <span class="doccomment">///   coordination with the guest kernel to support software breakpoints, as</span>
+    <span class="doccomment">///   there would need to be some way to distinguish between &quot;in-guest&quot;</span>
+    <span class="doccomment">///   debugging, and &quot;hypervisor&quot; debugging.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// As such, `gdbstub` includes this `guard_rail_implicit_sw_breakpoints`</span>
+    <span class="doccomment">/// method.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// As the name suggests, this method acts as a &quot;guard rail&quot; that</span>
+    <span class="doccomment">/// warns users from accidentally opting into this &quot;implicit&quot; breakpoint</span>
+    <span class="doccomment">/// functionality, and being exceptionally confused as to why their</span>
+    <span class="doccomment">/// target is acting weird.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If `gdbstub` detects that the target has not implemented a software</span>
+    <span class="doccomment">/// breakpoint handler, it will check if</span>
+    <span class="doccomment">/// `guard_rail_implicit_sw_breakpoints()` has been enabled, and if it</span>
+    <span class="doccomment">/// has not, it will trigger a runtime error that points the user at this</span>
+    <span class="doccomment">/// very documentation.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # A note on breakpoints</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Aside from setting breakpoints at the explicit behest of the user (e.g:</span>
+    <span class="doccomment">/// when setting breakpoints via the `b` command in GDB), the GDB client may</span>
+    <span class="doccomment">/// also set/remove _temporary breakpoints_ as part of other commands.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// e.g: On targets without native support for hardware single-stepping,</span>
+    <span class="doccomment">/// calling `stepi` in GDB will result in the GDB client setting a temporary</span>
+    <span class="doccomment">/// breakpoint on the next instruction + resuming via `continue` instead.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`GdbStubError::ImplicitSwBreakpoints`]:</span>
+    <span class="doccomment">/// crate::stub::GdbStubError::ImplicitSwBreakpoints</span>
+    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">guard_rail_implicit_sw_breakpoints</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+        <span class="bool-val">false</span>
+    }
+
+    <span class="doccomment">/// Override the arch-level value for [`Arch::single_step_gdb_behavior`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If you are reading these docs after having encountered a</span>
+    <span class="doccomment">/// [`GdbStubError::SingleStepGdbBehavior`] error, you may need to either:</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// - implement support for single-step</span>
+    <span class="doccomment">/// - disable existing support for single step</span>
+    <span class="doccomment">/// - be a Good Citizen and perform a quick test to see what kind of</span>
+    <span class="doccomment">///   behavior your Arch exhibits.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # WARNING</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Unless you _really_ know what you&#39;re doing (e.g: working on a dynamic</span>
+    <span class="doccomment">/// target implementation, attempting to fix the underlying bug, etc...),</span>
+    <span class="doccomment">/// you should **not** override this method, and instead follow the advice</span>
+    <span class="doccomment">/// the error gives you.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Incorrectly setting this method may lead to &quot;unexpected packet&quot; runtime</span>
+    <span class="doccomment">/// errors!</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Details</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This method provides an &quot;escape hatch&quot; for disabling a workaround for a</span>
+    <span class="doccomment">/// bug in the mainline GDB client implementation.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// To squelch all errors, this method can be set to return</span>
+    <span class="doccomment">/// [`SingleStepGdbBehavior::Optional`] (though as mentioned above - you</span>
+    <span class="doccomment">/// should only do so if you&#39;re sure that&#39;s the right behavior).</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// For more information, see the documentation for</span>
+    <span class="doccomment">/// [`Arch::single_step_gdb_behavior`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`GdbStubError::SingleStepGdbBehavior`]:</span>
+    <span class="doccomment">/// crate::stub::GdbStubError::SingleStepGdbBehavior</span>
+    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">guard_rail_single_step_gdb_behavior</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">SingleStepGdbBehavior</span> {
+        <span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Arch</span> <span class="kw">as</span> <span class="ident">Arch</span><span class="op">&gt;</span><span class="ident">::single_step_gdb_behavior</span>()
+    }
+
+    <span class="doccomment">/// Enable/disable using the more efficient `X` packet to write to target</span>
+    <span class="doccomment">/// memory (as opposed to the basic `M` packet).</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// By default, this method returns `true`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// _Author&#39;s note:_ Unless you&#39;re _really_ trying to squeeze `gdbstub` onto</span>
+    <span class="doccomment">/// a particularly resource-constrained platform, you may as well leave this</span>
+    <span class="doccomment">/// optimization enabled.</span>
+    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">use_x_upcase_packet</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+        <span class="bool-val">true</span>
+    }
+
+    <span class="doccomment">/// Whether `gdbstub` should provide a &quot;stub&quot; `resume` implementation on</span>
+    <span class="doccomment">/// targets without support for resumption.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// At the time of writing, the mainline GDB client does not gracefully</span>
+    <span class="doccomment">/// handle targets that do not support support resumption, and will hang</span>
+    <span class="doccomment">/// indefinitely if a user inadvertently attempts to `continue` or `step`</span>
+    <span class="doccomment">/// such a target.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// To make the `gdbstub` user experience a bit better, the library includes</span>
+    <span class="doccomment">/// bit of &quot;stub&quot; code to gracefully handle these cases.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If a user attempts to resume a target that hasn&#39;t implemented support</span>
+    <span class="doccomment">/// for resumption, `gdbstub` will write a brief message back to the GDB</span>
+    <span class="doccomment">/// client console, and will immediately return a &quot;stopped with TRAP&quot; stop</span>
+    <span class="doccomment">/// reason.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This method controls whether or not this bt of behavior is enabled.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// _Author&#39;s note:_ Unless you&#39;re _really_ trying to squeeze `gdbstub` onto</span>
+    <span class="doccomment">/// a particularly resource-constrained platform, you may as well leave this</span>
+    <span class="doccomment">/// enabled. The resulting stub code is entirely optimized out on targets</span>
+    <span class="doccomment">/// that implement support for resumption.</span>
+    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">use_resume_stub</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+        <span class="bool-val">true</span>
+    }
+
+    <span class="doccomment">/// Enable/Disable the use of run-length encoding on outgoing packets.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is enabled by default, as RLE can save substantial amounts of</span>
+    <span class="doccomment">/// bandwidth down the wire.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// _Author&#39;s note:_ There are essentially no reasons to disable RLE, unless</span>
+    <span class="doccomment">/// you happen to be using a custom GDB client that doesn&#39;t support RLE.</span>
+    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">use_rle</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+        <span class="bool-val">true</span>
+    }
+
+    <span class="doccomment">/// Whether to send a target description XML to the client.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Setting this to `false` will override both</span>
+    <span class="doccomment">/// [`Target::support_target_description_xml_override`] and the associated</span>
+    <span class="doccomment">/// [`Arch::target_description_xml`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// _Author&#39;s note:_ Having the GDB client autodetect your target&#39;s</span>
+    <span class="doccomment">/// architecture and register set is really useful, so unless you&#39;re</span>
+    <span class="doccomment">/// _really_ trying to squeeze `gdbstub` onto a particularly</span>
+    <span class="doccomment">/// resource-constrained platform, you may as well leave this enabled.</span>
+    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">use_target_description_xml</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+        <span class="bool-val">true</span>
+    }
+
+    <span class="doccomment">/// Support for setting / removing breakpoints.</span>
+    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">support_breakpoints</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::breakpoints::BreakpointsOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="prelude-val">None</span>
+    }
+
+    <span class="doccomment">/// Support for handling custom GDB `monitor` commands.</span>
+    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">support_monitor_cmd</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::monitor_cmd::MonitorCmdOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="prelude-val">None</span>
+    }
+
+    <span class="doccomment">/// Support for Extended Mode operations.</span>
+    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">support_extended_mode</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::extended_mode::ExtendedModeOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="prelude-val">None</span>
+    }
+
+    <span class="doccomment">/// Support for handling requests to get the target&#39;s current section (or</span>
+    <span class="doccomment">/// segment) offsets.</span>
+    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">support_section_offsets</span>(
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+    ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::section_offsets::SectionOffsetsOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="prelude-val">None</span>
+    }
+
+    <span class="doccomment">/// Support for overriding the target description XML specified by</span>
+    <span class="doccomment">/// `Target::Arch`.</span>
+    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">support_target_description_xml_override</span>(
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+    ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::target_description_xml_override::TargetDescriptionXmlOverrideOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>
+    {
+        <span class="prelude-val">None</span>
+    }
+
+    <span class="doccomment">/// Support for reading the target&#39;s memory map.</span>
+    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">support_memory_map</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::memory_map::MemoryMapOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="prelude-val">None</span>
+    }
+
+    <span class="doccomment">/// Support for setting / removing syscall catchpoints.</span>
+    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">support_catch_syscalls</span>(
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+    ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::catch_syscalls::CatchSyscallsOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="prelude-val">None</span>
+    }
+
+    <span class="doccomment">/// Support for Host I/O operations.</span>
+    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">support_host_io</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::host_io::HostIoOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="prelude-val">None</span>
+    }
+
+    <span class="doccomment">/// Support for reading the current exec-file.</span>
+    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">support_exec_file</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::exec_file::ExecFileOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="prelude-val">None</span>
+    }
+
+    <span class="doccomment">/// Support for reading the target&#39;s Auxillary Vector.</span>
+    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">support_auxv</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::auxv::AuxvOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="prelude-val">None</span>
+    }
+}
+
+<span class="macro">macro_rules!</span> <span class="ident">impl_dyn_target</span> {
+    (<span class="macro-nonterminal">$</span><span class="kw">type</span>:<span class="macro-nonterminal">ty</span>) =&gt; {
+        <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">E</span><span class="op">&gt;</span> <span class="ident">Target</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="kw">type</span>
+        <span class="kw">where</span>
+            <span class="macro-nonterminal">A</span>: <span class="ident">Arch</span>,
+        {
+            <span class="kw">type</span> <span class="ident">Arch</span> <span class="op">=</span> <span class="ident">A</span>;
+            <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">E</span>;
+
+            <span class="kw">fn</span> <span class="ident">base_ops</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">ext::base::BaseOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident"><span class="self">Self</span>::Arch</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">base_ops</span>()
+            }
+
+            <span class="kw">fn</span> <span class="ident">guard_rail_implicit_sw_breakpoints</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">guard_rail_implicit_sw_breakpoints</span>()
+            }
+
+            <span class="kw">fn</span> <span class="ident">guard_rail_single_step_gdb_behavior</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">SingleStepGdbBehavior</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">guard_rail_single_step_gdb_behavior</span>()
+            }
+
+            <span class="kw">fn</span> <span class="ident">use_x_upcase_packet</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">use_x_upcase_packet</span>()
+            }
+
+            <span class="kw">fn</span> <span class="ident">use_resume_stub</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">use_resume_stub</span>()
+            }
+
+            <span class="kw">fn</span> <span class="ident">use_rle</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">use_rle</span>()
+            }
+
+            <span class="kw">fn</span> <span class="ident">use_target_description_xml</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">use_target_description_xml</span>()
+            }
+
+            <span class="kw">fn</span> <span class="ident">support_breakpoints</span>(
+                <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+            ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::breakpoints::BreakpointsOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">support_breakpoints</span>()
+            }
+
+            <span class="kw">fn</span> <span class="ident">support_monitor_cmd</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::monitor_cmd::MonitorCmdOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">support_monitor_cmd</span>()
+            }
+
+            <span class="kw">fn</span> <span class="ident">support_extended_mode</span>(
+                <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+            ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::extended_mode::ExtendedModeOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">support_extended_mode</span>()
+            }
+
+            <span class="kw">fn</span> <span class="ident">support_section_offsets</span>(
+                <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+            ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::section_offsets::SectionOffsetsOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">support_section_offsets</span>()
+            }
+
+            <span class="kw">fn</span> <span class="ident">support_target_description_xml_override</span>(
+                <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+            ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>
+                <span class="ident">ext::target_description_xml_override::TargetDescriptionXmlOverrideOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span>,
+            <span class="op">&gt;</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">support_target_description_xml_override</span>()
+            }
+
+            <span class="kw">fn</span> <span class="ident">support_memory_map</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::memory_map::MemoryMapOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">support_memory_map</span>()
+            }
+
+            <span class="kw">fn</span> <span class="ident">support_catch_syscalls</span>(
+                <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+            ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::catch_syscalls::CatchSyscallsOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">support_catch_syscalls</span>()
+            }
+
+            <span class="kw">fn</span> <span class="ident">support_host_io</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::host_io::HostIoOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">support_host_io</span>()
+            }
+
+            <span class="kw">fn</span> <span class="ident">support_exec_file</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::exec_file::ExecFileOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">support_exec_file</span>()
+            }
+
+            <span class="kw">fn</span> <span class="ident">support_auxv</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ext::auxv::AuxvOps</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+                (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">support_auxv</span>()
+            }
+        }
+    };
+}
+
+<span class="macro">impl_dyn_target!</span>(<span class="kw-2">&amp;mut</span> <span class="kw">dyn</span> <span class="ident">Target</span><span class="op">&lt;</span><span class="ident">Arch</span> <span class="op">=</span> <span class="ident">A</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">E</span><span class="op">&gt;</span>);
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
+<span class="macro">impl_dyn_target!</span>(<span class="ident">alloc::boxed::Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Target</span><span class="op">&lt;</span><span class="ident">Arch</span> <span class="op">=</span> <span class="ident">A</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">E</span><span class="op">&gt;</span><span class="op">&gt;</span>);
+</code></pre></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="gdbstub" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (e95b10ba4 2022-03-13)" ></div>
+</body></html>

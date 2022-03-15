@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["CatchSyscallPosition","Describes where the syscall catchpoint was triggered at."]],"struct":[["SyscallNumbers","Iterator of syscall numbers that should be reported to GDB."]],"trait":[["CatchSyscalls","Target Extension - Enable and disable catching syscalls from the inferior process."]],"type":[["CatchSyscallsOps","See `CatchSyscalls`."]]});

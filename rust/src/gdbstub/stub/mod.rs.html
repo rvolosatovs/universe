@@ -1,0 +1,542 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/gdbstub-0.6.1/src/stub/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../gdbstub/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../../gdbstub/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../gdbstub/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+</pre><pre class="rust"><code><span class="doccomment">//! The core [`GdbStub`] type, used to drive a GDB debugging session for a</span>
+<span class="doccomment">//! particular [`Target`] over a given [`Connection`].</span>
+
+<span class="kw">use</span> <span class="ident">managed::ManagedSlice</span>;
+
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::conn</span>::{<span class="ident">Connection</span>, <span class="ident">ConnectionExt</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::target::Target</span>;
+
+<span class="kw">mod</span> <span class="ident">builder</span>;
+<span class="kw">mod</span> <span class="ident">core_impl</span>;
+<span class="kw">mod</span> <span class="ident">error</span>;
+<span class="kw">mod</span> <span class="ident">stop_reason</span>;
+
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">state_machine</span>;
+
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">builder</span>::{<span class="ident">GdbStubBuilder</span>, <span class="ident">GdbStubBuilderError</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">core_impl::DisconnectReason</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">error::GdbStubError</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">stop_reason</span>::{
+    <span class="ident">BaseStopReason</span>, <span class="ident">IntoStopReason</span>, <span class="ident">MultiThreadStopReason</span>, <span class="ident">SingleThreadStopReason</span>,
+};
+
+<span class="kw">use</span> <span class="ident">GdbStubError</span> <span class="kw">as</span> <span class="ident">Error</span>;
+
+<span class="doccomment">/// Types and traits related to the [`GdbStub::run_blocking`] interface.</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">run_blocking</span> {
+    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::conn::ConnectionExt</span>;
+
+    <span class="doccomment">/// A set of user-provided methods required to run a GDB debugging session</span>
+    <span class="doccomment">/// using the [`GdbStub::run_blocking`] method.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Reminder: to use `gdbstub` in a non-blocking manner (e.g: via</span>
+    <span class="doccomment">/// async/await, unix polling, from an interrupt handler, etc...) you will</span>
+    <span class="doccomment">/// need to interface with the</span>
+    <span class="doccomment">/// [`GdbStubStateMachine`](state_machine::GdbStubStateMachine) API</span>
+    <span class="doccomment">/// directly.</span>
+    <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">BlockingEventLoop</span> {
+        <span class="doccomment">/// The Target being driven.</span>
+        <span class="kw">type</span> <span class="ident">Target</span>: <span class="ident">Target</span>;
+        <span class="doccomment">/// Connection being used to drive the target.</span>
+        <span class="kw">type</span> <span class="ident">Connection</span>: <span class="ident">ConnectionExt</span>;
+
+        <span class="doccomment">/// Which variant of the `StopReason` type should be used. Single</span>
+        <span class="doccomment">/// threaded targets should use [`SingleThreadStopReason`], whereas</span>
+        <span class="doccomment">/// multi threaded targets should use [`MultiThreadStopReason`].</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// [`SingleThreadStopReason`]: crate::stub::SingleThreadStopReason</span>
+        <span class="doccomment">/// [`MultiThreadStopReason`]: crate::stub::MultiThreadStopReason</span>
+        <span class="kw">type</span> <span class="ident">StopReason</span>: <span class="ident">IntoStopReason</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Target</span><span class="op">&gt;</span>;
+
+        <span class="doccomment">/// Invoked immediately after the target&#39;s `resume` method has been</span>
+        <span class="doccomment">/// called. The implementation should block until either the target</span>
+        <span class="doccomment">/// reports a stop reason, or if new data was sent over the connection.</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// The specific mechanism to &quot;select&quot; between these two events is</span>
+        <span class="doccomment">/// implementation specific. Some examples might include: `epoll`,</span>
+        <span class="doccomment">/// `select!` across multiple event channels, periodic polling, etc...</span>
+        <span class="kw">fn</span> <span class="ident">wait_for_stop_reason</span>(
+            <span class="ident">target</span>: <span class="kw-2">&amp;mut</span> <span class="ident"><span class="self">Self</span>::Target</span>,
+            <span class="ident">conn</span>: <span class="kw-2">&amp;mut</span> <span class="ident"><span class="self">Self</span>::Connection</span>,
+        ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>
+            <span class="ident">Event</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::StopReason</span><span class="op">&gt;</span>,
+            <span class="ident">WaitForStopReasonError</span><span class="op">&lt;</span>
+                <span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Target</span> <span class="kw">as</span> <span class="ident">Target</span><span class="op">&gt;</span><span class="ident">::Error</span>,
+                <span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Connection</span> <span class="kw">as</span> <span class="ident">Connection</span><span class="op">&gt;</span><span class="ident">::Error</span>,
+            <span class="op">&gt;</span>,
+        <span class="op">&gt;</span>;
+
+        <span class="doccomment">/// Invoked when the GDB client sends a Ctrl-C interrupt.</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// Depending on how the target is implemented, it may or may not make</span>
+        <span class="doccomment">/// sense to immediately return a stop reason as part of handling the</span>
+        <span class="doccomment">/// Ctrl-C interrupt. e.g: in some cases, it may be better to send the</span>
+        <span class="doccomment">/// target a signal upon receiving a Ctrl-C interrupt _without_</span>
+        <span class="doccomment">/// immediately sending a stop reason, and instead deferring the stop</span>
+        <span class="doccomment">/// reason to some later point in the target&#39;s execution.</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// _Suggestion_: If you&#39;re unsure which stop reason to report,</span>
+        <span class="doccomment">/// [`BaseStopReason::Signal(Signal::SIGINT)`] is a sensible default.</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// [`BaseStopReason::Signal(Signal::SIGINT)`]:</span>
+        <span class="doccomment">/// crate::stub::BaseStopReason::Signal</span>
+        <span class="kw">fn</span> <span class="ident">on_interrupt</span>(
+            <span class="ident">target</span>: <span class="kw-2">&amp;mut</span> <span class="ident"><span class="self">Self</span>::Target</span>,
+        ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::StopReason</span><span class="op">&gt;</span>, <span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Target</span> <span class="kw">as</span> <span class="ident">Target</span><span class="op">&gt;</span><span class="ident">::Error</span><span class="op">&gt;</span>;
+    }
+
+    <span class="doccomment">/// Returned by the `wait_for_stop_reason` closure in</span>
+    <span class="doccomment">/// [`GdbStub::run_blocking`]</span>
+    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">StopReason</span><span class="op">&gt;</span> {
+        <span class="doccomment">/// GDB Client sent data while the target was running.</span>
+        <span class="ident">IncomingData</span>(<span class="ident">u8</span>),
+        <span class="doccomment">/// The target has stopped.</span>
+        <span class="ident">TargetStopped</span>(<span class="ident">StopReason</span>),
+    }
+
+    <span class="doccomment">/// Error value returned by the `wait_for_stop_reason` closure in</span>
+    <span class="doccomment">/// [`GdbStub::run_blocking`]</span>
+    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">WaitForStopReasonError</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">C</span><span class="op">&gt;</span> {
+        <span class="doccomment">/// A fatal target error has occurred.</span>
+        <span class="ident">Target</span>(<span class="ident">T</span>),
+        <span class="doccomment">/// A fatal connection error has occurred.</span>
+        <span class="ident">Connection</span>(<span class="ident">C</span>),
+    }
+}
+
+<span class="doccomment">/// Debug a [`Target`] using the GDB Remote Serial Protocol over a given</span>
+<span class="doccomment">/// [`Connection`].</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GdbStub</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Target</span>, <span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span> {
+    <span class="ident">conn</span>: <span class="ident">C</span>,
+    <span class="ident">packet_buffer</span>: <span class="ident">ManagedSlice</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">u8</span><span class="op">&gt;</span>,
+    <span class="ident">inner</span>: <span class="ident">core_impl::GdbStubImpl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">C</span><span class="op">&gt;</span>,
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Target</span>, <span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span> <span class="ident">GdbStub</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>, <span class="ident">C</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Create a [`GdbStubBuilder`] using the provided Connection.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">builder</span>(<span class="ident">conn</span>: <span class="ident">C</span>) -&gt; <span class="ident">GdbStubBuilder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>, <span class="ident">C</span><span class="op">&gt;</span> {
+        <span class="ident">GdbStubBuilder::new</span>(<span class="ident">conn</span>)
+    }
+
+    <span class="doccomment">/// Create a new `GdbStub` using the provided connection.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// _Note:_ `new` is only available when the `alloc` feature is enabled, as</span>
+    <span class="doccomment">/// it will use a dynamically allocated `Vec` as a packet buffer.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// For fine-grained control over various `GdbStub` options, including the</span>
+    <span class="doccomment">/// ability to specify a fixed-size buffer, use the [`GdbStub::builder`]</span>
+    <span class="doccomment">/// method instead.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">conn</span>: <span class="ident">C</span>) -&gt; <span class="ident">GdbStub</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>, <span class="ident">C</span><span class="op">&gt;</span> {
+        <span class="ident">GdbStubBuilder::new</span>(<span class="ident">conn</span>).<span class="ident">build</span>().<span class="ident">unwrap</span>()
+    }
+
+    <span class="doccomment">/// (Quickstart) Start a GDB remote debugging session using a blocking event</span>
+    <span class="doccomment">/// loop.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This method provides a quick and easy way to get up and running with</span>
+    <span class="doccomment">/// `gdbstub` without directly having to immediately interface with the</span>
+    <span class="doccomment">/// lower-level [state-machine](state_machine::GdbStubStateMachine)</span>
+    <span class="doccomment">/// based interface.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Instead, an implementation simply needs to provide a implementation of</span>
+    <span class="doccomment">/// [`run_blocking::BlockingEventLoop`], which is a simplified set</span>
+    <span class="doccomment">/// of methods describing how to drive the target.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// `GdbStub::run_blocking` returns once the GDB client closes the debugging</span>
+    <span class="doccomment">/// session, or if the target triggers a disconnect.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Note that this implementation is **blocking**, which many not be</span>
+    <span class="doccomment">/// preferred (or suitable) in all cases. To use `gdbstub` in a non-blocking</span>
+    <span class="doccomment">/// manner (e.g: via async/await, unix polling, from an interrupt handler,</span>
+    <span class="doccomment">/// etc...) you will need to interface with the underlying</span>
+    <span class="doccomment">/// [`GdbStubStateMachine`](state_machine::GdbStubStateMachine) API</span>
+    <span class="doccomment">/// directly.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run_blocking</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>(
+        <span class="self">self</span>,
+        <span class="ident">target</span>: <span class="kw-2">&amp;mut</span> <span class="ident">T</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DisconnectReason</span>, <span class="ident">Error</span><span class="op">&lt;</span><span class="ident">T::Error</span>, <span class="ident">C::Error</span><span class="op">&gt;</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">C</span>: <span class="ident">ConnectionExt</span>,
+        <span class="ident">E</span>: <span class="ident">run_blocking::BlockingEventLoop</span><span class="op">&lt;</span><span class="ident">Target</span> <span class="op">=</span> <span class="ident">T</span>, <span class="ident">Connection</span> <span class="op">=</span> <span class="ident">C</span><span class="op">&gt;</span>,
+    {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">gdb</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">run_state_machine</span>(<span class="ident">target</span>)<span class="question-mark">?</span>;
+        <span class="kw">loop</span> {
+            <span class="ident">gdb</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">gdb</span> {
+                <span class="ident">state_machine::GdbStubStateMachine::Idle</span>(<span class="kw-2">mut</span> <span class="ident">gdb</span>) =&gt; {
+                    <span class="comment">// needs more data, so perform a blocking read on the connection</span>
+                    <span class="kw">let</span> <span class="ident">byte</span> <span class="op">=</span> <span class="ident">gdb</span>.<span class="ident">borrow_conn</span>().<span class="ident">read</span>().<span class="ident">map_err</span>(<span class="ident">Error::ConnectionRead</span>)<span class="question-mark">?</span>;
+                    <span class="ident">gdb</span>.<span class="ident">incoming_data</span>(<span class="ident">target</span>, <span class="ident">byte</span>)<span class="question-mark">?</span>
+                }
+
+                <span class="ident">state_machine::GdbStubStateMachine::Disconnected</span>(<span class="ident">gdb</span>) =&gt; {
+                    <span class="comment">// run_blocking keeps things simple, and doesn&#39;t expose a way to re-use the</span>
+                    <span class="comment">// state machine</span>
+                    <span class="kw">break</span> <span class="prelude-val">Ok</span>(<span class="ident">gdb</span>.<span class="ident">get_reason</span>());
+                }
+
+                <span class="ident">state_machine::GdbStubStateMachine::CtrlCInterrupt</span>(<span class="ident">gdb</span>) =&gt; {
+                    <span class="comment">// defer to the implementation on how it wants to handle the interrupt</span>
+                    <span class="kw">let</span> <span class="ident">stop_reason</span> <span class="op">=</span> <span class="ident">E::on_interrupt</span>(<span class="ident">target</span>).<span class="ident">map_err</span>(<span class="ident">Error::TargetError</span>)<span class="question-mark">?</span>;
+                    <span class="ident">gdb</span>.<span class="ident">interrupt_handled</span>(<span class="ident">target</span>, <span class="ident">stop_reason</span>)<span class="question-mark">?</span>
+                }
+
+                <span class="ident">state_machine::GdbStubStateMachine::Running</span>(<span class="kw-2">mut</span> <span class="ident">gdb</span>) =&gt; {
+                    <span class="kw">use</span> <span class="ident">run_blocking</span>::{<span class="ident">Event</span> <span class="kw">as</span> <span class="ident">BlockingEventLoopEvent</span>, <span class="ident">WaitForStopReasonError</span>};
+
+                    <span class="comment">// block waiting for the target to return a stop reason</span>
+                    <span class="kw">let</span> <span class="ident">event</span> <span class="op">=</span> <span class="ident">E::wait_for_stop_reason</span>(<span class="ident">target</span>, <span class="ident">gdb</span>.<span class="ident">borrow_conn</span>());
+                    <span class="kw">match</span> <span class="ident">event</span> {
+                        <span class="prelude-val">Ok</span>(<span class="ident">BlockingEventLoopEvent::TargetStopped</span>(<span class="ident">stop_reason</span>)) =&gt; {
+                            <span class="ident">gdb</span>.<span class="ident">report_stop</span>(<span class="ident">target</span>, <span class="ident">stop_reason</span>)<span class="question-mark">?</span>
+                        }
+
+                        <span class="prelude-val">Ok</span>(<span class="ident">BlockingEventLoopEvent::IncomingData</span>(<span class="ident">byte</span>)) =&gt; {
+                            <span class="ident">gdb</span>.<span class="ident">incoming_data</span>(<span class="ident">target</span>, <span class="ident">byte</span>)<span class="question-mark">?</span>
+                        }
+
+                        <span class="prelude-val">Err</span>(<span class="ident">WaitForStopReasonError::Target</span>(<span class="ident">e</span>)) =&gt; {
+                            <span class="kw">break</span> <span class="prelude-val">Err</span>(<span class="ident">Error::TargetError</span>(<span class="ident">e</span>));
+                        }
+                        <span class="prelude-val">Err</span>(<span class="ident">WaitForStopReasonError::Connection</span>(<span class="ident">e</span>)) =&gt; {
+                            <span class="kw">break</span> <span class="prelude-val">Err</span>(<span class="ident">Error::ConnectionRead</span>(<span class="ident">e</span>));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    <span class="doccomment">/// Starts a GDB remote debugging session, converting this instance of</span>
+    <span class="doccomment">/// `GdbStub` into a</span>
+    <span class="doccomment">/// [`GdbStubStateMachine`](state_machine::GdbStubStateMachine) that is</span>
+    <span class="doccomment">/// ready to receive data.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run_state_machine</span>(
+        <span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="ident">target</span>: <span class="kw-2">&amp;mut</span> <span class="ident">T</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">state_machine::GdbStubStateMachine</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>, <span class="ident">C</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&lt;</span><span class="ident">T::Error</span>, <span class="ident">C::Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="comment">// Check if the target hasn&#39;t explicitly opted into implicit sw breakpoints</span>
+        {
+            <span class="kw">let</span> <span class="ident">support_software_breakpoints</span> <span class="op">=</span> <span class="ident">target</span>
+                .<span class="ident">support_breakpoints</span>()
+                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ops</span><span class="op">|</span> <span class="ident">ops</span>.<span class="ident">support_sw_breakpoint</span>().<span class="ident">is_some</span>())
+                .<span class="ident">unwrap_or</span>(<span class="bool-val">false</span>);
+
+            <span class="kw">if</span> <span class="op">!</span><span class="ident">support_software_breakpoints</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">target</span>.<span class="ident">guard_rail_implicit_sw_breakpoints</span>() {
+                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::ImplicitSwBreakpoints</span>);
+            }
+        }
+
+        <span class="comment">// Check how the target&#39;s arch handles single stepping</span>
+        {
+            <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::arch::SingleStepGdbBehavior</span>;
+            <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::target::ext::base::ResumeOps</span>;
+
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ops</span>) <span class="op">=</span> <span class="ident">target</span>.<span class="ident">base_ops</span>().<span class="ident">resume_ops</span>() {
+                <span class="kw">let</span> <span class="ident">support_single_step</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">ops</span> {
+                    <span class="ident">ResumeOps::SingleThread</span>(<span class="ident">ops</span>) =&gt; <span class="ident">ops</span>.<span class="ident">support_single_step</span>().<span class="ident">is_some</span>(),
+                    <span class="ident">ResumeOps::MultiThread</span>(<span class="ident">ops</span>) =&gt; <span class="ident">ops</span>.<span class="ident">support_single_step</span>().<span class="ident">is_some</span>(),
+                };
+
+                <span class="kw">let</span> <span class="ident">behavior</span> <span class="op">=</span> <span class="ident">target</span>.<span class="ident">guard_rail_single_step_gdb_behavior</span>();
+
+                <span class="kw">let</span> <span class="ident">return_error</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">behavior</span> {
+                    <span class="ident">SingleStepGdbBehavior::Optional</span> =&gt; <span class="bool-val">false</span>,
+                    <span class="ident">SingleStepGdbBehavior::Required</span> =&gt; <span class="op">!</span><span class="ident">support_single_step</span>,
+                    <span class="ident">SingleStepGdbBehavior::Ignored</span> =&gt; <span class="ident">support_single_step</span>,
+                    <span class="ident">SingleStepGdbBehavior::Unknown</span> =&gt; <span class="bool-val">true</span>,
+                };
+
+                <span class="kw">if</span> <span class="ident">return_error</span> {
+                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::SingleStepGdbBehavior</span>(<span class="ident">behavior</span>));
+                }
+            }
+        }
+
+        <span class="comment">// Perform any connection initialization</span>
+        {
+            <span class="self">self</span>.<span class="ident">conn</span>
+                .<span class="ident">on_session_start</span>()
+                .<span class="ident">map_err</span>(<span class="ident">Error::ConnectionInit</span>)<span class="question-mark">?</span>;
+        }
+
+        <span class="prelude-val">Ok</span>(<span class="ident">state_machine::GdbStubStateMachineInner::from_plain_gdbstub</span>(<span class="self">self</span>).<span class="ident">into</span>())
+    }
+}
+</code></pre></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="gdbstub" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (e95b10ba4 2022-03-13)" ></div>
+</body></html>

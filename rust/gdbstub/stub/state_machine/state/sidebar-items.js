@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["CtrlCInterrupt","Typestate corresponding to the “CtrlCInterrupt” state."],["Disconnected","Typestate corresponding to the “Disconnected” state."],["Idle","Typestate corresponding to the “Idle” state."],["Running","Typestate corresponding to the “Running” state."]]});
