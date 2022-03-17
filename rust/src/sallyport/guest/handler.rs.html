@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/git/checkouts/sallyport-87d2f89630049c63/ca03b82/src/guest/handler.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>handler.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/git/checkouts/sallyport-87d2f89630049c63/387583d/src/guest/handler.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>handler.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../sallyport/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -944,6 +944,7 @@
 <span id="939">939</span>
 <span id="940">940</span>
 <span id="941">941</span>
+<span id="942">942</span>
 </pre><pre class="rust"><code><span class="comment">// SPDX-License-Identifier: Apache-2.0</span>
 
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::alloc</span>::{<span class="ident">Alloc</span>, <span class="ident">Allocator</span>, <span class="ident">Collect</span>, <span class="ident">Commit</span>, <span class="ident">Committer</span>};
@@ -953,20 +954,21 @@
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::item::enarxcall::sgx</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::item::syscall::sigaction</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::libc</span>::{
-    <span class="ident">c_int</span>, <span class="ident">c_uint</span>, <span class="ident">c_ulong</span>, <span class="ident">c_void</span>, <span class="ident">clockid_t</span>, <span class="ident">epoll_event</span>, <span class="ident">gid_t</span>, <span class="ident">mode_t</span>, <span class="ident">off_t</span>, <span class="ident">pid_t</span>, <span class="ident">pollfd</span>,
-    <span class="ident">sigset_t</span>, <span class="ident">size_t</span>, <span class="ident">stack_t</span>, <span class="ident">stat</span>, <span class="ident">timespec</span>, <span class="ident">uid_t</span>, <span class="ident">utsname</span>, <span class="ident">Ioctl</span>, <span class="ident">SYS_accept</span>, <span class="ident">SYS_accept4</span>,
-    <span class="ident">SYS_arch_prctl</span>, <span class="ident">SYS_bind</span>, <span class="ident">SYS_brk</span>, <span class="ident">SYS_clock_gettime</span>, <span class="ident">SYS_close</span>, <span class="ident">SYS_connect</span>, <span class="ident">SYS_dup</span>,
-    <span class="ident">SYS_dup2</span>, <span class="ident">SYS_dup3</span>, <span class="ident">SYS_epoll_create1</span>, <span class="ident">SYS_epoll_ctl</span>, <span class="ident">SYS_epoll_pwait</span>, <span class="ident">SYS_epoll_wait</span>,
-    <span class="ident">SYS_eventfd2</span>, <span class="ident">SYS_exit</span>, <span class="ident">SYS_exit_group</span>, <span class="ident">SYS_fcntl</span>, <span class="ident">SYS_fstat</span>, <span class="ident">SYS_getegid</span>, <span class="ident">SYS_geteuid</span>,
-    <span class="ident">SYS_getgid</span>, <span class="ident">SYS_getpid</span>, <span class="ident">SYS_getrandom</span>, <span class="ident">SYS_getsockname</span>, <span class="ident">SYS_getuid</span>, <span class="ident">SYS_ioctl</span>, <span class="ident">SYS_listen</span>,
-    <span class="ident">SYS_madvise</span>, <span class="ident">SYS_mmap</span>, <span class="ident">SYS_mprotect</span>, <span class="ident">SYS_munmap</span>, <span class="ident">SYS_nanosleep</span>, <span class="ident">SYS_open</span>, <span class="ident">SYS_poll</span>, <span class="ident">SYS_read</span>,
-    <span class="ident">SYS_readlink</span>, <span class="ident">SYS_readv</span>, <span class="ident">SYS_recvfrom</span>, <span class="ident">SYS_rt_sigaction</span>, <span class="ident">SYS_rt_sigprocmask</span>, <span class="ident">SYS_sendto</span>,
-    <span class="ident">SYS_set_tid_address</span>, <span class="ident">SYS_setsockopt</span>, <span class="ident">SYS_sigaltstack</span>, <span class="ident">SYS_socket</span>, <span class="ident">SYS_sync</span>, <span class="ident">SYS_uname</span>,
-    <span class="ident">SYS_write</span>, <span class="ident">SYS_writev</span>, <span class="ident">EFAULT</span>, <span class="ident">EINVAL</span>, <span class="ident">ENOSYS</span>, <span class="ident">ENOTSUP</span>, <span class="ident">FIONBIO</span>, <span class="ident">FIONREAD</span>,
+    <span class="ident">clockid_t</span>, <span class="ident">epoll_event</span>, <span class="ident">gid_t</span>, <span class="ident">mode_t</span>, <span class="ident">off_t</span>, <span class="ident">pid_t</span>, <span class="ident">pollfd</span>, <span class="ident">sigset_t</span>, <span class="ident">stack_t</span>, <span class="ident">stat</span>, <span class="ident">timespec</span>,
+    <span class="ident">uid_t</span>, <span class="ident">utsname</span>, <span class="ident">Ioctl</span>, <span class="ident">SYS_accept</span>, <span class="ident">SYS_accept4</span>, <span class="ident">SYS_arch_prctl</span>, <span class="ident">SYS_bind</span>, <span class="ident">SYS_brk</span>,
+    <span class="ident">SYS_clock_gettime</span>, <span class="ident">SYS_close</span>, <span class="ident">SYS_connect</span>, <span class="ident">SYS_dup</span>, <span class="ident">SYS_dup2</span>, <span class="ident">SYS_dup3</span>, <span class="ident">SYS_epoll_create1</span>,
+    <span class="ident">SYS_epoll_ctl</span>, <span class="ident">SYS_epoll_pwait</span>, <span class="ident">SYS_epoll_wait</span>, <span class="ident">SYS_eventfd2</span>, <span class="ident">SYS_exit</span>, <span class="ident">SYS_exit_group</span>,
+    <span class="ident">SYS_fcntl</span>, <span class="ident">SYS_fstat</span>, <span class="ident">SYS_getegid</span>, <span class="ident">SYS_geteuid</span>, <span class="ident">SYS_getgid</span>, <span class="ident">SYS_getpid</span>, <span class="ident">SYS_getrandom</span>,
+    <span class="ident">SYS_getsockname</span>, <span class="ident">SYS_getuid</span>, <span class="ident">SYS_ioctl</span>, <span class="ident">SYS_listen</span>, <span class="ident">SYS_madvise</span>, <span class="ident">SYS_mmap</span>, <span class="ident">SYS_mprotect</span>,
+    <span class="ident">SYS_munmap</span>, <span class="ident">SYS_nanosleep</span>, <span class="ident">SYS_open</span>, <span class="ident">SYS_poll</span>, <span class="ident">SYS_read</span>, <span class="ident">SYS_readlink</span>, <span class="ident">SYS_readv</span>, <span class="ident">SYS_recvfrom</span>,
+    <span class="ident">SYS_rt_sigaction</span>, <span class="ident">SYS_rt_sigprocmask</span>, <span class="ident">SYS_sendto</span>, <span class="ident">SYS_set_tid_address</span>, <span class="ident">SYS_setsockopt</span>,
+    <span class="ident">SYS_sigaltstack</span>, <span class="ident">SYS_socket</span>, <span class="ident">SYS_sync</span>, <span class="ident">SYS_uname</span>, <span class="ident">SYS_write</span>, <span class="ident">SYS_writev</span>, <span class="ident">EFAULT</span>, <span class="ident">EINVAL</span>,
+    <span class="ident">ENOSYS</span>, <span class="ident">ENOTSUP</span>, <span class="ident">FIONBIO</span>, <span class="ident">FIONREAD</span>,
 };
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">item</span>, <span class="prelude-ty">Result</span>};
 
 <span class="kw">use</span> <span class="ident">core::arch::x86_64::CpuidResult</span>;
+<span class="kw">use</span> <span class="ident">core::ffi</span>::{<span class="ident">c_int</span>, <span class="ident">c_size_t</span>, <span class="ident">c_uint</span>, <span class="ident">c_ulong</span>, <span class="ident">c_void</span>};
 <span class="kw">use</span> <span class="ident">core::mem::size_of</span>;
 <span class="kw">use</span> <span class="ident">core::ptr::NonNull</span>;
 <span class="kw">use</span> <span class="ident">core::slice</span>;
@@ -1218,7 +1220,7 @@
 
     <span class="doccomment">/// Executes [`getrandom`](https://man7.org/linux/man-pages/man2/getrandom.2.html) syscall akin to [`libc::getrandom`].</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">getrandom</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>], <span class="ident">flags</span>: <span class="ident">c_uint</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">getrandom</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>], <span class="ident">flags</span>: <span class="ident">c_uint</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_size_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Getrandom</span> { <span class="ident">buf</span>, <span class="ident">flags</span> })<span class="question-mark">?</span>
     }
 
@@ -1255,7 +1257,7 @@
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">platform</span>: <span class="kw-2">&amp;</span><span class="kw">impl</span> <span class="ident">Platform</span>,
         <span class="ident">addr</span>: <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">c_void</span><span class="op">&gt;</span>,
-        <span class="ident">length</span>: <span class="ident">size_t</span>,
+        <span class="ident">length</span>: <span class="ident">c_size_t</span>,
         <span class="ident">advice</span>: <span class="ident">c_int</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 
@@ -1265,7 +1267,7 @@
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">platform</span>: <span class="kw-2">&amp;</span><span class="kw">impl</span> <span class="ident">Platform</span>,
         <span class="ident">addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">c_void</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">length</span>: <span class="ident">size_t</span>,
+        <span class="ident">length</span>: <span class="ident">c_size_t</span>,
         <span class="ident">prot</span>: <span class="ident">c_int</span>,
         <span class="ident">flags</span>: <span class="ident">c_int</span>,
         <span class="ident">fd</span>: <span class="ident">c_int</span>,
@@ -1277,7 +1279,7 @@
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">platform</span>: <span class="kw-2">&amp;</span><span class="kw">impl</span> <span class="ident">Platform</span>,
         <span class="ident">addr</span>: <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">c_void</span><span class="op">&gt;</span>,
-        <span class="ident">len</span>: <span class="ident">size_t</span>,
+        <span class="ident">len</span>: <span class="ident">c_size_t</span>,
         <span class="ident">prot</span>: <span class="ident">c_int</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 
@@ -1286,7 +1288,7 @@
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">platform</span>: <span class="kw-2">&amp;</span><span class="kw">impl</span> <span class="ident">Platform</span>,
         <span class="ident">addr</span>: <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">c_void</span><span class="op">&gt;</span>,
-        <span class="ident">length</span>: <span class="ident">size_t</span>,
+        <span class="ident">length</span>: <span class="ident">c_size_t</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 
     <span class="doccomment">/// Executes [`nanosleep`](https://man7.org/linux/man-pages/man2/nanosleep.2.html) syscall akin to [`libc::nanosleep`].</span>
@@ -1315,7 +1317,7 @@
 
     <span class="doccomment">/// Executes [`read`](https://man7.org/linux/man-pages/man2/read.2.html) syscall akin to [`libc::read`].</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">read</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">read</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_size_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Read</span> { <span class="ident">fd</span>, <span class="ident">buf</span> })<span class="question-mark">?</span>
             .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">attacked</span>())
     }
@@ -1324,7 +1326,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// `pathname` argument must contain the trailing nul terminator byte.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">readlink</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">pathname</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">readlink</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">pathname</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_size_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Readlink</span> { <span class="ident">pathname</span>, <span class="ident">buf</span> })<span class="question-mark">?</span>
             .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">attacked</span>())
     }
@@ -1332,7 +1334,7 @@
     <span class="doccomment">/// Executes [`readv`](https://man7.org/linux/man-pages/man2/readv.2.html) syscall by mapping</span>
     <span class="doccomment">/// it onto a single [`read`](https://man7.org/linux/man-pages/man2/read.2.html).</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">readv</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span>, <span class="ident">U</span>, <span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">iovs</span>: <span class="kw-2">&amp;mut</span> <span class="ident">T</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">readv</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span>, <span class="ident">U</span>, <span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">iovs</span>: <span class="kw-2">&amp;mut</span> <span class="ident">T</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_size_t</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">U</span><span class="op">&gt;</span>,
         <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">T</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">V</span><span class="op">&gt;</span>,
@@ -1345,7 +1347,7 @@
 
     <span class="doccomment">/// Executes [`recv`](https://man7.org/linux/man-pages/man2/recv.2.html) syscall akin to [`libc::recv`].</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">recv</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">sockfd</span>: <span class="ident">c_int</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>], <span class="ident">flags</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">recv</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">sockfd</span>: <span class="ident">c_int</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>], <span class="ident">flags</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_size_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Recv</span> { <span class="ident">sockfd</span>, <span class="ident">buf</span>, <span class="ident">flags</span> })<span class="question-mark">?</span>
             .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">attacked</span>())
     }
@@ -1358,7 +1360,7 @@
         <span class="ident">buf</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> [<span class="ident">u8</span>],
         <span class="ident">flags</span>: <span class="ident">c_int</span>,
         <span class="ident">src_addr</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">SockaddrOutput</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_size_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Recvfrom</span> {
             <span class="ident">sockfd</span>,
             <span class="ident">buf</span>,
@@ -1375,7 +1377,7 @@
         <span class="ident">signum</span>: <span class="ident">c_int</span>,
         <span class="ident">act</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">sigaction</span><span class="op">&gt;</span>,
         <span class="ident">oldact</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">sigaction</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">sigsetsize</span>: <span class="ident">size_t</span>,
+        <span class="ident">sigsetsize</span>: <span class="ident">c_size_t</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="ident">signum</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">SIGRTMAX</span> <span class="op">|</span><span class="op">|</span> <span class="ident">sigsetsize</span> <span class="op">!</span><span class="op">=</span> <span class="number">8</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">EINVAL</span>);
@@ -1397,7 +1399,7 @@
         <span class="ident">how</span>: <span class="ident">c_int</span>,
         <span class="ident">set</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">sigset_t</span><span class="op">&gt;</span>,
         <span class="ident">oldset</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="ident">sigset_t</span><span class="op">&gt;</span>,
-        <span class="ident">sigsetsize</span>: <span class="ident">size_t</span>,
+        <span class="ident">sigsetsize</span>: <span class="ident">c_size_t</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::RtSigprocmask</span> {
             <span class="ident">how</span>,
@@ -1415,7 +1417,7 @@
 
     <span class="doccomment">/// Executes [`send`](https://man7.org/linux/man-pages/man2/send.2.html) syscall akin to [`libc::send`].</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">send</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">sockfd</span>: <span class="ident">c_int</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">flags</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">send</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">sockfd</span>: <span class="ident">c_int</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">flags</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_size_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Send</span> { <span class="ident">sockfd</span>, <span class="ident">buf</span>, <span class="ident">flags</span> })<span class="question-mark">?</span>
             .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">attacked</span>())
     }
@@ -1428,7 +1430,7 @@
         <span class="ident">buf</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>],
         <span class="ident">flags</span>: <span class="ident">c_int</span>,
         <span class="ident">dest_addr</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">SockaddrInput</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_size_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Sendto</span> {
             <span class="ident">sockfd</span>,
             <span class="ident">buf</span>,
@@ -1485,7 +1487,7 @@
 
     <span class="doccomment">/// Executes [`write`](https://man7.org/linux/man-pages/man2/write.2.html) syscall akin to [`libc::write`].</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">write</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">write</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_size_t</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="ident">syscall::Write</span> { <span class="ident">fd</span>, <span class="ident">buf</span> })<span class="question-mark">?</span>
             .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">attacked</span>())
     }
@@ -1493,7 +1495,7 @@
     <span class="doccomment">/// Executes [`writev`](https://man7.org/linux/man-pages/man2/writev.2.html) syscall by mapping</span>
     <span class="doccomment">/// it onto a single [`write`](https://man7.org/linux/man-pages/man2/write.2.html).</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">writev</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span>, <span class="ident">U</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">iovs</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">size_t</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">writev</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span>, <span class="ident">U</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">iovs</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">c_size_t</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">U</span><span class="op">&gt;</span>,
         <span class="ident">U</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span>,
