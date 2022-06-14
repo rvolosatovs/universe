@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["ThreadExtraInfo","Target Extension - Provide extra information for a thread"]],"type":[["ThreadExtraInfoOps","See `ThreadExtraInfo`."]]});
