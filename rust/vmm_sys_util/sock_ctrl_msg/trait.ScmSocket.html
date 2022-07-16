@@ -15,7 +15,7 @@
 <code>recvmsg</code>.</p>
 <h2 id="examples"><a href="#examples">Examples</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">vmm_sys_util</span>;
-<span class="kw">use</span> <span class="ident">vmm_sys_util::sock_ctrl_msg</span>::{<span class="ident">ScmSocket</span>};
+<span class="kw">use</span> <span class="ident">vmm_sys_util::sock_ctrl_msg::ScmSocket</span>;
 
 
 <span class="kw">let</span> (<span class="ident">s1</span>, <span class="ident">s2</span>) <span class="op">=</span> <span class="ident">UnixDatagram::pair</span>().<span class="ident">expect</span>(<span class="string">&quot;failed to create socket pair&quot;</span>);
