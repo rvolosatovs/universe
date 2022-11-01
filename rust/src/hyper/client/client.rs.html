@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.14.20/src/client/client.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>client.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.14.22/src/client/client.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>client.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../hyper/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -1465,6 +1465,39 @@
 <span id="1460">1460</span>
 <span id="1461">1461</span>
 <span id="1462">1462</span>
+<span id="1463">1463</span>
+<span id="1464">1464</span>
+<span id="1465">1465</span>
+<span id="1466">1466</span>
+<span id="1467">1467</span>
+<span id="1468">1468</span>
+<span id="1469">1469</span>
+<span id="1470">1470</span>
+<span id="1471">1471</span>
+<span id="1472">1472</span>
+<span id="1473">1473</span>
+<span id="1474">1474</span>
+<span id="1475">1475</span>
+<span id="1476">1476</span>
+<span id="1477">1477</span>
+<span id="1478">1478</span>
+<span id="1479">1479</span>
+<span id="1480">1480</span>
+<span id="1481">1481</span>
+<span id="1482">1482</span>
+<span id="1483">1483</span>
+<span id="1484">1484</span>
+<span id="1485">1485</span>
+<span id="1486">1486</span>
+<span id="1487">1487</span>
+<span id="1488">1488</span>
+<span id="1489">1489</span>
+<span id="1490">1490</span>
+<span id="1491">1491</span>
+<span id="1492">1492</span>
+<span id="1493">1493</span>
+<span id="1494">1494</span>
+<span id="1495">1495</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>;
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
 <span class="kw">use</span> <span class="ident">std::mem</span>;
@@ -2527,6 +2560,39 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">http1_allow_obsolete_multiline_headers_in_responses</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">val</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">conn_builder</span>
             .<span class="ident">http1_allow_obsolete_multiline_headers_in_responses</span>(<span class="ident">val</span>);
+        <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// Sets whether invalid header lines should be silently ignored in HTTP/1 responses.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This mimicks the behaviour of major browsers. You probably don&#39;t want this.</span>
+    <span class="doccomment">/// You should only want this if you are implementing a proxy whose main</span>
+    <span class="doccomment">/// purpose is to sit in front of browsers whose users access arbitrary content</span>
+    <span class="doccomment">/// which may be malformed, and they expect everything that works without</span>
+    <span class="doccomment">/// the proxy to keep working with the proxy.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This option will prevent Hyper&#39;s client from returning an error encountered</span>
+    <span class="doccomment">/// when parsing a header, except if the error was caused by the character NUL</span>
+    <span class="doccomment">/// (ASCII code 0), as Chrome specifically always reject those.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The ignorable errors are:</span>
+    <span class="doccomment">/// * empty header names;</span>
+    <span class="doccomment">/// * characters that are not allowed in header names, except for `\0` and `\r`;</span>
+    <span class="doccomment">/// * when `allow_spaces_after_header_name_in_responses` is not enabled,</span>
+    <span class="doccomment">///   spaces and tabs between the header name and the colon;</span>
+    <span class="doccomment">/// * missing colon between header name and colon;</span>
+    <span class="doccomment">/// * characters that are not allowed in header values except for `\0` and `\r`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If an ignorable error is encountered, the parser tries to find the next</span>
+    <span class="doccomment">/// line in the input to resume parsing the rest of the headers. An error</span>
+    <span class="doccomment">/// will be emitted nonetheless if it finds `\0` or a lone `\r` while</span>
+    <span class="doccomment">/// looking for the next line.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">http1_ignore_invalid_headers_in_responses</span>(
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">val</span>: <span class="ident">bool</span>,
+    ) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">Builder</span> {
+        <span class="self">self</span>.<span class="ident">conn_builder</span>
+            .<span class="ident">http1_ignore_invalid_headers_in_responses</span>(<span class="ident">val</span>);
         <span class="self">self</span>
     }
 
