@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.14.22/src/proto/h2/client.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>client.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><script defer src="../../../../main.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.14.23/src/proto/h2/client.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>client.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><script defer src="../../../../main.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../hyper/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -391,6 +391,68 @@
 <span id="386">386</span>
 <span id="387">387</span>
 <span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;runtime&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">std::time::Duration</span>;
@@ -400,12 +462,14 @@
 <span class="kw">use</span> <span class="ident">futures_util::future</span>::{<span class="self">self</span>, <span class="ident">Either</span>, <span class="ident">FutureExt</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">TryFutureExt</span> <span class="kw">as</span> <span class="kw">_</span>};
 <span class="kw">use</span> <span class="ident">futures_util::stream::StreamExt</span> <span class="kw">as</span> <span class="kw">_</span>;
 <span class="kw">use</span> <span class="ident">h2::client</span>::{<span class="ident">Builder</span>, <span class="ident">SendRequest</span>};
+<span class="kw">use</span> <span class="ident">h2::SendStream</span>;
 <span class="kw">use</span> <span class="ident">http</span>::{<span class="ident">Method</span>, <span class="ident">StatusCode</span>};
 <span class="kw">use</span> <span class="ident">tokio::io</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncWrite</span>};
 <span class="kw">use</span> <span class="ident">tracing</span>::{<span class="ident">debug</span>, <span class="ident">trace</span>, <span class="ident">warn</span>};
 
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">ping</span>, <span class="ident">H2Upgraded</span>, <span class="ident">PipeToSendStream</span>, <span class="ident">SendBuf</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::body::HttpBody</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::client::dispatch::Callback</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::common</span>::{<span class="ident">exec::Exec</span>, <span class="ident">task</span>, <span class="ident">Future</span>, <span class="ident">Never</span>, <span class="ident">Pin</span>, <span class="ident">Poll</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ext::Protocol</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::headers</span>;
@@ -413,6 +477,7 @@
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::proto::Dispatched</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::upgrade::Upgraded</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Body</span>, <span class="ident">Request</span>, <span class="ident">Response</span>};
+<span class="kw">use</span> <span class="ident">h2::client::ResponseFuture</span>;
 
 <span class="kw">type</span> <span class="ident">ClientRx</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::client::dispatch::Receiver</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
@@ -563,6 +628,7 @@
         <span class="ident">executor</span>: <span class="ident">exec</span>,
         <span class="ident">h2_tx</span>,
         <span class="ident">req_rx</span>,
+        <span class="ident">fut_ctx</span>: <span class="prelude-val">None</span>,
     })
 }
 
@@ -586,6 +652,20 @@
     }
 }
 
+<span class="kw">struct</span> <span class="ident">FutCtx</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">B</span>: <span class="ident">HttpBody</span>,
+{
+    <span class="ident">is_connect</span>: <span class="ident">bool</span>,
+    <span class="ident">eos</span>: <span class="ident">bool</span>,
+    <span class="ident">fut</span>: <span class="ident">ResponseFuture</span>,
+    <span class="ident">body_tx</span>: <span class="ident">SendStream</span><span class="op">&lt;</span><span class="ident">SendBuf</span><span class="op">&lt;</span><span class="ident">B::Data</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">body</span>: <span class="ident">B</span>,
+    <span class="ident">cb</span>: <span class="ident">Callback</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">HttpBody</span><span class="op">&gt;</span> <span class="ident">Unpin</span> <span class="kw">for</span> <span class="ident">FutCtx</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {}
+
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">ClientTask</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">B</span>: <span class="ident">HttpBody</span>,
@@ -596,6 +676,7 @@
     <span class="ident">executor</span>: <span class="ident">Exec</span>,
     <span class="ident">h2_tx</span>: <span class="ident">SendRequest</span><span class="op">&lt;</span><span class="ident">SendBuf</span><span class="op">&lt;</span><span class="ident">B::Data</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">req_rx</span>: <span class="ident">ClientRx</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
+    <span class="ident">fut_ctx</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">FutCtx</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="ident">ClientTask</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>
@@ -604,6 +685,99 @@
 {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">is_extended_connect_protocol_enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">h2_tx</span>.<span class="ident">is_extended_connect_protocol_enabled</span>()
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="ident">ClientTask</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">B</span>: <span class="ident">HttpBody</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">B::Data</span>: <span class="ident">Send</span>,
+    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+{
+    <span class="kw">fn</span> <span class="ident">poll_pipe</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">FutCtx</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">task::Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) {
+        <span class="kw">let</span> <span class="ident">ping</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ping</span>.<span class="ident">clone</span>();
+        <span class="kw">let</span> <span class="ident">send_stream</span> <span class="op">=</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">f</span>.<span class="ident">is_connect</span> {
+            <span class="kw">if</span> <span class="op">!</span><span class="ident">f</span>.<span class="ident">eos</span> {
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pipe</span> <span class="op">=</span> <span class="ident">Box::pin</span>(<span class="ident">PipeToSendStream::new</span>(<span class="ident">f</span>.<span class="ident">body</span>, <span class="ident">f</span>.<span class="ident">body_tx</span>)).<span class="ident">map</span>(<span class="op">|</span><span class="ident">res</span><span class="op">|</span> {
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">res</span> {
+                        <span class="macro">debug!</span>(<span class="string">&quot;client request body error: {}&quot;</span>, <span class="ident">e</span>);
+                    }
+                });
+
+                <span class="comment">// eagerly see if the body pipe is ready and</span>
+                <span class="comment">// can thus skip allocating in the executor</span>
+                <span class="kw">match</span> <span class="ident">Pin::new</span>(<span class="kw-2">&amp;mut</span> <span class="ident">pipe</span>).<span class="ident">poll</span>(<span class="ident">cx</span>) {
+                    <span class="ident">Poll::Ready</span>(<span class="kw">_</span>) =&gt; (),
+                    <span class="ident">Poll::Pending</span> =&gt; {
+                        <span class="kw">let</span> <span class="ident">conn_drop_ref</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">conn_drop_ref</span>.<span class="ident">clone</span>();
+                        <span class="comment">// keep the ping recorder&#39;s knowledge of an</span>
+                        <span class="comment">// &quot;open stream&quot; alive while this body is</span>
+                        <span class="comment">// still sending...</span>
+                        <span class="kw">let</span> <span class="ident">ping</span> <span class="op">=</span> <span class="ident">ping</span>.<span class="ident">clone</span>();
+                        <span class="kw">let</span> <span class="ident">pipe</span> <span class="op">=</span> <span class="ident">pipe</span>.<span class="ident">map</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
+                            <span class="ident">drop</span>(<span class="ident">conn_drop_ref</span>);
+                            <span class="ident">drop</span>(<span class="ident">ping</span>);
+                            <span class="ident">x</span>
+                        });
+                        <span class="comment">// Clear send task</span>
+                        <span class="self">self</span>.<span class="ident">executor</span>.<span class="ident">execute</span>(<span class="ident">pipe</span>);
+                    }
+                }
+            }
+
+            <span class="prelude-val">None</span>
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">f</span>.<span class="ident">body_tx</span>)
+        };
+
+        <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="ident">f</span>.<span class="ident">fut</span>.<span class="ident">map</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">result</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">result</span> {
+            <span class="prelude-val">Ok</span>(<span class="ident">res</span>) =&gt; {
+                <span class="comment">// record that we got the response headers</span>
+                <span class="ident">ping</span>.<span class="ident">record_non_data</span>();
+
+                <span class="kw">let</span> <span class="ident">content_length</span> <span class="op">=</span> <span class="ident">headers::content_length_parse_all</span>(<span class="ident">res</span>.<span class="ident">headers</span>());
+                <span class="kw">if</span> <span class="kw">let</span> (<span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">send_stream</span>), <span class="ident">StatusCode::OK</span>) <span class="op">=</span> (<span class="ident">send_stream</span>, <span class="ident">res</span>.<span class="ident">status</span>()) {
+                    <span class="kw">if</span> <span class="ident">content_length</span>.<span class="ident">map_or</span>(<span class="bool-val">false</span>, <span class="op">|</span><span class="ident">len</span><span class="op">|</span> <span class="ident">len</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span>) {
+                        <span class="macro">warn!</span>(<span class="string">&quot;h2 connect response with non-zero body not supported&quot;</span>);
+
+                        <span class="ident">send_stream</span>.<span class="ident">send_reset</span>(<span class="ident">h2::Reason::INTERNAL_ERROR</span>);
+                        <span class="kw">return</span> <span class="prelude-val">Err</span>((
+                            <span class="ident"><span class="kw">crate</span>::Error::new_h2</span>(<span class="ident">h2::Reason::INTERNAL_ERROR</span>.<span class="ident">into</span>()),
+                            <span class="prelude-val">None</span>,
+                        ));
+                    }
+                    <span class="kw">let</span> (<span class="ident">parts</span>, <span class="ident">recv_stream</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">into_parts</span>();
+                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Response::from_parts</span>(<span class="ident">parts</span>, <span class="ident">Body::empty</span>());
+
+                    <span class="kw">let</span> (<span class="ident">pending</span>, <span class="ident">on_upgrade</span>) <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::upgrade::pending</span>();
+                    <span class="kw">let</span> <span class="ident">io</span> <span class="op">=</span> <span class="ident">H2Upgraded</span> {
+                        <span class="ident">ping</span>,
+                        <span class="ident">send_stream</span>: <span class="kw">unsafe</span> { <span class="ident">UpgradedSendStream::new</span>(<span class="ident">send_stream</span>) },
+                        <span class="ident">recv_stream</span>,
+                        <span class="ident">buf</span>: <span class="ident">Bytes::new</span>(),
+                    };
+                    <span class="kw">let</span> <span class="ident">upgraded</span> <span class="op">=</span> <span class="ident">Upgraded::new</span>(<span class="ident">io</span>, <span class="ident">Bytes::new</span>());
+
+                    <span class="ident">pending</span>.<span class="ident">fulfill</span>(<span class="ident">upgraded</span>);
+                    <span class="ident">res</span>.<span class="ident">extensions_mut</span>().<span class="ident">insert</span>(<span class="ident">on_upgrade</span>);
+
+                    <span class="prelude-val">Ok</span>(<span class="ident">res</span>)
+                } <span class="kw">else</span> {
+                    <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">stream</span><span class="op">|</span> {
+                        <span class="kw">let</span> <span class="ident">ping</span> <span class="op">=</span> <span class="ident">ping</span>.<span class="ident">for_stream</span>(<span class="kw-2">&amp;</span><span class="ident">stream</span>);
+                        <span class="ident"><span class="kw">crate</span>::Body::h2</span>(<span class="ident">stream</span>, <span class="ident">content_length</span>.<span class="ident">into</span>(), <span class="ident">ping</span>)
+                    });
+                    <span class="prelude-val">Ok</span>(<span class="ident">res</span>)
+                }
+            }
+            <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
+                <span class="ident">ping</span>.<span class="ident">ensure_not_timed_out</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> (<span class="ident">e</span>, <span class="prelude-val">None</span>))<span class="question-mark">?</span>;
+
+                <span class="macro">debug!</span>(<span class="string">&quot;client response error: {}&quot;</span>, <span class="ident">err</span>);
+                <span class="prelude-val">Err</span>((<span class="ident"><span class="kw">crate</span>::Error::new_h2</span>(<span class="ident">err</span>), <span class="prelude-val">None</span>))
+            }
+        });
+        <span class="self">self</span>.<span class="ident">executor</span>.<span class="ident">execute</span>(<span class="ident">f</span>.<span class="ident">cb</span>.<span class="ident">send_when</span>(<span class="ident">fut</span>));
     }
 }
 
@@ -630,6 +804,16 @@
                 }
             };
 
+            <span class="kw">match</span> <span class="self">self</span>.<span class="ident">fut_ctx</span>.<span class="ident">take</span>() {
+                <span class="comment">// If we were waiting on pending open</span>
+                <span class="comment">// continue where we left off.</span>
+                <span class="prelude-val">Some</span>(<span class="ident">f</span>) =&gt; {
+                    <span class="self">self</span>.<span class="ident">poll_pipe</span>(<span class="ident">f</span>, <span class="ident">cx</span>);
+                    <span class="kw">continue</span>;
+                }
+                <span class="prelude-val">None</span> =&gt; (),
+            }
+
             <span class="kw">match</span> <span class="self">self</span>.<span class="ident">req_rx</span>.<span class="ident">poll_recv</span>(<span class="ident">cx</span>) {
                 <span class="ident">Poll::Ready</span>(<span class="prelude-val">Some</span>((<span class="ident">req</span>, <span class="ident">cb</span>))) =&gt; {
                     <span class="comment">// check that future hasn&#39;t been canceled already</span>
@@ -648,7 +832,6 @@
 
                     <span class="kw">let</span> <span class="ident">is_connect</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">method</span>() <span class="op">==</span> <span class="ident">Method::CONNECT</span>;
                     <span class="kw">let</span> <span class="ident">eos</span> <span class="op">=</span> <span class="ident">body</span>.<span class="ident">is_end_stream</span>();
-                    <span class="kw">let</span> <span class="ident">ping</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ping</span>.<span class="ident">clone</span>();
 
                     <span class="kw">if</span> <span class="ident">is_connect</span> {
                         <span class="kw">if</span> <span class="ident">headers::content_length_parse_all</span>(<span class="ident">req</span>.<span class="ident">headers</span>())
@@ -676,90 +859,31 @@
                         }
                     };
 
-                    <span class="kw">let</span> <span class="ident">send_stream</span> <span class="op">=</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">is_connect</span> {
-                        <span class="kw">if</span> <span class="op">!</span><span class="ident">eos</span> {
-                            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pipe</span> <span class="op">=</span>
-                                <span class="ident">Box::pin</span>(<span class="ident">PipeToSendStream::new</span>(<span class="ident">body</span>, <span class="ident">body_tx</span>)).<span class="ident">map</span>(<span class="op">|</span><span class="ident">res</span><span class="op">|</span> {
-                                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">res</span> {
-                                        <span class="macro">debug!</span>(<span class="string">&quot;client request body error: {}&quot;</span>, <span class="ident">e</span>);
-                                    }
-                                });
-
-                            <span class="comment">// eagerly see if the body pipe is ready and</span>
-                            <span class="comment">// can thus skip allocating in the executor</span>
-                            <span class="kw">match</span> <span class="ident">Pin::new</span>(<span class="kw-2">&amp;mut</span> <span class="ident">pipe</span>).<span class="ident">poll</span>(<span class="ident">cx</span>) {
-                                <span class="ident">Poll::Ready</span>(<span class="kw">_</span>) =&gt; (),
-                                <span class="ident">Poll::Pending</span> =&gt; {
-                                    <span class="kw">let</span> <span class="ident">conn_drop_ref</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">conn_drop_ref</span>.<span class="ident">clone</span>();
-                                    <span class="comment">// keep the ping recorder&#39;s knowledge of an</span>
-                                    <span class="comment">// &quot;open stream&quot; alive while this body is</span>
-                                    <span class="comment">// still sending...</span>
-                                    <span class="kw">let</span> <span class="ident">ping</span> <span class="op">=</span> <span class="ident">ping</span>.<span class="ident">clone</span>();
-                                    <span class="kw">let</span> <span class="ident">pipe</span> <span class="op">=</span> <span class="ident">pipe</span>.<span class="ident">map</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
-                                        <span class="ident">drop</span>(<span class="ident">conn_drop_ref</span>);
-                                        <span class="ident">drop</span>(<span class="ident">ping</span>);
-                                        <span class="ident">x</span>
-                                    });
-                                    <span class="self">self</span>.<span class="ident">executor</span>.<span class="ident">execute</span>(<span class="ident">pipe</span>);
-                                }
-                            }
-                        }
-
-                        <span class="prelude-val">None</span>
-                    } <span class="kw">else</span> {
-                        <span class="prelude-val">Some</span>(<span class="ident">body_tx</span>)
+                    <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">FutCtx</span> {
+                        <span class="ident">is_connect</span>,
+                        <span class="ident">eos</span>,
+                        <span class="ident">fut</span>,
+                        <span class="ident">body_tx</span>,
+                        <span class="ident">body</span>,
+                        <span class="ident">cb</span>,
                     };
 
-                    <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="ident">fut</span>.<span class="ident">map</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">result</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">result</span> {
-                        <span class="prelude-val">Ok</span>(<span class="ident">res</span>) =&gt; {
-                            <span class="comment">// record that we got the response headers</span>
-                            <span class="ident">ping</span>.<span class="ident">record_non_data</span>();
-
-                            <span class="kw">let</span> <span class="ident">content_length</span> <span class="op">=</span> <span class="ident">headers::content_length_parse_all</span>(<span class="ident">res</span>.<span class="ident">headers</span>());
-                            <span class="kw">if</span> <span class="kw">let</span> (<span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">send_stream</span>), <span class="ident">StatusCode::OK</span>) <span class="op">=</span>
-                                (<span class="ident">send_stream</span>, <span class="ident">res</span>.<span class="ident">status</span>())
-                            {
-                                <span class="kw">if</span> <span class="ident">content_length</span>.<span class="ident">map_or</span>(<span class="bool-val">false</span>, <span class="op">|</span><span class="ident">len</span><span class="op">|</span> <span class="ident">len</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span>) {
-                                    <span class="macro">warn!</span>(<span class="string">&quot;h2 connect response with non-zero body not supported&quot;</span>);
-
-                                    <span class="ident">send_stream</span>.<span class="ident">send_reset</span>(<span class="ident">h2::Reason::INTERNAL_ERROR</span>);
-                                    <span class="kw">return</span> <span class="prelude-val">Err</span>((
-                                        <span class="ident"><span class="kw">crate</span>::Error::new_h2</span>(<span class="ident">h2::Reason::INTERNAL_ERROR</span>.<span class="ident">into</span>()),
-                                        <span class="prelude-val">None</span>,
-                                    ));
-                                }
-                                <span class="kw">let</span> (<span class="ident">parts</span>, <span class="ident">recv_stream</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">into_parts</span>();
-                                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Response::from_parts</span>(<span class="ident">parts</span>, <span class="ident">Body::empty</span>());
-
-                                <span class="kw">let</span> (<span class="ident">pending</span>, <span class="ident">on_upgrade</span>) <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::upgrade::pending</span>();
-                                <span class="kw">let</span> <span class="ident">io</span> <span class="op">=</span> <span class="ident">H2Upgraded</span> {
-                                    <span class="ident">ping</span>,
-                                    <span class="ident">send_stream</span>: <span class="kw">unsafe</span> { <span class="ident">UpgradedSendStream::new</span>(<span class="ident">send_stream</span>) },
-                                    <span class="ident">recv_stream</span>,
-                                    <span class="ident">buf</span>: <span class="ident">Bytes::new</span>(),
-                                };
-                                <span class="kw">let</span> <span class="ident">upgraded</span> <span class="op">=</span> <span class="ident">Upgraded::new</span>(<span class="ident">io</span>, <span class="ident">Bytes::new</span>());
-
-                                <span class="ident">pending</span>.<span class="ident">fulfill</span>(<span class="ident">upgraded</span>);
-                                <span class="ident">res</span>.<span class="ident">extensions_mut</span>().<span class="ident">insert</span>(<span class="ident">on_upgrade</span>);
-
-                                <span class="prelude-val">Ok</span>(<span class="ident">res</span>)
-                            } <span class="kw">else</span> {
-                                <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">stream</span><span class="op">|</span> {
-                                    <span class="kw">let</span> <span class="ident">ping</span> <span class="op">=</span> <span class="ident">ping</span>.<span class="ident">for_stream</span>(<span class="kw-2">&amp;</span><span class="ident">stream</span>);
-                                    <span class="ident"><span class="kw">crate</span>::Body::h2</span>(<span class="ident">stream</span>, <span class="ident">content_length</span>.<span class="ident">into</span>(), <span class="ident">ping</span>)
-                                });
-                                <span class="prelude-val">Ok</span>(<span class="ident">res</span>)
-                            }
+                    <span class="comment">// Check poll_ready() again.</span>
+                    <span class="comment">// If the call to send_request() resulted in the new stream being pending open</span>
+                    <span class="comment">// we have to wait for the open to complete before accepting new requests.</span>
+                    <span class="kw">match</span> <span class="self">self</span>.<span class="ident">h2_tx</span>.<span class="ident">poll_ready</span>(<span class="ident">cx</span>) {
+                        <span class="ident">Poll::Pending</span> =&gt; {
+                            <span class="comment">// Save Context</span>
+                            <span class="self">self</span>.<span class="ident">fut_ctx</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">f</span>);
+                            <span class="kw">return</span> <span class="ident">Poll::Pending</span>;
                         }
-                        <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
-                            <span class="ident">ping</span>.<span class="ident">ensure_not_timed_out</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> (<span class="ident">e</span>, <span class="prelude-val">None</span>))<span class="question-mark">?</span>;
-
-                            <span class="macro">debug!</span>(<span class="string">&quot;client response error: {}&quot;</span>, <span class="ident">err</span>);
-                            <span class="prelude-val">Err</span>((<span class="ident"><span class="kw">crate</span>::Error::new_h2</span>(<span class="ident">err</span>), <span class="prelude-val">None</span>))
+                        <span class="ident">Poll::Ready</span>(<span class="prelude-val">Ok</span>(())) =&gt; (),
+                        <span class="ident">Poll::Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)) =&gt; {
+                            <span class="ident">f</span>.<span class="ident">cb</span>.<span class="ident">send</span>(<span class="prelude-val">Err</span>((<span class="ident"><span class="kw">crate</span>::Error::new_h2</span>(<span class="ident">err</span>), <span class="prelude-val">None</span>)));
+                            <span class="kw">continue</span>;
                         }
-                    });
-                    <span class="self">self</span>.<span class="ident">executor</span>.<span class="ident">execute</span>(<span class="ident">cb</span>.<span class="ident">send_when</span>(<span class="ident">fut</span>));
+                    }
+                    <span class="self">self</span>.<span class="ident">poll_pipe</span>(<span class="ident">f</span>, <span class="ident">cx</span>);
                     <span class="kw">continue</span>;
                 }
 
