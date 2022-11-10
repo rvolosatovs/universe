@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/vmm-sys-util-0.10.0/src/rand.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>rand.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/vmm-sys-util-0.11.0/src/rand.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>rand.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../vmm_sys_util/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -130,8 +130,43 @@
 <span id="125">125</span>
 <span id="126">126</span>
 <span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.</span>
-<span class="comment">// SPDX-License-Identifier: Apache-2.0</span>
+<span class="comment">// SPDX-License-Identifier: BSD-3-Clause</span>
 
 <span class="doccomment">//! Miscellaneous functions related to getting (pseudo) random numbers and</span>
 <span class="doccomment">//! strings.</span>
@@ -171,7 +206,7 @@
 }
 
 <span class="doccomment">/// Generate pseudo random u32 numbers based on the current timestamp.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">xor_psuedo_rng_u32</span>() -&gt; <span class="ident">u32</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">xor_pseudo_rng_u32</span>() -&gt; <span class="ident">u32</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">t</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="ident">timestamp_cycles</span>() <span class="kw">as</span> <span class="ident">u32</span>;
     <span class="comment">// Taken from https://en.wikipedia.org/wiki/Xorshift</span>
     <span class="ident">t</span> <span class="op">^</span><span class="op">=</span> <span class="ident">t</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">13</span>;
@@ -182,27 +217,26 @@
 <span class="comment">// This will get an array of numbers that can safely be converted to strings</span>
 <span class="comment">// because they will be in the range [a-zA-Z0-9]. The return vector could be any</span>
 <span class="comment">// size between 0 and 4.</span>
-<span class="kw">fn</span> <span class="ident">xor_psuedo_rng_u8_alphanumerics</span>(<span class="ident">rand_fn</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Fn</span>() -&gt; <span class="ident">u32</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">r</span> <span class="op">=</span> <span class="macro">vec!</span>[];
+<span class="kw">fn</span> <span class="ident">xor_pseudo_rng_u8_alphanumerics</span>(<span class="ident">rand_fn</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Fn</span>() -&gt; <span class="ident">u32</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
+    <span class="ident">rand_fn</span>()
+        .<span class="ident">to_ne_bytes</span>()
+        .<span class="ident">to_vec</span>()
+        .<span class="ident">drain</span>(..)
+        .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">val</span><span class="op">|</span> {
+            (<span class="number">48</span>..<span class="op">=</span><span class="number">57</span>).<span class="ident">contains</span>(<span class="ident">val</span>) <span class="op">|</span><span class="op">|</span> (<span class="number">65</span>..<span class="op">=</span><span class="number">90</span>).<span class="ident">contains</span>(<span class="ident">val</span>) <span class="op">|</span><span class="op">|</span> (<span class="number">97</span>..<span class="op">=</span><span class="number">122</span>).<span class="ident">contains</span>(<span class="ident">val</span>)
+        })
+        .<span class="ident">collect</span>()
+}
 
-    <span class="kw">fn</span> <span class="ident">between</span>(<span class="ident">lower</span>: <span class="ident">u8</span>, <span class="ident">upper</span>: <span class="ident">u8</span>, <span class="ident">to_check</span>: <span class="ident">u8</span>) -&gt; <span class="ident">bool</span> {
-        (<span class="ident">to_check</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">lower</span>) <span class="op">&amp;&amp;</span> (<span class="ident">to_check</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">upper</span>)
-    }
-
-    <span class="kw">for</span> <span class="ident">n</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">rand_fn</span>().<span class="ident">to_ne_bytes</span>() {
-        <span class="comment">// Upper / Lower alphabetics and numbers.</span>
-        <span class="kw">if</span> <span class="ident">between</span>(<span class="number">48</span>, <span class="number">57</span>, <span class="kw-2">*</span><span class="ident">n</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">between</span>(<span class="number">65</span>, <span class="number">90</span>, <span class="kw-2">*</span><span class="ident">n</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">between</span>(<span class="number">97</span>, <span class="number">122</span>, <span class="kw-2">*</span><span class="ident">n</span>) {
-            <span class="ident">r</span>.<span class="ident">push</span>(<span class="kw-2">*</span><span class="ident">n</span>);
-        }
-    }
-    <span class="ident">r</span>
+<span class="kw">fn</span> <span class="ident">xor_pseudo_rng_u8_bytes</span>(<span class="ident">rand_fn</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Fn</span>() -&gt; <span class="ident">u32</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
+    <span class="ident">rand_fn</span>().<span class="ident">to_ne_bytes</span>().<span class="ident">to_vec</span>()
 }
 
 <span class="kw">fn</span> <span class="ident">rand_alphanumerics_impl</span>(<span class="ident">rand_fn</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Fn</span>() -&gt; <span class="ident">u32</span>, <span class="ident">len</span>: <span class="ident">usize</span>) -&gt; <span class="ident">OsString</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">OsString::new</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">done</span> <span class="op">=</span> <span class="number">0</span>;
     <span class="kw">loop</span> {
-        <span class="kw">for</span> <span class="ident">n</span> <span class="kw">in</span> <span class="ident">xor_psuedo_rng_u8_alphanumerics</span>(<span class="ident">rand_fn</span>) {
+        <span class="kw">for</span> <span class="ident">n</span> <span class="kw">in</span> <span class="ident">xor_pseudo_rng_u8_alphanumerics</span>(<span class="ident">rand_fn</span>) {
             <span class="ident">done</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
             <span class="ident">buf</span>.<span class="ident">push</span>(<span class="ident">str::from_utf8</span>(<span class="kw-2">&amp;</span>[<span class="ident">n</span>]).<span class="ident">unwrap_or</span>(<span class="string">&quot;_&quot;</span>));
             <span class="kw">if</span> <span class="ident">done</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">len</span> {
@@ -212,10 +246,25 @@
     }
 }
 
+<span class="kw">fn</span> <span class="ident">rand_bytes_impl</span>(<span class="ident">rand_fn</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Fn</span>() -&gt; <span class="ident">u32</span>, <span class="ident">len</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">num</span> <span class="op">=</span> <span class="ident">len</span>;
+    <span class="kw">while</span> <span class="ident">num</span> <span class="op">&gt;</span> <span class="number">0</span> {
+        <span class="ident">buf</span>.<span class="ident">push</span>(<span class="ident">xor_pseudo_rng_u8_bytes</span>(<span class="ident">rand_fn</span>));
+        <span class="ident">num</span> <span class="op">-</span><span class="op">=</span> <span class="number">4</span>;
+    }
+    <span class="ident">buf</span>.<span class="ident">into_iter</span>().<span class="ident">flatten</span>().<span class="ident">take</span>(<span class="ident">len</span>).<span class="ident">collect</span>()
+}
+
 <span class="doccomment">/// Gets a pseudo random OsString of length `len` with characters in the</span>
 <span class="doccomment">/// range [a-zA-Z0-9].</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rand_alphanumerics</span>(<span class="ident">len</span>: <span class="ident">usize</span>) -&gt; <span class="ident">OsString</span> {
-    <span class="ident">rand_alphanumerics_impl</span>(<span class="kw-2">&amp;</span><span class="ident">xor_psuedo_rng_u32</span>, <span class="ident">len</span>)
+    <span class="ident">rand_alphanumerics_impl</span>(<span class="kw-2">&amp;</span><span class="ident">xor_pseudo_rng_u32</span>, <span class="ident">len</span>)
+}
+
+<span class="doccomment">/// Get a pseudo random vector of `len` bytes.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rand_bytes</span>(<span class="ident">len</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
+    <span class="ident">rand_bytes_impl</span>(<span class="kw-2">&amp;</span><span class="ident">xor_pseudo_rng_u32</span>, <span class="ident">len</span>)
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
@@ -230,18 +279,18 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_xor_psuedo_rng_u32</span>() {
+    <span class="kw">fn</span> <span class="ident">test_xor_pseudo_rng_u32</span>() {
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">1000</span> {
-            <span class="macro">assert_ne!</span>(<span class="ident">xor_psuedo_rng_u32</span>(), <span class="ident">xor_psuedo_rng_u32</span>());
+            <span class="macro">assert_ne!</span>(<span class="ident">xor_pseudo_rng_u32</span>(), <span class="ident">xor_pseudo_rng_u32</span>());
         }
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_xor_psuedo_rng_u8_alphas</span>() {
+    <span class="kw">fn</span> <span class="ident">test_xor_pseudo_rng_u8_alphas</span>() {
         <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="number">3612982</span>; <span class="comment">// 55 (shifted 16 places), 33 (shifted 8 places), 54...</span>
                          <span class="comment">// The 33 will be discarded as it is not a valid letter</span>
                          <span class="comment">// (upper or lower) or number.</span>
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">xor_psuedo_rng_u8_alphanumerics</span>(<span class="kw-2">&amp;</span><span class="op">|</span><span class="op">|</span> <span class="ident">i</span>);
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">xor_pseudo_rng_u8_alphanumerics</span>(<span class="kw-2">&amp;</span><span class="op">|</span><span class="op">|</span> <span class="ident">i</span>);
         <span class="macro">assert_eq!</span>(<span class="macro">vec!</span>[<span class="number">54</span>, <span class="number">55</span>], <span class="ident">s</span>);
     }
 
@@ -255,6 +304,27 @@
     <span class="kw">fn</span> <span class="ident">test_rand_alphanumerics</span>() {
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">rand_alphanumerics</span>(<span class="number">5</span>);
         <span class="macro">assert_eq!</span>(<span class="number">5</span>, <span class="ident">s</span>.<span class="ident">len</span>());
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_xor_pseudo_rng_u8_bytes</span>() {
+        <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="number">3612982</span>; <span class="comment">// 55 (shifted 16 places), 33 (shifted 8 places), 54...</span>
+                         <span class="comment">// The 33 will be discarded as it is not a valid letter</span>
+                         <span class="comment">// (upper or lower) or number.</span>
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">xor_pseudo_rng_u8_bytes</span>(<span class="kw-2">&amp;</span><span class="op">|</span><span class="op">|</span> <span class="ident">i</span>);
+        <span class="macro">assert_eq!</span>(<span class="macro">vec!</span>[<span class="number">54</span>, <span class="number">33</span>, <span class="number">55</span>, <span class="number">0</span>], <span class="ident">s</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_rand_bytes_impl</span>() {
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">rand_bytes_impl</span>(<span class="kw-2">&amp;</span><span class="op">|</span><span class="op">|</span> <span class="number">1234567</span>, <span class="number">4</span>);
+        <span class="macro">assert_eq!</span>(<span class="macro">vec!</span>[<span class="number">135</span>, <span class="number">214</span>, <span class="number">18</span>, <span class="number">0</span>], <span class="ident">s</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_rand_bytes</span>() {
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">rand_bytes</span>(<span class="number">8</span>);
+        <span class="macro">assert_eq!</span>(<span class="number">8</span>, <span class="ident">s</span>.<span class="ident">len</span>());
     }
 }
 </code></pre></div>
