@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/kvm-ioctls-0.11.0/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/kvm-ioctls-0.12.0/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../kvm_ioctls/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -232,6 +232,10 @@
 <span id="227">227</span>
 <span id="228">228</span>
 <span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.</span>
 <span class="comment">// SPDX-License-Identifier: Apache-2.0 OR MIT</span>
 <span class="comment">//</span>
@@ -390,8 +394,8 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//!         let core_reg_base: u64 = 0x6030_0000_0010_0000;</span>
 <span class="doccomment">//!         let mmio_addr: u64 = guest_addr + mem_size as u64;</span>
-<span class="doccomment">//!         vcpu_fd.set_one_reg(core_reg_base + 2 * 32, guest_addr); // set PC</span>
-<span class="doccomment">//!         vcpu_fd.set_one_reg(core_reg_base + 2 * 0, mmio_addr); // set X0</span>
+<span class="doccomment">//!         vcpu_fd.set_one_reg(core_reg_base + 2 * 32, guest_addr as u128); // set PC</span>
+<span class="doccomment">//!         vcpu_fd.set_one_reg(core_reg_base + 2 * 0, mmio_addr as u128); // set X0</span>
 <span class="doccomment">//!     }</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//!     // 6. Run code on the vCPU.</span>
@@ -450,6 +454,10 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ioctls::device::DeviceFd</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ioctls::system::Kvm</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ioctls::vcpu</span>::{<span class="ident">VcpuExit</span>, <span class="ident">VcpuFd</span>};
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ioctls::vcpu::SyncReg</span>;
+
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ioctls::vm</span>::{<span class="ident">IoEventAddress</span>, <span class="ident">NoDatamatch</span>, <span class="ident">VmFd</span>};
 <span class="comment">// The following example is used to verify that our public</span>
 <span class="comment">// structures are exported properly.</span>

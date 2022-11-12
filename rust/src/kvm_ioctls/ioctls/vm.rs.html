@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/kvm-ioctls-0.11.0/src/ioctls/vm.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>vm.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/kvm-ioctls-0.12.0/src/ioctls/vm.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>vm.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../kvm_ioctls/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -2130,6 +2130,139 @@
 <span id="2125">2125</span>
 <span id="2126">2126</span>
 <span id="2127">2127</span>
+<span id="2128">2128</span>
+<span id="2129">2129</span>
+<span id="2130">2130</span>
+<span id="2131">2131</span>
+<span id="2132">2132</span>
+<span id="2133">2133</span>
+<span id="2134">2134</span>
+<span id="2135">2135</span>
+<span id="2136">2136</span>
+<span id="2137">2137</span>
+<span id="2138">2138</span>
+<span id="2139">2139</span>
+<span id="2140">2140</span>
+<span id="2141">2141</span>
+<span id="2142">2142</span>
+<span id="2143">2143</span>
+<span id="2144">2144</span>
+<span id="2145">2145</span>
+<span id="2146">2146</span>
+<span id="2147">2147</span>
+<span id="2148">2148</span>
+<span id="2149">2149</span>
+<span id="2150">2150</span>
+<span id="2151">2151</span>
+<span id="2152">2152</span>
+<span id="2153">2153</span>
+<span id="2154">2154</span>
+<span id="2155">2155</span>
+<span id="2156">2156</span>
+<span id="2157">2157</span>
+<span id="2158">2158</span>
+<span id="2159">2159</span>
+<span id="2160">2160</span>
+<span id="2161">2161</span>
+<span id="2162">2162</span>
+<span id="2163">2163</span>
+<span id="2164">2164</span>
+<span id="2165">2165</span>
+<span id="2166">2166</span>
+<span id="2167">2167</span>
+<span id="2168">2168</span>
+<span id="2169">2169</span>
+<span id="2170">2170</span>
+<span id="2171">2171</span>
+<span id="2172">2172</span>
+<span id="2173">2173</span>
+<span id="2174">2174</span>
+<span id="2175">2175</span>
+<span id="2176">2176</span>
+<span id="2177">2177</span>
+<span id="2178">2178</span>
+<span id="2179">2179</span>
+<span id="2180">2180</span>
+<span id="2181">2181</span>
+<span id="2182">2182</span>
+<span id="2183">2183</span>
+<span id="2184">2184</span>
+<span id="2185">2185</span>
+<span id="2186">2186</span>
+<span id="2187">2187</span>
+<span id="2188">2188</span>
+<span id="2189">2189</span>
+<span id="2190">2190</span>
+<span id="2191">2191</span>
+<span id="2192">2192</span>
+<span id="2193">2193</span>
+<span id="2194">2194</span>
+<span id="2195">2195</span>
+<span id="2196">2196</span>
+<span id="2197">2197</span>
+<span id="2198">2198</span>
+<span id="2199">2199</span>
+<span id="2200">2200</span>
+<span id="2201">2201</span>
+<span id="2202">2202</span>
+<span id="2203">2203</span>
+<span id="2204">2204</span>
+<span id="2205">2205</span>
+<span id="2206">2206</span>
+<span id="2207">2207</span>
+<span id="2208">2208</span>
+<span id="2209">2209</span>
+<span id="2210">2210</span>
+<span id="2211">2211</span>
+<span id="2212">2212</span>
+<span id="2213">2213</span>
+<span id="2214">2214</span>
+<span id="2215">2215</span>
+<span id="2216">2216</span>
+<span id="2217">2217</span>
+<span id="2218">2218</span>
+<span id="2219">2219</span>
+<span id="2220">2220</span>
+<span id="2221">2221</span>
+<span id="2222">2222</span>
+<span id="2223">2223</span>
+<span id="2224">2224</span>
+<span id="2225">2225</span>
+<span id="2226">2226</span>
+<span id="2227">2227</span>
+<span id="2228">2228</span>
+<span id="2229">2229</span>
+<span id="2230">2230</span>
+<span id="2231">2231</span>
+<span id="2232">2232</span>
+<span id="2233">2233</span>
+<span id="2234">2234</span>
+<span id="2235">2235</span>
+<span id="2236">2236</span>
+<span id="2237">2237</span>
+<span id="2238">2238</span>
+<span id="2239">2239</span>
+<span id="2240">2240</span>
+<span id="2241">2241</span>
+<span id="2242">2242</span>
+<span id="2243">2243</span>
+<span id="2244">2244</span>
+<span id="2245">2245</span>
+<span id="2246">2246</span>
+<span id="2247">2247</span>
+<span id="2248">2248</span>
+<span id="2249">2249</span>
+<span id="2250">2250</span>
+<span id="2251">2251</span>
+<span id="2252">2252</span>
+<span id="2253">2253</span>
+<span id="2254">2254</span>
+<span id="2255">2255</span>
+<span id="2256">2256</span>
+<span id="2257">2257</span>
+<span id="2258">2258</span>
+<span id="2259">2259</span>
+<span id="2260">2260</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.</span>
 <span class="comment">// SPDX-License-Identifier: Apache-2.0 OR MIT</span>
 <span class="comment">//</span>
@@ -2143,13 +2276,13 @@
 <span class="kw">use</span> <span class="ident">std::os::raw</span>::{<span class="ident">c_int</span>, <span class="ident">c_ulong</span>};
 <span class="kw">use</span> <span class="ident">std::os::unix::io</span>::{<span class="ident">AsRawFd</span>, <span class="ident">FromRawFd</span>, <span class="ident">RawFd</span>};
 
-<span class="kw">use</span> <span class="ident">cap::Cap</span>;
-<span class="kw">use</span> <span class="ident">ioctls::device::new_device</span>;
-<span class="kw">use</span> <span class="ident">ioctls::device::DeviceFd</span>;
-<span class="kw">use</span> <span class="ident">ioctls::vcpu::new_vcpu</span>;
-<span class="kw">use</span> <span class="ident">ioctls::vcpu::VcpuFd</span>;
-<span class="kw">use</span> <span class="ident">ioctls</span>::{<span class="ident">KvmRunWrapper</span>, <span class="prelude-ty">Result</span>};
-<span class="kw">use</span> <span class="ident">kvm_ioctls</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cap::Cap</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ioctls::device::new_device</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ioctls::device::DeviceFd</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ioctls::vcpu::new_vcpu</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ioctls::vcpu::VcpuFd</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ioctls</span>::{<span class="ident">KvmRunWrapper</span>, <span class="prelude-ty">Result</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::kvm_ioctls</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">vmm_sys_util::errno</span>;
 <span class="kw">use</span> <span class="ident">vmm_sys_util::eventfd::EventFd</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
@@ -2160,6 +2293,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// The `IoEventAddress` is used for specifying the type when registering an event</span>
 <span class="doccomment">/// in [register_ioevent](struct.VmFd.html#method.register_ioevent).</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">IoEventAddress</span> {
     <span class="doccomment">/// Representation of an programmable I/O address.</span>
     <span class="ident">Pio</span>(<span class="ident">u64</span>),
@@ -2173,6 +2307,7 @@
 <span class="doccomment">/// [`register_ioevent`](struct.VmFd.html#method.register_ioevent)</span>
 <span class="doccomment">/// to disable filtering of events based on the datamatch flag. For details check the</span>
 <span class="doccomment">/// [KVM API documentation](https://www.kernel.org/doc/Documentation/virtual/kvm/api.txt).</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">NoDatamatch</span>;
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">NoDatamatch</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">u64</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw">_</span>: <span class="ident">NoDatamatch</span>) -&gt; <span class="ident">u64</span> {
@@ -2181,6 +2316,7 @@
 }
 
 <span class="doccomment">/// Wrapper over KVM VM ioctls.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">VmFd</span> {
     <span class="ident">vm</span>: <span class="ident">File</span>,
     <span class="ident">run_size</span>: <span class="ident">usize</span>,
@@ -2261,6 +2397,34 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tss_address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">offset</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// Safe because we know that our file is a VM fd and we verify the return result.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_val</span>(<span class="self">self</span>, <span class="ident">KVM_SET_TSS_ADDR</span>(), <span class="ident">offset</span> <span class="kw">as</span> <span class="ident">c_ulong</span>) };
+        <span class="kw">if</span> <span class="ident">ret</span> <span class="op">==</span> <span class="number">0</span> {
+            <span class="prelude-val">Ok</span>(())
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>())
+        }
+    }
+
+    <span class="doccomment">/// Sets the address of the one-page region in the VM&#39;s address space.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// See the documentation for `KVM_SET_IDENTITY_MAP_ADDR`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Arguments</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * `address` - Physical address of a one-page region in the guest&#39;s physical address space.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Example</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # extern crate kvm_ioctls;</span>
+    <span class="doccomment">/// # use kvm_ioctls::Kvm;</span>
+    <span class="doccomment">/// let kvm = Kvm::new().unwrap();</span>
+    <span class="doccomment">/// let vm = kvm.create_vm().unwrap();</span>
+    <span class="doccomment">/// vm.set_identity_map_address(0xfffb_c000).unwrap();</span>
+    <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_identity_map_address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="comment">// Safe because we know that our file is a VM fd and we verify the return result.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_IDENTITY_MAP_ADDR</span>(), <span class="kw-2">&amp;</span><span class="ident">address</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">==</span> <span class="number">0</span> {
             <span class="prelude-val">Ok</span>(())
         } <span class="kw">else</span> {
@@ -2897,8 +3061,8 @@
     <span class="doccomment">///</span>
     <span class="doccomment">///     let core_reg_base: u64 = 0x6030_0000_0010_0000;</span>
     <span class="doccomment">///     let mmio_addr: u64 = guest_addr + mem_size as u64;</span>
-    <span class="doccomment">///     vcpu_fd.set_one_reg(core_reg_base + 2 * 32, guest_addr); // set PC</span>
-    <span class="doccomment">///     vcpu_fd.set_one_reg(core_reg_base + 2 * 0, mmio_addr); // set X0</span>
+    <span class="doccomment">///     vcpu_fd.set_one_reg(core_reg_base + 2 * 32, guest_addr as u128); // set PC</span>
+    <span class="doccomment">///     vcpu_fd.set_one_reg(core_reg_base + 2 * 0, mmio_addr as u128); // set X0</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// loop {</span>
@@ -2997,6 +3161,65 @@
         }
     }
 
+    <span class="doccomment">/// Registers an event that will, when signaled, assert the `gsi` IRQ.</span>
+    <span class="doccomment">/// If the irqchip is resampled by the guest, the IRQ is de-asserted,</span>
+    <span class="doccomment">/// and `resamplefd` is notified.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Arguments</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * `fd` - `EventFd` to be signaled.</span>
+    <span class="doccomment">/// * `resamplefd` - `EventFd`to be notified on resample.</span>
+    <span class="doccomment">/// * `gsi` - IRQ to be triggered.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Example</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # extern crate kvm_ioctls;</span>
+    <span class="doccomment">/// # extern crate libc;</span>
+    <span class="doccomment">/// # extern crate vmm_sys_util;</span>
+    <span class="doccomment">/// # use kvm_ioctls::Kvm;</span>
+    <span class="doccomment">/// # use libc::EFD_NONBLOCK;</span>
+    <span class="doccomment">/// # use vmm_sys_util::eventfd::EventFd;</span>
+    <span class="doccomment">/// let kvm = Kvm::new().unwrap();</span>
+    <span class="doccomment">/// let vm = kvm.create_vm().unwrap();</span>
+    <span class="doccomment">/// let evtfd = EventFd::new(EFD_NONBLOCK).unwrap();</span>
+    <span class="doccomment">/// let resamplefd = EventFd::new(EFD_NONBLOCK).unwrap();</span>
+    <span class="doccomment">/// #[cfg(any(target_arch = &quot;x86&quot;, target_arch = &quot;x86_64&quot;))]</span>
+    <span class="doccomment">/// {</span>
+    <span class="doccomment">///     vm.create_irq_chip().unwrap();</span>
+    <span class="doccomment">///     vm.register_irqfd_with_resample(&amp;evtfd, &amp;resamplefd, 0)</span>
+    <span class="doccomment">///         .unwrap();</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(
+        <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>,
+        <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>,
+        <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>,
+        <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>
+    ))]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_irqfd_with_resample</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">fd</span>: <span class="kw-2">&amp;</span><span class="ident">EventFd</span>,
+        <span class="ident">resamplefd</span>: <span class="kw-2">&amp;</span><span class="ident">EventFd</span>,
+        <span class="ident">gsi</span>: <span class="ident">u32</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">irqfd</span> <span class="op">=</span> <span class="ident">kvm_irqfd</span> {
+            <span class="ident">fd</span>: <span class="ident">fd</span>.<span class="ident">as_raw_fd</span>() <span class="kw">as</span> <span class="ident">u32</span>,
+            <span class="ident">resamplefd</span>: <span class="ident">resamplefd</span>.<span class="ident">as_raw_fd</span>() <span class="kw">as</span> <span class="ident">u32</span>,
+            <span class="ident">gsi</span>,
+            <span class="ident">flags</span>: <span class="ident">KVM_IRQFD_FLAG_RESAMPLE</span>,
+            ..<span class="ident">Default::default</span>()
+        };
+        <span class="comment">// Safe because we know that our file is a VM fd, we know the kernel will only read the</span>
+        <span class="comment">// correct amount of memory from our pointer, and we verify the return result.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_IRQFD</span>(), <span class="kw-2">&amp;</span><span class="ident">irqfd</span>) };
+        <span class="kw">if</span> <span class="ident">ret</span> <span class="op">==</span> <span class="number">0</span> {
+            <span class="prelude-val">Ok</span>(())
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>())
+        }
+    }
+
     <span class="doccomment">/// Unregisters an event that will, when signaled, trigger the `gsi` IRQ.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Arguments</span>
@@ -3016,10 +3239,14 @@
     <span class="doccomment">/// let kvm = Kvm::new().unwrap();</span>
     <span class="doccomment">/// let vm = kvm.create_vm().unwrap();</span>
     <span class="doccomment">/// let evtfd = EventFd::new(EFD_NONBLOCK).unwrap();</span>
+    <span class="doccomment">/// let resamplefd = EventFd::new(EFD_NONBLOCK).unwrap();</span>
     <span class="doccomment">/// #[cfg(any(target_arch = &quot;x86&quot;, target_arch = &quot;x86_64&quot;))]</span>
     <span class="doccomment">/// {</span>
     <span class="doccomment">///     vm.create_irq_chip().unwrap();</span>
     <span class="doccomment">///     vm.register_irqfd(&amp;evtfd, 0).unwrap();</span>
+    <span class="doccomment">///     vm.unregister_irqfd(&amp;evtfd, 0).unwrap();</span>
+    <span class="doccomment">///     vm.register_irqfd_with_resample(&amp;evtfd, &amp;resamplefd, 0)</span>
+    <span class="doccomment">///         .unwrap();</span>
     <span class="doccomment">///     vm.unregister_irqfd(&amp;evtfd, 0).unwrap();</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
@@ -3687,7 +3914,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident">Kvm</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Kvm</span>;
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fs::OpenOptions</span>, <span class="ident">ptr::null_mut</span>};
@@ -3714,6 +3941,19 @@
         <span class="kw">let</span> <span class="ident">kvm</span> <span class="op">=</span> <span class="ident">Kvm::new</span>().<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">vm</span> <span class="op">=</span> <span class="ident">kvm</span>.<span class="ident">create_vm</span>().<span class="ident">unwrap</span>();
         <span class="macro">assert!</span>(<span class="ident">vm</span>.<span class="ident">set_tss_address</span>(<span class="number">0xfffb_d000</span>).<span class="ident">is_ok</span>());
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
+    <span class="kw">fn</span> <span class="ident">test_set_identity_map_address</span>() {
+        <span class="kw">let</span> <span class="ident">kvm</span> <span class="op">=</span> <span class="ident">Kvm::new</span>().<span class="ident">unwrap</span>();
+        <span class="kw">if</span> <span class="ident">kvm</span>.<span class="ident">check_extension</span>(<span class="ident">Cap::SetIdentityMapAddr</span>) {
+            <span class="kw">let</span> <span class="ident">vm</span> <span class="op">=</span> <span class="ident">kvm</span>.<span class="ident">create_vm</span>().<span class="ident">unwrap</span>();
+            <span class="macro">assert!</span>(<span class="ident">vm</span>.<span class="ident">set_identity_map_address</span>(<span class="number">0xfffb_c000</span>).<span class="ident">is_ok</span>());
+            <span class="ident">vm</span>.<span class="ident">create_vcpu</span>(<span class="number">0</span>).<span class="ident">unwrap</span>();
+            <span class="comment">// Setting the identity map after creating a vCPU must fail.</span>
+            <span class="macro">assert!</span>(<span class="ident">vm</span>.<span class="ident">set_identity_map_address</span>(<span class="number">0xfffb_c000</span>).<span class="ident">is_err</span>());
+        }
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -3880,6 +4120,8 @@
         <span class="kw">let</span> <span class="ident">evtfd1</span> <span class="op">=</span> <span class="ident">EventFd::new</span>(<span class="ident">EFD_NONBLOCK</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">evtfd2</span> <span class="op">=</span> <span class="ident">EventFd::new</span>(<span class="ident">EFD_NONBLOCK</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">evtfd3</span> <span class="op">=</span> <span class="ident">EventFd::new</span>(<span class="ident">EFD_NONBLOCK</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">evtfd4</span> <span class="op">=</span> <span class="ident">EventFd::new</span>(<span class="ident">EFD_NONBLOCK</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">resamplefd</span> <span class="op">=</span> <span class="ident">EventFd::new</span>(<span class="ident">EFD_NONBLOCK</span>).<span class="ident">unwrap</span>();
 
         <span class="macro">assert!</span>(<span class="ident">vm_fd</span>.<span class="ident">create_irq_chip</span>().<span class="ident">is_ok</span>());
 
@@ -3896,6 +4138,17 @@
         <span class="macro">assert!</span>(<span class="ident">vm_fd</span>.<span class="ident">register_irqfd</span>(<span class="kw-2">&amp;</span><span class="ident">evtfd3</span>, <span class="number">5</span>).<span class="ident">is_err</span>());
         <span class="comment">// KVM irqfd doesn&#39;t report failure on this case:(</span>
         <span class="macro">assert!</span>(<span class="ident">vm_fd</span>.<span class="ident">unregister_irqfd</span>(<span class="kw-2">&amp;</span><span class="ident">evtfd3</span>, <span class="number">5</span>).<span class="ident">is_ok</span>());
+
+        <span class="kw">if</span> <span class="ident">vm_fd</span>.<span class="ident">check_extension</span>(<span class="ident">Cap::IrqfdResample</span>) {
+            <span class="macro">assert!</span>(<span class="ident">vm_fd</span>
+                .<span class="ident">register_irqfd_with_resample</span>(<span class="kw-2">&amp;</span><span class="ident">evtfd4</span>, <span class="kw-2">&amp;</span><span class="ident">resamplefd</span>, <span class="number">6</span>)
+                .<span class="ident">is_ok</span>());
+            <span class="macro">assert!</span>(<span class="ident">vm_fd</span>.<span class="ident">unregister_irqfd</span>(<span class="kw-2">&amp;</span><span class="ident">evtfd4</span>, <span class="number">6</span>).<span class="ident">is_ok</span>());
+        } <span class="kw">else</span> {
+            <span class="macro">assert!</span>(<span class="ident">vm_fd</span>
+                .<span class="ident">register_irqfd_with_resample</span>(<span class="kw-2">&amp;</span><span class="ident">evtfd4</span>, <span class="kw-2">&amp;</span><span class="ident">resamplefd</span>, <span class="number">6</span>)
+                .<span class="ident">is_err</span>());
+        }
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -3906,6 +4159,8 @@
         <span class="kw">let</span> <span class="ident">evtfd1</span> <span class="op">=</span> <span class="ident">EventFd::new</span>(<span class="ident">EFD_NONBLOCK</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">evtfd2</span> <span class="op">=</span> <span class="ident">EventFd::new</span>(<span class="ident">EFD_NONBLOCK</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">evtfd3</span> <span class="op">=</span> <span class="ident">EventFd::new</span>(<span class="ident">EFD_NONBLOCK</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">evtfd4</span> <span class="op">=</span> <span class="ident">EventFd::new</span>(<span class="ident">EFD_NONBLOCK</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">resamplefd</span> <span class="op">=</span> <span class="ident">EventFd::new</span>(<span class="ident">EFD_NONBLOCK</span>).<span class="ident">unwrap</span>();
 
         <span class="comment">// Create the vGIC device.</span>
         <span class="kw">let</span> <span class="ident">vgic_fd</span> <span class="op">=</span> <span class="ident">create_gic_device</span>(<span class="kw-2">&amp;</span><span class="ident">vm_fd</span>, <span class="number">0</span>);
@@ -3933,6 +4188,17 @@
         <span class="macro">assert!</span>(<span class="ident">vm_fd</span>.<span class="ident">register_irqfd</span>(<span class="kw-2">&amp;</span><span class="ident">evtfd3</span>, <span class="number">5</span>).<span class="ident">is_err</span>());
         <span class="comment">// KVM irqfd doesn&#39;t report failure on this case:(</span>
         <span class="macro">assert!</span>(<span class="ident">vm_fd</span>.<span class="ident">unregister_irqfd</span>(<span class="kw-2">&amp;</span><span class="ident">evtfd3</span>, <span class="number">5</span>).<span class="ident">is_ok</span>());
+
+        <span class="kw">if</span> <span class="ident">vm_fd</span>.<span class="ident">check_extension</span>(<span class="ident">Cap::IrqfdResample</span>) {
+            <span class="macro">assert!</span>(<span class="ident">vm_fd</span>
+                .<span class="ident">register_irqfd_with_resample</span>(<span class="kw-2">&amp;</span><span class="ident">evtfd4</span>, <span class="kw-2">&amp;</span><span class="ident">resamplefd</span>, <span class="number">6</span>)
+                .<span class="ident">is_ok</span>());
+            <span class="macro">assert!</span>(<span class="ident">vm_fd</span>.<span class="ident">unregister_irqfd</span>(<span class="kw-2">&amp;</span><span class="ident">evtfd4</span>, <span class="number">6</span>).<span class="ident">is_ok</span>());
+        } <span class="kw">else</span> {
+            <span class="macro">assert!</span>(<span class="ident">vm_fd</span>
+                .<span class="ident">register_irqfd_with_resample</span>(<span class="kw-2">&amp;</span><span class="ident">evtfd4</span>, <span class="kw-2">&amp;</span><span class="ident">resamplefd</span>, <span class="number">6</span>)
+                .<span class="ident">is_err</span>());
+        }
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
