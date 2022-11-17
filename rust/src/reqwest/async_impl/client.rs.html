@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/reqwest-0.11.12/src/async_impl/client.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>client.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/reqwest-0.11.13/src/async_impl/client.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>client.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../reqwest/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -2090,6 +2090,51 @@
 <span id="2085">2085</span>
 <span id="2086">2086</span>
 <span id="2087">2087</span>
+<span id="2088">2088</span>
+<span id="2089">2089</span>
+<span id="2090">2090</span>
+<span id="2091">2091</span>
+<span id="2092">2092</span>
+<span id="2093">2093</span>
+<span id="2094">2094</span>
+<span id="2095">2095</span>
+<span id="2096">2096</span>
+<span id="2097">2097</span>
+<span id="2098">2098</span>
+<span id="2099">2099</span>
+<span id="2100">2100</span>
+<span id="2101">2101</span>
+<span id="2102">2102</span>
+<span id="2103">2103</span>
+<span id="2104">2104</span>
+<span id="2105">2105</span>
+<span id="2106">2106</span>
+<span id="2107">2107</span>
+<span id="2108">2108</span>
+<span id="2109">2109</span>
+<span id="2110">2110</span>
+<span id="2111">2111</span>
+<span id="2112">2112</span>
+<span id="2113">2113</span>
+<span id="2114">2114</span>
+<span id="2115">2115</span>
+<span id="2116">2116</span>
+<span id="2117">2117</span>
+<span id="2118">2118</span>
+<span id="2119">2119</span>
+<span id="2120">2120</span>
+<span id="2121">2121</span>
+<span id="2122">2122</span>
+<span id="2123">2123</span>
+<span id="2124">2124</span>
+<span id="2125">2125</span>
+<span id="2126">2126</span>
+<span id="2127">2127</span>
+<span id="2128">2128</span>
+<span id="2129">2129</span>
+<span id="2130">2130</span>
+<span id="2131">2131</span>
+<span id="2132">2132</span>
 </pre><pre class="rust"><code><span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;native-tls&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__rustls&quot;</span>,))]</span>
 <span class="kw">use</span> <span class="ident">std::any::Any</span>;
 <span class="kw">use</span> <span class="ident">std::net::IpAddr</span>;
@@ -2105,7 +2150,7 @@
 };
 <span class="kw">use</span> <span class="ident">http::uri::Scheme</span>;
 <span class="kw">use</span> <span class="ident">http::Uri</span>;
-<span class="kw">use</span> <span class="ident">hyper::client::ResponseFuture</span>;
+<span class="kw">use</span> <span class="ident">hyper::client</span>::{<span class="ident">HttpConnector</span>, <span class="ident">ResponseFuture</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;native-tls-crate&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">native_tls_crate::TlsConnector</span>;
 <span class="kw">use</span> <span class="ident">pin_project_lite::pin_project</span>;
@@ -2120,9 +2165,12 @@
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::request</span>::{<span class="ident">Request</span>, <span class="ident">RequestBuilder</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::response::Response</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::Body</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::connect</span>::{<span class="ident">Connector</span>, <span class="ident">HttpConnector</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::connect::Connector</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cookie</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;trust-dns&quot;</span>)]</span>
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::dns::trust_dns::TrustDnsResolver</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::dns</span>::{<span class="ident">gai::GaiResolver</span>, <span class="ident">DnsResolverWithOverrides</span>, <span class="ident">DynResolver</span>, <span class="ident">Resolve</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::into_url</span>::{<span class="ident">expect_uri</span>, <span class="ident">try_uri</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::redirect</span>::{<span class="self">self</span>, <span class="ident">remove_sensitive_headers</span>};
@@ -2172,6 +2220,8 @@
     <span class="ident">hostname_verification</span>: <span class="ident">bool</span>,
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__tls&quot;</span>)]</span>
     <span class="ident">certs_verification</span>: <span class="ident">bool</span>,
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__tls&quot;</span>)]</span>
+    <span class="ident">tls_sni</span>: <span class="ident">bool</span>,
     <span class="ident">connect_timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
     <span class="ident">connection_verbose</span>: <span class="ident">bool</span>,
     <span class="ident">pool_idle_timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
@@ -2213,6 +2263,7 @@
     <span class="ident">error</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>,
     <span class="ident">https_only</span>: <span class="ident">bool</span>,
     <span class="ident">dns_overrides</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SocketAddr</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">dns_resolver</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Resolve</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">ClientBuilder</span> {
@@ -2238,6 +2289,8 @@
                 <span class="ident">hostname_verification</span>: <span class="bool-val">true</span>,
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__tls&quot;</span>)]</span>
                 <span class="ident">certs_verification</span>: <span class="bool-val">true</span>,
+                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__tls&quot;</span>)]</span>
+                <span class="ident">tls_sni</span>: <span class="bool-val">true</span>,
                 <span class="ident">connect_timeout</span>: <span class="prelude-val">None</span>,
                 <span class="ident">connection_verbose</span>: <span class="bool-val">false</span>,
                 <span class="ident">pool_idle_timeout</span>: <span class="prelude-val">Some</span>(<span class="ident">Duration::from_secs</span>(<span class="number">90</span>)),
@@ -2280,6 +2333,7 @@
                 <span class="ident">cookie_store</span>: <span class="prelude-val">None</span>,
                 <span class="ident">https_only</span>: <span class="bool-val">false</span>,
                 <span class="ident">dns_overrides</span>: <span class="ident">HashMap::new</span>(),
+                <span class="ident">dns_resolver</span>: <span class="prelude-val">None</span>,
             },
         }
     }
@@ -2309,25 +2363,23 @@
                 <span class="ident">headers</span>.<span class="ident">get</span>(<span class="ident">USER_AGENT</span>).<span class="ident">cloned</span>()
             }
 
-            <span class="kw">let</span> <span class="ident">http</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">config</span>.<span class="ident">trust_dns</span> {
-                <span class="bool-val">false</span> =&gt; {
-                    <span class="kw">if</span> <span class="ident">config</span>.<span class="ident">dns_overrides</span>.<span class="ident">is_empty</span>() {
-                        <span class="ident">HttpConnector::new_gai</span>()
-                    } <span class="kw">else</span> {
-                        <span class="ident">HttpConnector::new_gai_with_overrides</span>(<span class="ident">config</span>.<span class="ident">dns_overrides</span>)
-                    }
-                }
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resolver</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Resolve</span><span class="op">&gt;</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">config</span>.<span class="ident">trust_dns</span> {
+                <span class="bool-val">false</span> =&gt; <span class="ident">Arc::new</span>(<span class="ident">GaiResolver::new</span>()),
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;trust-dns&quot;</span>)]</span>
-                <span class="bool-val">true</span> =&gt; {
-                    <span class="kw">if</span> <span class="ident">config</span>.<span class="ident">dns_overrides</span>.<span class="ident">is_empty</span>() {
-                        <span class="ident">HttpConnector::new_trust_dns</span>()<span class="question-mark">?</span>
-                    } <span class="kw">else</span> {
-                        <span class="ident">HttpConnector::new_trust_dns_with_overrides</span>(<span class="ident">config</span>.<span class="ident">dns_overrides</span>)<span class="question-mark">?</span>
-                    }
-                }
+                <span class="bool-val">true</span> =&gt; <span class="ident">Arc::new</span>(<span class="ident">TrustDnsResolver::new</span>().<span class="ident">map_err</span>(<span class="ident"><span class="kw">crate</span>::error::builder</span>)<span class="question-mark">?</span>),
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;trust-dns&quot;</span>))]</span>
                 <span class="bool-val">true</span> =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;trust-dns shouldn&#39;t be enabled unless the feature is&quot;</span>),
             };
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">dns_resolver</span>) <span class="op">=</span> <span class="ident">config</span>.<span class="ident">dns_resolver</span> {
+                <span class="ident">resolver</span> <span class="op">=</span> <span class="ident">dns_resolver</span>;
+            }
+            <span class="kw">if</span> <span class="op">!</span><span class="ident">config</span>.<span class="ident">dns_overrides</span>.<span class="ident">is_empty</span>() {
+                <span class="ident">resolver</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">DnsResolverWithOverrides::new</span>(
+                    <span class="ident">resolver</span>,
+                    <span class="ident">config</span>.<span class="ident">dns_overrides</span>,
+                ));
+            }
+            <span class="kw">let</span> <span class="ident">http</span> <span class="op">=</span> <span class="ident">HttpConnector::new_with_resolver</span>(<span class="ident">DynResolver::new</span>(<span class="ident">resolver</span>));
 
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__tls&quot;</span>)]</span>
             <span class="kw">match</span> <span class="ident">config</span>.<span class="ident">tls</span> {
@@ -2356,6 +2408,8 @@
                     }
 
                     <span class="ident">tls</span>.<span class="ident">danger_accept_invalid_certs</span>(<span class="op">!</span><span class="ident">config</span>.<span class="ident">certs_verification</span>);
+
+                    <span class="ident">tls</span>.<span class="ident">use_sni</span>(<span class="ident">config</span>.<span class="ident">tls_sni</span>);
 
                     <span class="ident">tls</span>.<span class="ident">disable_built_in_roots</span>(<span class="op">!</span><span class="ident">config</span>.<span class="ident">tls_built_in_root_certs</span>);
 
@@ -2517,6 +2571,8 @@
                         <span class="ident">tls</span>.<span class="ident">dangerous</span>()
                             .<span class="ident">set_certificate_verifier</span>(<span class="ident">Arc::new</span>(<span class="ident">NoVerifier</span>));
                     }
+
+                    <span class="ident">tls</span>.<span class="ident">enable_sni</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">tls_sni</span>;
 
                     <span class="comment">// ALPN protocol</span>
                     <span class="kw">match</span> <span class="ident">config</span>.<span class="ident">http_version_pref</span> {
@@ -3229,6 +3285,28 @@
         <span class="self">self</span>
     }
 
+    <span class="doccomment">/// Controls the use of TLS server name indication.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Defaults to `true`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Optional</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This requires the optional `default-tls`, `native-tls`, or `rustls-tls(-...)`</span>
+    <span class="doccomment">/// feature to be enabled.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__tls&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(
+        <span class="ident">docsrs</span>,
+        <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">any</span>(
+            <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;default-tls&quot;</span>,
+            <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;native-tls&quot;</span>,
+            <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rustls-tls&quot;</span>
+        )))
+    )]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tls_sni</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">tls_sni</span>: <span class="ident">bool</span>) -&gt; <span class="ident">ClientBuilder</span> {
+        <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">tls_sni</span> <span class="op">=</span> <span class="ident">tls_sni</span>;
+        <span class="self">self</span>
+    }
+
     <span class="doccomment">/// Set the minimum required TLS version for connections.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// By default the TLS backend&#39;s own default is used.</span>
@@ -3430,6 +3508,16 @@
         <span class="self">self</span>.<span class="ident">config</span>
             .<span class="ident">dns_overrides</span>
             .<span class="ident">insert</span>(<span class="ident">domain</span>.<span class="ident">to_string</span>(), <span class="ident">addrs</span>.<span class="ident">to_vec</span>());
+        <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// Override the DNS resolver implementation.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Pass an `Arc` wrapping a trait object implementing `Resolve`.</span>
+    <span class="doccomment">/// Overrides for specific names passed to `resolve` and `resolve_to_addrs` will</span>
+    <span class="doccomment">/// still be applied on top of this resolver.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dns_resolver</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Resolve</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">resolver</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>) -&gt; <span class="ident">ClientBuilder</span> {
+        <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">dns_resolver</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">resolver</span> <span class="kw">as</span> <span class="kw">_</span>);
         <span class="self">self</span>
     }
 }
@@ -3785,6 +3873,8 @@
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">max_tls_version</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">max_tls_version</span> {
                 <span class="ident">f</span>.<span class="ident">field</span>(<span class="string">&quot;max_tls_version&quot;</span>, <span class="ident">max_tls_version</span>);
             }
+
+            <span class="ident">f</span>.<span class="ident">field</span>(<span class="string">&quot;tls_sni&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">tls_sni</span>);
         }
 
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;native-tls-crate&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__rustls&quot;</span>))]</span>
