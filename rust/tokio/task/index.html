@@ -211,7 +211,7 @@ blocking the executor.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.spawn.html" title="tokio::task::spawn fn">spawn</a></div><div class="item-right docblock-short"><p>Spawns a new asynchronous task, returning a
 <a href="struct.JoinHandle.html"><code>JoinHandle</code></a> for it.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.spawn_blocking.html" title="tokio::task::spawn_blocking fn">spawn_blocking</a></div><div class="item-right docblock-short"><p>Runs the provided closure on a thread where blocking is acceptable.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.spawn_local.html" title="tokio::task::spawn_local fn">spawn_local</a></div><div class="item-right docblock-short"><p>Spawns a <code>!Send</code> future on the local task set.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.spawn_local.html" title="tokio::task::spawn_local fn">spawn_local</a></div><div class="item-right docblock-short"><p>Spawns a <code>!Send</code> future on the current <a href="struct.LocalSet.html"><code>LocalSet</code></a>.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.unconstrained.html" title="tokio::task::unconstrained fn">unconstrained</a></div><div class="item-right docblock-short"><p>Turn off cooperative scheduling for a future. The future will never be forced to yield by
 Tokio. Using this exposes your service to starvation if the unconstrained future never yields
 otherwise.</p>

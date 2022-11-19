@@ -293,7 +293,7 @@ syscalls.</p>
     <span class="macro">assert_eq!</span>(<span class="ident">writer</span>, <span class="string">b&quot;\x02\x05&quot;</span>);
     <span class="prelude-val">Ok</span>(())
 }</code></pre></div>
-</div></details><details class="rustdoc-toggle" open><summary><div id="method.write_i8" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../src/tokio/io/util/async_write_ext.rs.html#371-1213">source</a></div><h4 class="code-header">fn <a href="#method.write_i8" class="fnname">write_i8</a>&lt;'a&gt;(&amp;'a mut self, n: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i8.html">i8</a>) -&gt; WriteI8&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;'a mut </a>Self&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Unpin.html" title="trait core::marker::Unpin">Unpin</a>,&nbsp;</span></h4></div></summary><div class="docblock"><p>Writes an unsigned 8-bit integer to the underlying writer.</p>
+</div></details><details class="rustdoc-toggle" open><summary><div id="method.write_i8" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../src/tokio/io/util/async_write_ext.rs.html#371-1213">source</a></div><h4 class="code-header">fn <a href="#method.write_i8" class="fnname">write_i8</a>&lt;'a&gt;(&amp;'a mut self, n: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i8.html">i8</a>) -&gt; WriteI8&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;'a mut </a>Self&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Unpin.html" title="trait core::marker::Unpin">Unpin</a>,&nbsp;</span></h4></div></summary><div class="docblock"><p>Writes a signed 8-bit integer to the underlying writer.</p>
 <p>Equivalent to:</p>
 
 <div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="kw">async</span> <span class="kw">fn</span> <span class="ident">write_i8</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">n</span>: <span class="ident">i8</span>) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;</code></pre></div>
@@ -302,7 +302,7 @@ syscalls.</p>
 <h5 id="errors-4"><a href="#errors-4">Errors</a></h5>
 <p>This method returns the same errors as <a href="trait.AsyncWriteExt.html#method.write_all"><code>AsyncWriteExt::write_all</code></a>.</p>
 <h5 id="examples-6"><a href="#examples-6">Examples</a></h5>
-<p>Write unsigned 8 bit integers to a <code>AsyncWrite</code>:</p>
+<p>Write signed 8 bit integers to a <code>AsyncWrite</code>:</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::io</span>::{<span class="self">self</span>, <span class="ident">AsyncWriteExt</span>};
 
@@ -310,10 +310,10 @@ syscalls.</p>
 <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">writer</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
 
-    <span class="ident">writer</span>.<span class="ident">write_u8</span>(<span class="number">2</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-    <span class="ident">writer</span>.<span class="ident">write_u8</span>(<span class="number">5</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="ident">writer</span>.<span class="ident">write_i8</span>(<span class="op">-</span><span class="number">2</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="ident">writer</span>.<span class="ident">write_i8</span>(<span class="number">126</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="macro">assert_eq!</span>(<span class="ident">writer</span>, <span class="string">b&quot;\x02\x05&quot;</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">writer</span>, <span class="string">b&quot;\xFE\x7E&quot;</span>);
     <span class="prelude-val">Ok</span>(())
 }</code></pre></div>
 </div></details><details class="rustdoc-toggle" open><summary><div id="method.write_u16" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../src/tokio/io/util/async_write_ext.rs.html#371-1213">source</a></div><h4 class="code-header">fn <a href="#method.write_u16" class="fnname">write_u16</a>&lt;'a&gt;(&amp;'a mut self, n: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>) -&gt; WriteU16&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;'a mut </a>Self&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Unpin.html" title="trait core::marker::Unpin">Unpin</a>,&nbsp;</span></h4></div></summary><div class="docblock"><p>Writes an unsigned 16-bit integer in big-endian order to the

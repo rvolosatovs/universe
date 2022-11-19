@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.21.2/src/sync/mutex.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mutex.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.22.0/src/sync/mutex.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mutex.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../tokio/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -972,6 +972,62 @@
 <span id="967">967</span>
 <span id="968">968</span>
 <span id="969">969</span>
+<span id="970">970</span>
+<span id="971">971</span>
+<span id="972">972</span>
+<span id="973">973</span>
+<span id="974">974</span>
+<span id="975">975</span>
+<span id="976">976</span>
+<span id="977">977</span>
+<span id="978">978</span>
+<span id="979">979</span>
+<span id="980">980</span>
+<span id="981">981</span>
+<span id="982">982</span>
+<span id="983">983</span>
+<span id="984">984</span>
+<span id="985">985</span>
+<span id="986">986</span>
+<span id="987">987</span>
+<span id="988">988</span>
+<span id="989">989</span>
+<span id="990">990</span>
+<span id="991">991</span>
+<span id="992">992</span>
+<span id="993">993</span>
+<span id="994">994</span>
+<span id="995">995</span>
+<span id="996">996</span>
+<span id="997">997</span>
+<span id="998">998</span>
+<span id="999">999</span>
+<span id="1000">1000</span>
+<span id="1001">1001</span>
+<span id="1002">1002</span>
+<span id="1003">1003</span>
+<span id="1004">1004</span>
+<span id="1005">1005</span>
+<span id="1006">1006</span>
+<span id="1007">1007</span>
+<span id="1008">1008</span>
+<span id="1009">1009</span>
+<span id="1010">1010</span>
+<span id="1011">1011</span>
+<span id="1012">1012</span>
+<span id="1013">1013</span>
+<span id="1014">1014</span>
+<span id="1015">1015</span>
+<span id="1016">1016</span>
+<span id="1017">1017</span>
+<span id="1018">1018</span>
+<span id="1019">1019</span>
+<span id="1020">1020</span>
+<span id="1021">1021</span>
+<span id="1022">1022</span>
+<span id="1023">1023</span>
+<span id="1024">1024</span>
+<span id="1025">1025</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sync&quot;</span>), <span class="ident">allow</span>(<span class="ident">unreachable_pub</span>, <span class="ident">dead_code</span>))]</span>
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::sync::batch_semaphore</span> <span class="kw">as</span> <span class="ident">semaphore</span>;
@@ -1174,8 +1230,8 @@
 <span class="doccomment">/// `RwLock::try_read` operation will only fail if the lock is currently held</span>
 <span class="doccomment">/// by an exclusive writer.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// `RwLock::try_write` operation will if lock is held by any reader or by an</span>
-<span class="doccomment">/// exclusive writer.</span>
+<span class="doccomment">/// `RwLock::try_write` operation will only fail if the lock is currently held</span>
+<span class="doccomment">/// by any reader or by an exclusive writer.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// [`Mutex::try_lock`]: Mutex::try_lock</span>
 <span class="doccomment">/// [`RwLock::try_read`]: fn@super::RwLock::try_read</span>
@@ -1390,6 +1446,62 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sync&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">blocking_lock</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">MutexGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">T</span><span class="op">&gt;</span> {
         <span class="ident"><span class="kw">crate</span>::future::block_on</span>(<span class="self">self</span>.<span class="ident">lock</span>())
+    }
+
+    <span class="doccomment">/// Blockingly locks this `Mutex`. When the lock has been acquired, function returns an</span>
+    <span class="doccomment">/// [`OwnedMutexGuard`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This method is identical to [`Mutex::blocking_lock`], except that the returned</span>
+    <span class="doccomment">/// guard references the `Mutex` with an [`Arc`] rather than by borrowing</span>
+    <span class="doccomment">/// it. Therefore, the `Mutex` must be wrapped in an `Arc` to call this</span>
+    <span class="doccomment">/// method, and the guard will live for the `&#39;static` lifetime, as it keeps</span>
+    <span class="doccomment">/// the `Mutex` alive by holding an `Arc`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Panics</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This function panics if called within an asynchronous execution context.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///   - If you find yourself in an asynchronous execution context and needing</span>
+    <span class="doccomment">///     to call some (synchronous) function which performs one of these</span>
+    <span class="doccomment">///     `blocking_` operations, then consider wrapping that call inside</span>
+    <span class="doccomment">///     [`spawn_blocking()`][crate::runtime::Handle::spawn_blocking]</span>
+    <span class="doccomment">///     (or [`block_in_place()`][crate::task::block_in_place]).</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use std::sync::Arc;</span>
+    <span class="doccomment">/// use tokio::sync::Mutex;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// #[tokio::main]</span>
+    <span class="doccomment">/// async fn main() {</span>
+    <span class="doccomment">///     let mutex =  Arc::new(Mutex::new(1));</span>
+    <span class="doccomment">///     let lock = mutex.lock().await;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     let mutex1 = Arc::clone(&amp;mutex);</span>
+    <span class="doccomment">///     let blocking_task = tokio::task::spawn_blocking(move || {</span>
+    <span class="doccomment">///         // This shall block until the `lock` is released.</span>
+    <span class="doccomment">///         let mut n = mutex1.blocking_lock_owned();</span>
+    <span class="doccomment">///         *n = 2;</span>
+    <span class="doccomment">///     });</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     assert_eq!(*lock, 1);</span>
+    <span class="doccomment">///     // Release the lock.</span>
+    <span class="doccomment">///     drop(lock);</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     // Await the completion of the blocking task.</span>
+    <span class="doccomment">///     blocking_task.await.unwrap();</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     // Assert uncontended.</span>
+    <span class="doccomment">///     let n = mutex.try_lock().unwrap();</span>
+    <span class="doccomment">///     assert_eq!(*n, 2);</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">track_caller</span>]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sync&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">blocking_lock_owned</span>(<span class="self">self</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>) -&gt; <span class="ident">OwnedMutexGuard</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+        <span class="ident"><span class="kw">crate</span>::future::block_on</span>(<span class="self">self</span>.<span class="ident">lock_owned</span>())
     }
 
     <span class="doccomment">/// Locks this mutex, causing the current task to yield until the lock has</span>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.21.2/src/task/join_set.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>join_set.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.22.0/src/task/join_set.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>join_set.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../tokio/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -508,6 +508,25 @@
 <span id="503">503</span>
 <span id="504">504</span>
 <span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
 </pre><pre class="rust"><code><span class="doccomment">//! A collection of tasks spawned on a Tokio runtime.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! This module provides the [`JoinSet`] type, a collection which stores a set</span>
@@ -630,6 +649,10 @@
     <span class="doccomment">/// Spawn the provided task on the `JoinSet`, returning an [`AbortHandle`]</span>
     <span class="doccomment">/// that can be used to remotely cancel the task.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// You do not have to `.await` the returned `JoinHandle` to make the</span>
+    <span class="doccomment">/// provided future start execution. It will start running in the background</span>
+    <span class="doccomment">/// immediately when `spawn` is called.</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// # Panics</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This method panics if called outside of a Tokio runtime.</span>
@@ -649,6 +672,10 @@
     <span class="doccomment">/// `JoinSet` returning an [`AbortHandle`] that can be used to remotely</span>
     <span class="doccomment">/// cancel the task.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// You do not have to `.await` the returned `JoinHandle` to make the</span>
+    <span class="doccomment">/// provided future start execution. It will start running in the background</span>
+    <span class="doccomment">/// immediately when `spawn_on` is called.</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// [`AbortHandle`]: crate::task::AbortHandle</span>
     <span class="attribute">#[<span class="ident">track_caller</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">spawn_on</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">task</span>: <span class="ident">F</span>, <span class="ident">handle</span>: <span class="kw-2">&amp;</span><span class="ident">Handle</span>) -&gt; <span class="ident">AbortHandle</span>
@@ -663,6 +690,10 @@
     <span class="doccomment">/// Spawn the provided task on the current [`LocalSet`] and store it in this</span>
     <span class="doccomment">/// `JoinSet`, returning an [`AbortHandle`] that can be used to remotely</span>
     <span class="doccomment">/// cancel the task.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// You do not have to `.await` the returned `JoinHandle` to make the</span>
+    <span class="doccomment">/// provided future start execution. It will start running in the background</span>
+    <span class="doccomment">/// immediately when `spawn_local` is called.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Panics</span>
     <span class="doccomment">///</span>
@@ -683,8 +714,15 @@
     <span class="doccomment">/// this `JoinSet`, returning an [`AbortHandle`] that can be used to</span>
     <span class="doccomment">/// remotely cancel the task.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// Unlike the [`spawn_local`] method, this method may be used to spawn local</span>
+    <span class="doccomment">/// tasks when the `LocalSet` is _not_ running. You do not have to `.await`</span>
+    <span class="doccomment">/// the returned `JoinHandle` to make the provided future start execution.</span>
+    <span class="doccomment">/// It will start running immediately whenever the `LocalSet` is next</span>
+    <span class="doccomment">/// started.</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// [`LocalSet`]: crate::task::LocalSet</span>
     <span class="doccomment">/// [`AbortHandle`]: crate::task::AbortHandle</span>
+    <span class="doccomment">/// [`spawn_local`]: Self::spawn_local</span>
     <span class="attribute">#[<span class="ident">track_caller</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">spawn_local_on</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">task</span>: <span class="ident">F</span>, <span class="ident">local_set</span>: <span class="kw-2">&amp;</span><span class="ident">LocalSet</span>) -&gt; <span class="ident">AbortHandle</span>
     <span class="kw">where</span>

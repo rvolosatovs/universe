@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.21.2/src/macros/join.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>join.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.22.0/src/macros/join.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>join.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../tokio/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -157,6 +157,16 @@
 <span id="152">152</span>
 <span id="153">153</span>
 <span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
 </pre><pre class="rust"><code><span class="doccomment">/// Waits on multiple concurrent branches, returning when **all** branches</span>
 <span class="doccomment">/// complete.</span>
 <span class="doccomment">///</span>
@@ -231,7 +241,17 @@
 
         <span class="comment">// Safety: nothing must be moved out of `futures`. This is to satisfy</span>
         <span class="comment">// the requirement of `Pin::new_unchecked` called below.</span>
+        <span class="comment">//</span>
+        <span class="comment">// We can&#39;t use the `pin!` macro for this because `futures` is a tuple</span>
+        <span class="comment">// and the standard library provides no way to pin-project to the fields</span>
+        <span class="comment">// of a tuple.</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">futures</span> <span class="op">=</span> ( $( <span class="ident">maybe_done</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>), )<span class="op">*</span> );
+
+        <span class="comment">// This assignment makes sure that the `poll_fn` closure only has a</span>
+        <span class="comment">// reference to the futures, instead of taking ownership of them. This</span>
+        <span class="comment">// mitigates the issue described in</span>
+        <span class="comment">// &lt;https://internals.rust-lang.org/t/surprising-soundness-trouble-around-pollfn/17484&gt;</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">futures</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">futures</span>;
 
         <span class="comment">// Each time the future created by poll_fn is polled, a different future will be polled first</span>
         <span class="comment">// to ensure every future passed to join! gets a chance to make progress even if</span>
@@ -265,7 +285,7 @@
                     <span class="ident">to_run</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
 
                     <span class="comment">// Extract the future for this branch from the tuple.</span>
-                    <span class="kw">let</span> ( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">skip</span>,)<span class="op">*</span> <span class="ident">fut</span>, .. ) <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">futures</span>;
+                    <span class="kw">let</span> ( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">skip</span>,)<span class="op">*</span> <span class="ident">fut</span>, .. ) <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="kw-2">*</span><span class="ident">futures</span>;
 
                     <span class="comment">// Safety: future is stored on the stack above</span>
                     <span class="comment">// and never moved.</span>
