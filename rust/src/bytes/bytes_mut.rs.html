@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/bytes-1.2.1/src/bytes_mut.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bytes_mut.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/bytes-1.3.0/src/bytes_mut.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bytes_mut.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../bytes/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -1777,8 +1777,46 @@
 <span id="1772">1772</span>
 <span id="1773">1773</span>
 <span id="1774">1774</span>
+<span id="1775">1775</span>
+<span id="1776">1776</span>
+<span id="1777">1777</span>
+<span id="1778">1778</span>
+<span id="1779">1779</span>
+<span id="1780">1780</span>
+<span id="1781">1781</span>
+<span id="1782">1782</span>
+<span id="1783">1783</span>
+<span id="1784">1784</span>
+<span id="1785">1785</span>
+<span id="1786">1786</span>
+<span id="1787">1787</span>
+<span id="1788">1788</span>
+<span id="1789">1789</span>
+<span id="1790">1790</span>
+<span id="1791">1791</span>
+<span id="1792">1792</span>
+<span id="1793">1793</span>
+<span id="1794">1794</span>
+<span id="1795">1795</span>
+<span id="1796">1796</span>
+<span id="1797">1797</span>
+<span id="1798">1798</span>
+<span id="1799">1799</span>
+<span id="1800">1800</span>
+<span id="1801">1801</span>
+<span id="1802">1802</span>
+<span id="1803">1803</span>
+<span id="1804">1804</span>
+<span id="1805">1805</span>
+<span id="1806">1806</span>
+<span id="1807">1807</span>
+<span id="1808">1808</span>
+<span id="1809">1809</span>
+<span id="1810">1810</span>
+<span id="1811">1811</span>
+<span id="1812">1812</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">core::iter</span>::{<span class="ident">FromIterator</span>, <span class="ident">Iterator</span>};
-<span class="kw">use</span> <span class="ident">core::mem</span>::{<span class="self">self</span>, <span class="ident">ManuallyDrop</span>};
+<span class="kw">use</span> <span class="ident">core::mem</span>::{<span class="self">self</span>, <span class="ident">ManuallyDrop</span>, <span class="ident">MaybeUninit</span>};
 <span class="kw">use</span> <span class="ident">core::ops</span>::{<span class="ident">Deref</span>, <span class="ident">DerefMut</span>};
 <span class="kw">use</span> <span class="ident">core::ptr</span>::{<span class="self">self</span>, <span class="ident">NonNull</span>};
 <span class="kw">use</span> <span class="ident">core</span>::{<span class="ident">cmp</span>, <span class="ident">fmt</span>, <span class="ident">hash</span>, <span class="ident">isize</span>, <span class="ident">slice</span>, <span class="ident">usize</span>};
@@ -2484,6 +2522,15 @@
                     <span class="ident">new_cap</span> <span class="op">=</span> <span class="ident">cmp::max</span>(<span class="ident">double</span>, <span class="ident">new_cap</span>);
 
                     <span class="comment">// No space - allocate more</span>
+                    <span class="comment">//</span>
+                    <span class="comment">// The length field of `Shared::vec` is not used by the `BytesMut`;</span>
+                    <span class="comment">// instead we use the `len` field in the `BytesMut` itself. However,</span>
+                    <span class="comment">// when calling `reserve`, it doesn&#39;t guarantee that data stored in</span>
+                    <span class="comment">// the unused capacity of the vector is copied over to the new</span>
+                    <span class="comment">// allocation, so we need to ensure that we don&#39;t have any data we</span>
+                    <span class="comment">// care about in the unused capacity before calling `reserve`.</span>
+                    <span class="macro">debug_assert!</span>(<span class="ident">off</span> <span class="op">+</span> <span class="ident">len</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">v</span>.<span class="ident">capacity</span>());
+                    <span class="ident">v</span>.<span class="ident">set_len</span>(<span class="ident">off</span> <span class="op">+</span> <span class="ident">len</span>);
                     <span class="ident">v</span>.<span class="ident">reserve</span>(<span class="ident">new_cap</span> <span class="op">-</span> <span class="ident">v</span>.<span class="ident">len</span>());
 
                     <span class="comment">// Update the info</span>
@@ -2536,11 +2583,11 @@
         <span class="self">self</span>.<span class="ident">reserve</span>(<span class="ident">cnt</span>);
 
         <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">dst</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">uninit_slice</span>();
+            <span class="kw">let</span> <span class="ident">dst</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">spare_capacity_mut</span>();
             <span class="comment">// Reserved above</span>
             <span class="macro">debug_assert!</span>(<span class="ident">dst</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="ident">cnt</span>);
 
-            <span class="ident">ptr::copy_nonoverlapping</span>(<span class="ident">extend</span>.<span class="ident">as_ptr</span>(), <span class="ident">dst</span>.<span class="ident">as_mut_ptr</span>(), <span class="ident">cnt</span>);
+            <span class="ident">ptr::copy_nonoverlapping</span>(<span class="ident">extend</span>.<span class="ident">as_ptr</span>(), <span class="ident">dst</span>.<span class="ident">as_mut_ptr</span>().<span class="ident">cast</span>(), <span class="ident">cnt</span>);
         }
 
         <span class="kw">unsafe</span> {
@@ -2762,13 +2809,42 @@
         <span class="self">self</span>.<span class="ident">data</span> <span class="op">=</span> <span class="ident">invalid_ptr</span>((<span class="ident">pos</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">VEC_POS_OFFSET</span>) <span class="op">|</span> (<span class="ident">prev</span> <span class="op">&amp;</span> <span class="ident">NOT_VEC_POS_MASK</span>));
     }
 
+    <span class="doccomment">/// Returns the remaining spare capacity of the buffer as a slice of `MaybeUninit&lt;u8&gt;`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The returned slice can be used to fill the buffer with data (e.g. by</span>
+    <span class="doccomment">/// reading from a file) before marking the data as initialized using the</span>
+    <span class="doccomment">/// [`set_len`] method.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`set_len`]: BytesMut::set_len</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use bytes::BytesMut;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// // Allocate buffer big enough for 10 bytes.</span>
+    <span class="doccomment">/// let mut buf = BytesMut::with_capacity(10);</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// // Fill in the first 3 elements.</span>
+    <span class="doccomment">/// let uninit = buf.spare_capacity_mut();</span>
+    <span class="doccomment">/// uninit[0].write(0);</span>
+    <span class="doccomment">/// uninit[1].write(1);</span>
+    <span class="doccomment">/// uninit[2].write(2);</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// // Mark the first 3 bytes of the buffer as being initialized.</span>
+    <span class="doccomment">/// unsafe {</span>
+    <span class="doccomment">///     buf.set_len(3);</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// assert_eq!(&amp;buf[..], &amp;[0, 1, 2]);</span>
+    <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">uninit_slice</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">UninitSlice</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">spare_capacity_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> [<span class="ident">MaybeUninit</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>] {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ptr</span>.<span class="ident">as_ptr</span>().<span class="ident">add</span>(<span class="self">self</span>.<span class="ident">len</span>);
             <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">cap</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">len</span>;
 
-            <span class="ident">UninitSlice::from_raw_parts_mut</span>(<span class="ident">ptr</span>, <span class="ident">len</span>)
+            <span class="ident">slice::from_raw_parts_mut</span>(<span class="ident">ptr</span>.<span class="ident">cast</span>(), <span class="ident">len</span>)
         }
     }
 }
@@ -2842,7 +2918,7 @@
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">capacity</span>() <span class="op">==</span> <span class="self">self</span>.<span class="ident">len</span>() {
             <span class="self">self</span>.<span class="ident">reserve</span>(<span class="number">64</span>);
         }
-        <span class="self">self</span>.<span class="ident">uninit_slice</span>()
+        <span class="ident">UninitSlice::from_slice</span>(<span class="self">self</span>.<span class="ident">spare_capacity_mut</span>())
     }
 
     <span class="comment">// Specialize these methods so they can skip checking `remaining_mut`</span>
@@ -2867,7 +2943,7 @@
     <span class="kw">fn</span> <span class="ident">put_bytes</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">val</span>: <span class="ident">u8</span>, <span class="ident">cnt</span>: <span class="ident">usize</span>) {
         <span class="self">self</span>.<span class="ident">reserve</span>(<span class="ident">cnt</span>);
         <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">dst</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">uninit_slice</span>();
+            <span class="kw">let</span> <span class="ident">dst</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">spare_capacity_mut</span>();
             <span class="comment">// Reserved above</span>
             <span class="macro">debug_assert!</span>(<span class="ident">dst</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="ident">cnt</span>);
 
