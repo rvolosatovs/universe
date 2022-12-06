@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.22.0/src/runtime/task/harness.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>harness.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><script defer src="../../../../main.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.23.0/src/runtime/task/harness.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>harness.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><script defer src="../../../../main.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../tokio/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -509,13 +509,11 @@
 <span id="504">504</span>
 <span id="505">505</span>
 <span id="506">506</span>
-<span id="507">507</span>
-<span id="508">508</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::future::Future</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::runtime::task::core</span>::{<span class="ident">Cell</span>, <span class="ident">Core</span>, <span class="ident">Header</span>, <span class="ident">Trailer</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::runtime::task::state</span>::{<span class="ident">Snapshot</span>, <span class="ident">State</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::runtime::task::waker::waker_ref</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::runtime::task</span>::{<span class="ident">JoinError</span>, <span class="ident">Notified</span>, <span class="ident">Schedule</span>, <span class="ident">Task</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::runtime::task</span>::{<span class="ident">JoinError</span>, <span class="ident">Notified</span>, <span class="ident">RawTask</span>, <span class="ident">Schedule</span>, <span class="ident">Task</span>};
 
 <span class="kw">use</span> <span class="ident">std::mem</span>;
 <span class="kw">use</span> <span class="ident">std::mem::ManuallyDrop</span>;
@@ -560,11 +558,102 @@
     }
 }
 
+<span class="doccomment">/// Task operations that can be implemented without being generic over the</span>
+<span class="doccomment">/// scheduler or task. Only one version of these methods should exist in the</span>
+<span class="doccomment">/// final binary.</span>
+<span class="kw">impl</span> <span class="ident">RawTask</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">drop_reference</span>(<span class="self">self</span>) {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">ref_dec</span>() {
+            <span class="self">self</span>.<span class="ident">dealloc</span>();
+        }
+    }
+
+    <span class="doccomment">/// This call consumes a ref-count and notifies the task. This will create a</span>
+    <span class="doccomment">/// new Notified and submit it if necessary.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The caller does not need to hold a ref-count besides the one that was</span>
+    <span class="doccomment">/// passed to this call.</span>
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">wake_by_val</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::state::TransitionToNotifiedByVal</span>;
+
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">transition_to_notified_by_val</span>() {
+            <span class="ident">TransitionToNotifiedByVal::Submit</span> =&gt; {
+                <span class="comment">// The caller has given us a ref-count, and the transition has</span>
+                <span class="comment">// created a new ref-count, so we now hold two. We turn the new</span>
+                <span class="comment">// ref-count Notified and pass it to the call to `schedule`.</span>
+                <span class="comment">//</span>
+                <span class="comment">// The old ref-count is retained for now to ensure that the task</span>
+                <span class="comment">// is not dropped during the call to `schedule` if the call</span>
+                <span class="comment">// drops the task it was given.</span>
+                <span class="self">self</span>.<span class="ident">schedule</span>();
+
+                <span class="comment">// Now that we have completed the call to schedule, we can</span>
+                <span class="comment">// release our ref-count.</span>
+                <span class="self">self</span>.<span class="ident">drop_reference</span>();
+            }
+            <span class="ident">TransitionToNotifiedByVal::Dealloc</span> =&gt; {
+                <span class="self">self</span>.<span class="ident">dealloc</span>();
+            }
+            <span class="ident">TransitionToNotifiedByVal::DoNothing</span> =&gt; {}
+        }
+    }
+
+    <span class="doccomment">/// This call notifies the task. It will not consume any ref-counts, but the</span>
+    <span class="doccomment">/// caller should hold a ref-count.  This will create a new Notified and</span>
+    <span class="doccomment">/// submit it if necessary.</span>
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">wake_by_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::state::TransitionToNotifiedByRef</span>;
+
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">transition_to_notified_by_ref</span>() {
+            <span class="ident">TransitionToNotifiedByRef::Submit</span> =&gt; {
+                <span class="comment">// The transition above incremented the ref-count for a new task</span>
+                <span class="comment">// and the caller also holds a ref-count. The caller&#39;s ref-count</span>
+                <span class="comment">// ensures that the task is not destroyed even if the new task</span>
+                <span class="comment">// is dropped before `schedule` returns.</span>
+                <span class="self">self</span>.<span class="ident">schedule</span>();
+            }
+            <span class="ident">TransitionToNotifiedByRef::DoNothing</span> =&gt; {}
+        }
+    }
+
+    <span class="doccomment">/// Remotely aborts the task.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The caller should hold a ref-count, but we do not consume it.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is similar to `shutdown` except that it asks the runtime to perform</span>
+    <span class="doccomment">/// the shutdown. This is necessary to avoid the shutdown happening in the</span>
+    <span class="doccomment">/// wrong thread for non-Send tasks.</span>
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">remote_abort</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">transition_to_notified_and_cancel</span>() {
+            <span class="comment">// The transition has created a new ref-count, which we turn into</span>
+            <span class="comment">// a Notified and pass to the task.</span>
+            <span class="comment">//</span>
+            <span class="comment">// Since the caller holds a ref-count, the task cannot be destroyed</span>
+            <span class="comment">// before the call to `schedule` returns even if the call drops the</span>
+            <span class="comment">// `Notified` internally.</span>
+            <span class="self">self</span>.<span class="ident">schedule</span>();
+        }
+    }
+
+    <span class="doccomment">/// Try to set the waker notified when the task is complete. Returns true if</span>
+    <span class="doccomment">/// the task has already completed. If this call returns false, then the</span>
+    <span class="doccomment">/// waker will not be notified.</span>
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">try_set_join_waker</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">waker</span>: <span class="kw-2">&amp;</span><span class="ident">Waker</span>) -&gt; <span class="ident">bool</span> {
+        <span class="ident">can_read_output</span>(<span class="self">self</span>.<span class="ident">header</span>(), <span class="self">self</span>.<span class="ident">trailer</span>(), <span class="ident">waker</span>)
+    }
+}
+
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span><span class="op">&gt;</span> <span class="ident">Harness</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Future</span>,
     <span class="ident">S</span>: <span class="ident">Schedule</span>,
 {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">drop_reference</span>(<span class="self">self</span>) {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">ref_dec</span>() {
+            <span class="self">self</span>.<span class="ident">dealloc</span>();
+        }
+    }
+
     <span class="doccomment">/// Polls the inner future. A ref-count is consumed.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// All necessary state checks and transitions are performed.</span>
@@ -698,13 +787,6 @@
         }
     }
 
-    <span class="doccomment">/// Try to set the waker notified when the task is complete. Returns true if</span>
-    <span class="doccomment">/// the task has already completed. If this call returns false, then the</span>
-    <span class="doccomment">/// waker will not be notified.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">try_set_join_waker</span>(<span class="self">self</span>, <span class="ident">waker</span>: <span class="kw-2">&amp;</span><span class="ident">Waker</span>) -&gt; <span class="ident">bool</span> {
-        <span class="ident">can_read_output</span>(<span class="self">self</span>.<span class="ident">header</span>(), <span class="self">self</span>.<span class="ident">trailer</span>(), <span class="ident">waker</span>)
-    }
-
     <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">drop_join_handle_slow</span>(<span class="self">self</span>) {
         <span class="comment">// Try to unset `JOIN_INTEREST`. This must be done as a first step in</span>
         <span class="comment">// case the task concurrently completed.</span>
@@ -725,92 +807,6 @@
 
         <span class="comment">// Drop the `JoinHandle` reference, possibly deallocating the task</span>
         <span class="self">self</span>.<span class="ident">drop_reference</span>();
-    }
-
-    <span class="doccomment">/// Remotely aborts the task.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The caller should hold a ref-count, but we do not consume it.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This is similar to `shutdown` except that it asks the runtime to perform</span>
-    <span class="doccomment">/// the shutdown. This is necessary to avoid the shutdown happening in the</span>
-    <span class="doccomment">/// wrong thread for non-Send tasks.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">remote_abort</span>(<span class="self">self</span>) {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">transition_to_notified_and_cancel</span>() {
-            <span class="comment">// The transition has created a new ref-count, which we turn into</span>
-            <span class="comment">// a Notified and pass to the task.</span>
-            <span class="comment">//</span>
-            <span class="comment">// Since the caller holds a ref-count, the task cannot be destroyed</span>
-            <span class="comment">// before the call to `schedule` returns even if the call drops the</span>
-            <span class="comment">// `Notified` internally.</span>
-            <span class="self">self</span>.<span class="ident">core</span>()
-                .<span class="ident">scheduler</span>
-                .<span class="ident">schedule</span>(<span class="ident">Notified</span>(<span class="self">self</span>.<span class="ident">get_new_task</span>()));
-        }
-    }
-
-    <span class="comment">// ===== waker behavior =====</span>
-
-    <span class="doccomment">/// This call consumes a ref-count and notifies the task. This will create a</span>
-    <span class="doccomment">/// new Notified and submit it if necessary.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The caller does not need to hold a ref-count besides the one that was</span>
-    <span class="doccomment">/// passed to this call.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">wake_by_val</span>(<span class="self">self</span>) {
-        <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::state::TransitionToNotifiedByVal</span>;
-
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">transition_to_notified_by_val</span>() {
-            <span class="ident">TransitionToNotifiedByVal::Submit</span> =&gt; {
-                <span class="comment">// The caller has given us a ref-count, and the transition has</span>
-                <span class="comment">// created a new ref-count, so we now hold two. We turn the new</span>
-                <span class="comment">// ref-count Notified and pass it to the call to `schedule`.</span>
-                <span class="comment">//</span>
-                <span class="comment">// The old ref-count is retained for now to ensure that the task</span>
-                <span class="comment">// is not dropped during the call to `schedule` if the call</span>
-                <span class="comment">// drops the task it was given.</span>
-                <span class="self">self</span>.<span class="ident">core</span>()
-                    .<span class="ident">scheduler</span>
-                    .<span class="ident">schedule</span>(<span class="ident">Notified</span>(<span class="self">self</span>.<span class="ident">get_new_task</span>()));
-
-                <span class="comment">// Now that we have completed the call to schedule, we can</span>
-                <span class="comment">// release our ref-count.</span>
-                <span class="self">self</span>.<span class="ident">drop_reference</span>();
-            }
-            <span class="ident">TransitionToNotifiedByVal::Dealloc</span> =&gt; {
-                <span class="self">self</span>.<span class="ident">dealloc</span>();
-            }
-            <span class="ident">TransitionToNotifiedByVal::DoNothing</span> =&gt; {}
-        }
-    }
-
-    <span class="doccomment">/// This call notifies the task. It will not consume any ref-counts, but the</span>
-    <span class="doccomment">/// caller should hold a ref-count.  This will create a new Notified and</span>
-    <span class="doccomment">/// submit it if necessary.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">wake_by_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::state::TransitionToNotifiedByRef</span>;
-
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">transition_to_notified_by_ref</span>() {
-            <span class="ident">TransitionToNotifiedByRef::Submit</span> =&gt; {
-                <span class="comment">// The transition above incremented the ref-count for a new task</span>
-                <span class="comment">// and the caller also holds a ref-count. The caller&#39;s ref-count</span>
-                <span class="comment">// ensures that the task is not destroyed even if the new task</span>
-                <span class="comment">// is dropped before `schedule` returns.</span>
-                <span class="self">self</span>.<span class="ident">core</span>()
-                    .<span class="ident">scheduler</span>
-                    .<span class="ident">schedule</span>(<span class="ident">Notified</span>(<span class="self">self</span>.<span class="ident">get_new_task</span>()));
-            }
-            <span class="ident">TransitionToNotifiedByRef::DoNothing</span> =&gt; {}
-        }
-    }
-
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">drop_reference</span>(<span class="self">self</span>) {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">ref_dec</span>() {
-            <span class="self">self</span>.<span class="ident">dealloc</span>();
-        }
-    }
-
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">tokio_unstable</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tracing&quot;</span>))]</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">tracing::Id</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">header</span>().<span class="ident">id</span>.<span class="ident">as_ref</span>()
     }
 
     <span class="comment">// ====== internal ======</span>

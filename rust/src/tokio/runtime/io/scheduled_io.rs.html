@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.22.0/src/runtime/io/scheduled_io.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>scheduled_io.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><script defer src="../../../../main.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.23.0/src/runtime/io/scheduled_io.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>scheduled_io.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><script defer src="../../../../main.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../tokio/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -546,6 +546,16 @@
 <span id="541">541</span>
 <span id="542">542</span>
 <span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">ReadyEvent</span>, <span class="ident">Tick</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::io::interest::Interest</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::io::ready::Ready</span>;
@@ -1058,14 +1068,24 @@
                         <span class="ident">drop</span>(<span class="ident">waiters</span>);
                     }
                     <span class="ident">State::Done</span> =&gt; {
-                        <span class="kw">let</span> <span class="ident">tick</span> <span class="op">=</span> <span class="ident">TICK</span>.<span class="ident">unpack</span>(<span class="ident">scheduled_io</span>.<span class="ident">readiness</span>.<span class="ident">load</span>(<span class="ident">Acquire</span>)) <span class="kw">as</span> <span class="ident">u8</span>;
-
                         <span class="comment">// Safety: State::Done means it is no longer shared</span>
                         <span class="kw">let</span> <span class="ident">w</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">&amp;mut</span> <span class="kw-2">*</span><span class="ident">waiter</span>.<span class="ident">get</span>() };
 
+                        <span class="kw">let</span> <span class="ident">curr</span> <span class="op">=</span> <span class="ident">scheduled_io</span>.<span class="ident">readiness</span>.<span class="ident">load</span>(<span class="ident">Acquire</span>);
+
+                        <span class="comment">// The returned tick might be newer than the event</span>
+                        <span class="comment">// which notified our waker. This is ok because the future</span>
+                        <span class="comment">// still didn&#39;t return `Poll::Ready`.</span>
+                        <span class="kw">let</span> <span class="ident">tick</span> <span class="op">=</span> <span class="ident">TICK</span>.<span class="ident">unpack</span>(<span class="ident">curr</span>) <span class="kw">as</span> <span class="ident">u8</span>;
+
+                        <span class="comment">// The readiness state could have been cleared in the meantime,</span>
+                        <span class="comment">// but we allow the returned ready set to be empty.</span>
+                        <span class="kw">let</span> <span class="ident">curr_ready</span> <span class="op">=</span> <span class="ident">Ready::from_usize</span>(<span class="ident">READINESS</span>.<span class="ident">unpack</span>(<span class="ident">curr</span>));
+                        <span class="kw">let</span> <span class="ident">ready</span> <span class="op">=</span> <span class="ident">curr_ready</span>.<span class="ident">intersection</span>(<span class="ident">w</span>.<span class="ident">interest</span>);
+
                         <span class="kw">return</span> <span class="ident">Poll::Ready</span>(<span class="ident">ReadyEvent</span> {
                             <span class="ident">tick</span>,
-                            <span class="ident">ready</span>: <span class="ident">Ready::from_interest</span>(<span class="ident">w</span>.<span class="ident">interest</span>),
+                            <span class="ident">ready</span>,
                         });
                     }
                 }

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.22.0/src/runtime/context.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>context.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.23.0/src/runtime/context.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>context.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../tokio/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -359,6 +359,50 @@
 <span id="354">354</span>
 <span id="355">355</span>
 <span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::loom::thread::AccessError</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::runtime::coop</span>;
 
@@ -368,8 +412,7 @@
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::util::rand</span>::{<span class="ident">FastRand</span>, <span class="ident">RngSeed</span>};
 
 <span class="macro">cfg_rt!</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::runtime::scheduler</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::runtime::task::Id</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::runtime</span>::{<span class="ident">scheduler</span>, <span class="ident">task::Id</span>, <span class="ident">Defer</span>};
 
     <span class="kw">use</span> <span class="ident">std::cell::RefCell</span>;
     <span class="kw">use</span> <span class="ident">std::marker::PhantomData</span>;
@@ -380,6 +423,7 @@
     <span class="doccomment">/// Handle to the runtime scheduler running on the current thread.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rt&quot;</span>)]</span>
     <span class="ident">handle</span>: <span class="ident">RefCell</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">scheduler::Handle</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rt&quot;</span>)]</span>
     <span class="ident">current_task_id</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Id</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
@@ -390,6 +434,11 @@
     <span class="doccomment">/// within a runtime.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rt&quot;</span>)]</span>
     <span class="ident">runtime</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">EnterRuntime</span><span class="op">&gt;</span>,
+
+    <span class="doccomment">/// Yielded task wakers are stored here and notified after resource drivers</span>
+    <span class="doccomment">/// are polled.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rt&quot;</span>)]</span>
+    <span class="ident">defer</span>: <span class="ident">RefCell</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Defer</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rt&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;macros&quot;</span>))]</span>
     <span class="ident">rng</span>: <span class="ident">FastRand</span>,
@@ -416,6 +465,9 @@
             <span class="doccomment">/// within a runtime.</span>
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rt&quot;</span>)]</span>
             <span class="ident">runtime</span>: <span class="ident">Cell::new</span>(<span class="ident">EnterRuntime::NotEntered</span>),
+
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rt&quot;</span>)]</span>
+            <span class="ident">defer</span>: <span class="ident">RefCell::new</span>(<span class="prelude-val">None</span>),
 
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rt&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;macros&quot;</span>))]</span>
             <span class="ident">rng</span>: <span class="ident">FastRand::new</span>(<span class="ident">RngSeed::new</span>()),
@@ -460,9 +512,17 @@
     <span class="doccomment">/// Guard tracking that a caller has entered a runtime context.</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">EnterRuntimeGuard</span> {
+        <span class="doccomment">/// Tracks that the current thread has entered a blocking function call.</span>
         <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">blocking</span>: <span class="ident">BlockingRegionGuard</span>,
+
         <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span> <span class="comment">// Only tracking the guard.</span>
         <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">handle</span>: <span class="ident">SetCurrentGuard</span>,
+
+        <span class="doccomment">/// If true, then this is the root runtime guard. It is possible to nest</span>
+        <span class="doccomment">/// runtime guards by using `block_in_place` between the calls. We need</span>
+        <span class="doccomment">/// to track the root guard as this is the guard responsible for freeing</span>
+        <span class="doccomment">/// the deferred task queue.</span>
+        <span class="ident">is_root</span>: <span class="ident">bool</span>,
     }
 
     <span class="doccomment">/// Guard tracking that a caller has entered a blocking region.</span>
@@ -520,10 +580,23 @@
             <span class="kw">if</span> <span class="ident">c</span>.<span class="ident">runtime</span>.<span class="ident">get</span>().<span class="ident">is_entered</span>() {
                 <span class="prelude-val">None</span>
             } <span class="kw">else</span> {
+                <span class="comment">// Set the entered flag</span>
                 <span class="ident">c</span>.<span class="ident">runtime</span>.<span class="ident">set</span>(<span class="ident">EnterRuntime::Entered</span> { <span class="ident">allow_block_in_place</span> });
+
+                <span class="comment">// Initialize queue to track yielded tasks</span>
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">defer</span> <span class="op">=</span> <span class="ident">c</span>.<span class="ident">defer</span>.<span class="ident">borrow_mut</span>();
+
+                <span class="kw">let</span> <span class="ident">is_root</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">defer</span>.<span class="ident">is_none</span>() {
+                    <span class="kw-2">*</span><span class="ident">defer</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Defer::new</span>());
+                    <span class="bool-val">true</span>
+                } <span class="kw">else</span> {
+                    <span class="bool-val">false</span>
+                };
+
                 <span class="prelude-val">Some</span>(<span class="ident">EnterRuntimeGuard</span> {
                     <span class="ident">blocking</span>: <span class="ident">BlockingRegionGuard::new</span>(),
                     <span class="ident">handle</span>: <span class="ident">c</span>.<span class="ident">set_current</span>(<span class="ident">handle</span>),
+                    <span class="ident">is_root</span>,
                 })
             }
         })
@@ -562,6 +635,13 @@
         <span class="ident">DisallowBlockInPlaceGuard</span>(<span class="ident">reset</span>)
     }
 
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">with_defer</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="ident">Defer</span>) -&gt; <span class="ident">R</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span> {
+        <span class="ident">CONTEXT</span>.<span class="ident">with</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> {
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">defer</span> <span class="op">=</span> <span class="ident">c</span>.<span class="ident">defer</span>.<span class="ident">borrow_mut</span>();
+            <span class="ident">defer</span>.<span class="ident">as_mut</span>().<span class="ident">map</span>(<span class="ident">f</span>)
+        })
+    }
+
     <span class="kw">impl</span> <span class="ident">Context</span> {
         <span class="kw">fn</span> <span class="ident">set_current</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">handle</span>: <span class="kw-2">&amp;</span><span class="ident">scheduler::Handle</span>) -&gt; <span class="ident">SetCurrentGuard</span> {
             <span class="kw">let</span> <span class="ident">rng_seed</span> <span class="op">=</span> <span class="ident">handle</span>.<span class="ident">seed_generator</span>().<span class="ident">next_seed</span>();
@@ -596,6 +676,10 @@
             <span class="ident">CONTEXT</span>.<span class="ident">with</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> {
                 <span class="macro">assert!</span>(<span class="ident">c</span>.<span class="ident">runtime</span>.<span class="ident">get</span>().<span class="ident">is_entered</span>());
                 <span class="ident">c</span>.<span class="ident">runtime</span>.<span class="ident">set</span>(<span class="ident">EnterRuntime::NotEntered</span>);
+
+                <span class="kw">if</span> <span class="self">self</span>.<span class="ident">is_root</span> {
+                    <span class="kw-2">*</span><span class="ident">c</span>.<span class="ident">defer</span>.<span class="ident">borrow_mut</span>() <span class="op">=</span> <span class="prelude-val">None</span>;
+                }
             });
         }
     }
@@ -646,6 +730,10 @@
                 <span class="kw">if</span> <span class="ident">now</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">when</span> {
                     <span class="kw">return</span> <span class="prelude-val">Err</span>(());
                 }
+
+                <span class="comment">// Wake any yielded tasks before parking in order to avoid</span>
+                <span class="comment">// blocking.</span>
+                <span class="ident">with_defer</span>(<span class="op">|</span><span class="ident">defer</span><span class="op">|</span> <span class="ident">defer</span>.<span class="ident">wake</span>());
 
                 <span class="ident">park</span>.<span class="ident">park_timeout</span>(<span class="ident">when</span> <span class="op">-</span> <span class="ident">now</span>);
             }
