@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.23.1/src/runtime/builder.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>builder.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.24.0/src/runtime/builder.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>builder.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../tokio/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -1060,6 +1060,32 @@
 <span id="1055">1055</span>
 <span id="1056">1056</span>
 <span id="1057">1057</span>
+<span id="1058">1058</span>
+<span id="1059">1059</span>
+<span id="1060">1060</span>
+<span id="1061">1061</span>
+<span id="1062">1062</span>
+<span id="1063">1063</span>
+<span id="1064">1064</span>
+<span id="1065">1065</span>
+<span id="1066">1066</span>
+<span id="1067">1067</span>
+<span id="1068">1068</span>
+<span id="1069">1069</span>
+<span id="1070">1070</span>
+<span id="1071">1071</span>
+<span id="1072">1072</span>
+<span id="1073">1073</span>
+<span id="1074">1074</span>
+<span id="1075">1075</span>
+<span id="1076">1076</span>
+<span id="1077">1077</span>
+<span id="1078">1078</span>
+<span id="1079">1079</span>
+<span id="1080">1080</span>
+<span id="1081">1081</span>
+<span id="1082">1082</span>
+<span id="1083">1083</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::runtime::handle::Handle</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::runtime</span>::{<span class="ident">blocking</span>, <span class="ident">driver</span>, <span class="ident">Callback</span>, <span class="ident">Runtime</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::util::rand</span>::{<span class="ident">RngSeed</span>, <span class="ident">RngSeedGenerator</span>};
@@ -1106,6 +1132,7 @@
 
     <span class="doccomment">/// Whether or not to enable the I/O driver</span>
     <span class="ident">enable_io</span>: <span class="ident">bool</span>,
+    <span class="ident">nevents</span>: <span class="ident">usize</span>,
 
     <span class="doccomment">/// Whether or not to enable the time driver</span>
     <span class="ident">enable_time</span>: <span class="ident">bool</span>,
@@ -1243,6 +1270,7 @@
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type</span> <span class="ident">ThreadNameFn</span> <span class="op">=</span> <span class="ident">std::sync::Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>() -&gt; <span class="ident">String</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>;
 
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">Kind</span> {
     <span class="ident">CurrentThread</span>,
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rt-multi-thread&quot;</span>, <span class="ident">not</span>(<span class="ident">tokio_wasi</span>)))]</span>
@@ -1290,6 +1318,7 @@
 
             <span class="comment">// I/O defaults to &quot;off&quot;</span>
             <span class="ident">enable_io</span>: <span class="bool-val">false</span>,
+            <span class="ident">nevents</span>: <span class="number">1024</span>,
 
             <span class="comment">// Time defaults to &quot;off&quot;</span>
             <span class="ident">enable_time</span>: <span class="bool-val">false</span>,
@@ -1297,6 +1326,7 @@
             <span class="comment">// The clock starts not-paused</span>
             <span class="ident">start_paused</span>: <span class="bool-val">false</span>,
 
+            <span class="comment">// Read from environment variable first in multi-threaded mode.</span>
             <span class="comment">// Default to lazy auto-detection (one thread per CPU core)</span>
             <span class="ident">worker_threads</span>: <span class="prelude-val">None</span>,
 
@@ -1363,6 +1393,8 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This can be any number above 0 though it is advised to keep this value</span>
     <span class="doccomment">/// on the smaller side.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This will override the value read from environment variable `TOKIO_WORKER_THREADS`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Default</span>
     <span class="doccomment">///</span>
@@ -1709,6 +1741,7 @@
             <span class="ident">enable_io</span>: <span class="self">self</span>.<span class="ident">enable_io</span>,
             <span class="ident">enable_time</span>: <span class="self">self</span>.<span class="ident">enable_time</span>,
             <span class="ident">start_paused</span>: <span class="self">self</span>.<span class="ident">start_paused</span>,
+            <span class="ident">nevents</span>: <span class="self">self</span>.<span class="ident">nevents</span>,
         }
     }
 
@@ -1998,6 +2031,25 @@
         <span class="doccomment">/// ```</span>
         <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enable_io</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
             <span class="self">self</span>.<span class="ident">enable_io</span> <span class="op">=</span> <span class="bool-val">true</span>;
+            <span class="self">self</span>
+        }
+
+        <span class="doccomment">/// Enables the I/O driver and configures the max number of events to be</span>
+        <span class="doccomment">/// processed per tick.</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// # Examples</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// ```</span>
+        <span class="doccomment">/// use tokio::runtime;</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// let rt = runtime::Builder::new_current_thread()</span>
+        <span class="doccomment">///     .enable_io()</span>
+        <span class="doccomment">///     .max_io_events_per_tick(1024)</span>
+        <span class="doccomment">///     .build()</span>
+        <span class="doccomment">///     .unwrap();</span>
+        <span class="doccomment">/// ```</span>
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">max_io_events_per_tick</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">capacity</span>: <span class="ident">usize</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
+            <span class="self">self</span>.<span class="ident">nevents</span> <span class="op">=</span> <span class="ident">capacity</span>;
             <span class="self">self</span>
         }
     }

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.23.1/src/sync/mpsc/block.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>block.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><script defer src="../../../../main.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.24.0/src/sync/mpsc/block.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>block.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><script defer src="../../../../main.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../tokio/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -388,9 +388,73 @@
 <span id="383">383</span>
 <span id="384">384</span>
 <span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::loom::cell::UnsafeCell</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::loom::sync::atomic</span>::{<span class="ident">AtomicPtr</span>, <span class="ident">AtomicUsize</span>};
 
+<span class="kw">use</span> <span class="ident">std::alloc::Layout</span>;
 <span class="kw">use</span> <span class="ident">std::mem::MaybeUninit</span>;
 <span class="kw">use</span> <span class="ident">std::ops</span>;
 <span class="kw">use</span> <span class="ident">std::ptr</span>::{<span class="self">self</span>, <span class="ident">NonNull</span>};
@@ -400,6 +464,17 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// Each block in the list can hold up to `BLOCK_CAP` messages.</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">Block</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// The header fields.</span>
+    <span class="ident">header</span>: <span class="ident">BlockHeader</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+
+    <span class="doccomment">/// Array containing values pushed into the block. Values are stored in a</span>
+    <span class="doccomment">/// continuous array in order to improve cache line behavior when reading.</span>
+    <span class="doccomment">/// The values must be manually dropped.</span>
+    <span class="ident">values</span>: <span class="ident">Values</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+}
+
+<span class="doccomment">/// Extra fields for a `Block&lt;T&gt;`.</span>
+<span class="kw">struct</span> <span class="ident">BlockHeader</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="doccomment">/// The start index of this block.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Slots in this block have indices in `start_index .. start_index + BLOCK_CAP`.</span>
@@ -414,11 +489,6 @@
     <span class="doccomment">/// The observed `tail_position` value *after* the block has been passed by</span>
     <span class="doccomment">/// `block_tail`.</span>
     <span class="ident">observed_tail_position</span>: <span class="ident">UnsafeCell</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
-
-    <span class="doccomment">/// Array containing values pushed into the block. Values are stored in a</span>
-    <span class="doccomment">/// continuous array in order to improve cache line behavior when reading.</span>
-    <span class="doccomment">/// The values must be manually dropped.</span>
-    <span class="ident">values</span>: <span class="ident">Values</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">Read</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
@@ -426,6 +496,7 @@
     <span class="ident">Closed</span>,
 }
 
+<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">transparent</span>)]</span>
 <span class="kw">struct</span> <span class="ident">Values</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>([<span class="ident">UnsafeCell</span><span class="op">&lt;</span><span class="ident">MaybeUninit</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>; <span class="ident">BLOCK_CAP</span>]);
 
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::BLOCK_CAP</span>;
@@ -461,28 +532,56 @@
     <span class="ident">SLOT_MASK</span> <span class="op">&amp;</span> <span class="ident">slot_index</span>
 }
 
+<span class="macro">generate_addr_of_methods!</span> {
+    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Block</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">addr_of_header</span>(<span class="self">self</span>: <span class="ident">NonNull</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>) -&gt; <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">BlockHeader</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">header</span>
+        }
+
+        <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">addr_of_values</span>(<span class="self">self</span>: <span class="ident">NonNull</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>) -&gt; <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">Values</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">values</span>
+        }
+    }
+}
+
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Block</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">start_index</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Block</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="ident">Block</span> {
-            <span class="comment">// The absolute index in the channel of the first slot in the block.</span>
-            <span class="ident">start_index</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">start_index</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="comment">// Allocate the block on the heap.</span>
+            <span class="comment">// SAFETY: The size of the Block&lt;T&gt; is non-zero, since it is at least the size of the header.</span>
+            <span class="kw">let</span> <span class="ident">block</span> <span class="op">=</span> <span class="ident">std::alloc::alloc</span>(<span class="ident">Layout::new</span>::<span class="op">&lt;</span><span class="ident">Block</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>()) <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">Block</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>;
+            <span class="kw">let</span> <span class="ident">block</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">NonNull::new</span>(<span class="ident">block</span>) {
+                <span class="prelude-val">Some</span>(<span class="ident">block</span>) =&gt; <span class="ident">block</span>,
+                <span class="prelude-val">None</span> =&gt; <span class="ident">std::alloc::handle_alloc_error</span>(<span class="ident">Layout::new</span>::<span class="op">&lt;</span><span class="ident">Block</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>()),
+            };
 
-            <span class="comment">// Pointer to the next block in the linked list.</span>
-            <span class="ident">next</span>: <span class="ident">AtomicPtr::new</span>(<span class="ident">ptr::null_mut</span>()),
+            <span class="comment">// Write the header to the block.</span>
+            <span class="ident">Block::addr_of_header</span>(<span class="ident">block</span>).<span class="ident">as_ptr</span>().<span class="ident">write</span>(<span class="ident">BlockHeader</span> {
+                <span class="comment">// The absolute index in the channel of the first slot in the block.</span>
+                <span class="ident">start_index</span>,
 
-            <span class="ident">ready_slots</span>: <span class="ident">AtomicUsize::new</span>(<span class="number">0</span>),
+                <span class="comment">// Pointer to the next block in the linked list.</span>
+                <span class="ident">next</span>: <span class="ident">AtomicPtr::new</span>(<span class="ident">ptr::null_mut</span>()),
 
-            <span class="ident">observed_tail_position</span>: <span class="ident">UnsafeCell::new</span>(<span class="number">0</span>),
+                <span class="ident">ready_slots</span>: <span class="ident">AtomicUsize::new</span>(<span class="number">0</span>),
 
-            <span class="comment">// Value storage</span>
-            <span class="ident">values</span>: <span class="kw">unsafe</span> { <span class="ident">Values::uninitialized</span>() },
+                <span class="ident">observed_tail_position</span>: <span class="ident">UnsafeCell::new</span>(<span class="number">0</span>),
+            });
+
+            <span class="comment">// Initialize the values array.</span>
+            <span class="ident">Values::initialize</span>(<span class="ident">Block::addr_of_values</span>(<span class="ident">block</span>));
+
+            <span class="comment">// Convert the pointer to a `Box`.</span>
+            <span class="comment">// Safety: The raw pointer was allocated using the global allocator, and with</span>
+            <span class="comment">// the layout for a `Block&lt;T&gt;`, so it&#39;s valid to convert it to box.</span>
+            <span class="ident">Box::from_raw</span>(<span class="ident">block</span>.<span class="ident">as_ptr</span>())
         }
     }
 
     <span class="doccomment">/// Returns `true` if the block matches the given index.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">is_at_index</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">index</span>: <span class="ident">usize</span>) -&gt; <span class="ident">bool</span> {
         <span class="macro">debug_assert!</span>(<span class="ident">offset</span>(<span class="ident">index</span>) <span class="op">==</span> <span class="number">0</span>);
-        <span class="self">self</span>.<span class="ident">start_index</span> <span class="op">==</span> <span class="ident">index</span>
+        <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">start_index</span> <span class="op">==</span> <span class="ident">index</span>
     }
 
     <span class="doccomment">/// Returns the number of blocks between `self` and the block at the</span>
@@ -491,7 +590,7 @@
     <span class="doccomment">/// `start_index` must represent a block *after* `self`.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">distance</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other_index</span>: <span class="ident">usize</span>) -&gt; <span class="ident">usize</span> {
         <span class="macro">debug_assert!</span>(<span class="ident">offset</span>(<span class="ident">other_index</span>) <span class="op">==</span> <span class="number">0</span>);
-        <span class="ident">other_index</span>.<span class="ident">wrapping_sub</span>(<span class="self">self</span>.<span class="ident">start_index</span>) <span class="op">/</span> <span class="ident">BLOCK_CAP</span>
+        <span class="ident">other_index</span>.<span class="ident">wrapping_sub</span>(<span class="self">self</span>.<span class="ident">header</span>.<span class="ident">start_index</span>) <span class="op">/</span> <span class="ident">BLOCK_CAP</span>
     }
 
     <span class="doccomment">/// Reads the value at the given offset.</span>
@@ -506,7 +605,7 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">slot_index</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Read</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">offset</span> <span class="op">=</span> <span class="ident">offset</span>(<span class="ident">slot_index</span>);
 
-        <span class="kw">let</span> <span class="ident">ready_bits</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ready_slots</span>.<span class="ident">load</span>(<span class="ident">Acquire</span>);
+        <span class="kw">let</span> <span class="ident">ready_bits</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">ready_slots</span>.<span class="ident">load</span>(<span class="ident">Acquire</span>);
 
         <span class="kw">if</span> <span class="op">!</span><span class="ident">is_ready</span>(<span class="ident">ready_bits</span>, <span class="ident">offset</span>) {
             <span class="kw">if</span> <span class="ident">is_tx_closed</span>(<span class="ident">ready_bits</span>) {
@@ -546,7 +645,7 @@
 
     <span class="doccomment">/// Signal to the receiver that the sender half of the list is closed.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">tx_close</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">ready_slots</span>.<span class="ident">fetch_or</span>(<span class="ident">TX_CLOSED</span>, <span class="ident">Release</span>);
+        <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">ready_slots</span>.<span class="ident">fetch_or</span>(<span class="ident">TX_CLOSED</span>, <span class="ident">Release</span>);
     }
 
     <span class="doccomment">/// Resets the block to a blank state. This enables reusing blocks in the</span>
@@ -559,9 +658,9 @@
     <span class="doccomment">/// * All slots are empty.</span>
     <span class="doccomment">/// * The caller holds a unique pointer to the block.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">reclaim</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">start_index</span> <span class="op">=</span> <span class="number">0</span>;
-        <span class="self">self</span>.<span class="ident">next</span> <span class="op">=</span> <span class="ident">AtomicPtr::new</span>(<span class="ident">ptr::null_mut</span>());
-        <span class="self">self</span>.<span class="ident">ready_slots</span> <span class="op">=</span> <span class="ident">AtomicUsize::new</span>(<span class="number">0</span>);
+        <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">start_index</span> <span class="op">=</span> <span class="number">0</span>;
+        <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">next</span> <span class="op">=</span> <span class="ident">AtomicPtr::new</span>(<span class="ident">ptr::null_mut</span>());
+        <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">ready_slots</span> <span class="op">=</span> <span class="ident">AtomicUsize::new</span>(<span class="number">0</span>);
     }
 
     <span class="doccomment">/// Releases the block to the rx half for freeing.</span>
@@ -577,19 +676,20 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">tx_release</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">tail_position</span>: <span class="ident">usize</span>) {
         <span class="comment">// Track the observed tail_position. Any sender targeting a greater</span>
         <span class="comment">// tail_position is guaranteed to not access this block.</span>
-        <span class="self">self</span>.<span class="ident">observed_tail_position</span>
+        <span class="self">self</span>.<span class="ident">header</span>
+            .<span class="ident">observed_tail_position</span>
             .<span class="ident">with_mut</span>(<span class="op">|</span><span class="ident">ptr</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">ptr</span> <span class="op">=</span> <span class="ident">tail_position</span>);
 
         <span class="comment">// Set the released bit, signalling to the receiver that it is safe to</span>
         <span class="comment">// free the block&#39;s memory as soon as all slots **prior** to</span>
         <span class="comment">// `observed_tail_position` have been filled.</span>
-        <span class="self">self</span>.<span class="ident">ready_slots</span>.<span class="ident">fetch_or</span>(<span class="ident">RELEASED</span>, <span class="ident">Release</span>);
+        <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">ready_slots</span>.<span class="ident">fetch_or</span>(<span class="ident">RELEASED</span>, <span class="ident">Release</span>);
     }
 
     <span class="doccomment">/// Mark a slot as ready</span>
     <span class="kw">fn</span> <span class="ident">set_ready</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">slot</span>: <span class="ident">usize</span>) {
         <span class="kw">let</span> <span class="ident">mask</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">slot</span>;
-        <span class="self">self</span>.<span class="ident">ready_slots</span>.<span class="ident">fetch_or</span>(<span class="ident">mask</span>, <span class="ident">Release</span>);
+        <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">ready_slots</span>.<span class="ident">fetch_or</span>(<span class="ident">mask</span>, <span class="ident">Release</span>);
     }
 
     <span class="doccomment">/// Returns `true` when all slots have their `ready` bits set.</span>
@@ -604,25 +704,31 @@
     <span class="doccomment">/// single atomic cell. However, this could have negative impact on cache</span>
     <span class="doccomment">/// behavior as there would be many more mutations to a single slot.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">is_final</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">ready_slots</span>.<span class="ident">load</span>(<span class="ident">Acquire</span>) <span class="op">&amp;</span> <span class="ident">READY_MASK</span> <span class="op">==</span> <span class="ident">READY_MASK</span>
+        <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">ready_slots</span>.<span class="ident">load</span>(<span class="ident">Acquire</span>) <span class="op">&amp;</span> <span class="ident">READY_MASK</span> <span class="op">==</span> <span class="ident">READY_MASK</span>
     }
 
     <span class="doccomment">/// Returns the `observed_tail_position` value, if set</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">observed_tail_position</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="number">0</span> <span class="op">==</span> <span class="ident">RELEASED</span> <span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">ready_slots</span>.<span class="ident">load</span>(<span class="ident">Acquire</span>) {
+        <span class="kw">if</span> <span class="number">0</span> <span class="op">==</span> <span class="ident">RELEASED</span> <span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">ready_slots</span>.<span class="ident">load</span>(<span class="ident">Acquire</span>) {
             <span class="prelude-val">None</span>
         } <span class="kw">else</span> {
-            <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">observed_tail_position</span>.<span class="ident">with</span>(<span class="op">|</span><span class="ident">ptr</span><span class="op">|</span> <span class="kw">unsafe</span> { <span class="kw-2">*</span><span class="ident">ptr</span> }))
+            <span class="prelude-val">Some</span>(
+                <span class="self">self</span>.<span class="ident">header</span>
+                    .<span class="ident">observed_tail_position</span>
+                    .<span class="ident">with</span>(<span class="op">|</span><span class="ident">ptr</span><span class="op">|</span> <span class="kw">unsafe</span> { <span class="kw-2">*</span><span class="ident">ptr</span> }),
+            )
         }
     }
 
     <span class="doccomment">/// Loads the next block</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">load_next</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ordering</span>: <span class="ident">Ordering</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="ident">NonNull::new</span>(<span class="self">self</span>.<span class="ident">next</span>.<span class="ident">load</span>(<span class="ident">ordering</span>));
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="ident">NonNull::new</span>(<span class="self">self</span>.<span class="ident">header</span>.<span class="ident">next</span>.<span class="ident">load</span>(<span class="ident">ordering</span>));
 
         <span class="macro">debug_assert!</span>(<span class="kw">unsafe</span> {
-            <span class="ident">ret</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">block</span><span class="op">|</span> <span class="ident">block</span>.<span class="ident">as_ref</span>().<span class="ident">start_index</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">start_index</span>.<span class="ident">wrapping_add</span>(<span class="ident">BLOCK_CAP</span>))
-                .<span class="ident">unwrap_or</span>(<span class="bool-val">true</span>)
+            <span class="ident">ret</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">block</span><span class="op">|</span> {
+                <span class="ident">block</span>.<span class="ident">as_ref</span>().<span class="ident">header</span>.<span class="ident">start_index</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">start_index</span>.<span class="ident">wrapping_add</span>(<span class="ident">BLOCK_CAP</span>)
+            })
+            .<span class="ident">unwrap_or</span>(<span class="bool-val">true</span>)
         });
 
         <span class="ident">ret</span>
@@ -650,9 +756,10 @@
         <span class="ident">success</span>: <span class="ident">Ordering</span>,
         <span class="ident">failure</span>: <span class="ident">Ordering</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="ident">block</span>.<span class="ident">as_mut</span>().<span class="ident">start_index</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">start_index</span>.<span class="ident">wrapping_add</span>(<span class="ident">BLOCK_CAP</span>);
+        <span class="ident">block</span>.<span class="ident">as_mut</span>().<span class="ident">header</span>.<span class="ident">start_index</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">start_index</span>.<span class="ident">wrapping_add</span>(<span class="ident">BLOCK_CAP</span>);
 
         <span class="kw">let</span> <span class="ident">next_ptr</span> <span class="op">=</span> <span class="self">self</span>
+            .<span class="ident">header</span>
             .<span class="ident">next</span>
             .<span class="ident">compare_exchange</span>(<span class="ident">ptr::null_mut</span>(), <span class="ident">block</span>.<span class="ident">as_ptr</span>(), <span class="ident">success</span>, <span class="ident">failure</span>)
             .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>);
@@ -681,7 +788,7 @@
         <span class="comment">// Create the new block. It is assumed that the block will become the</span>
         <span class="comment">// next one after `&amp;self`. If this turns out to not be the case,</span>
         <span class="comment">// `start_index` is updated accordingly.</span>
-        <span class="kw">let</span> <span class="ident">new_block</span> <span class="op">=</span> <span class="ident">Box::new</span>(<span class="ident">Block::new</span>(<span class="self">self</span>.<span class="ident">start_index</span> <span class="op">+</span> <span class="ident">BLOCK_CAP</span>));
+        <span class="kw">let</span> <span class="ident">new_block</span> <span class="op">=</span> <span class="ident">Block::new</span>(<span class="self">self</span>.<span class="ident">header</span>.<span class="ident">start_index</span> <span class="op">+</span> <span class="ident">BLOCK_CAP</span>);
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_block</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">NonNull::new_unchecked</span>(<span class="ident">Box::into_raw</span>(<span class="ident">new_block</span>)) };
 
@@ -698,7 +805,8 @@
         <span class="comment">// `Release` ensures that the newly allocated block is available to</span>
         <span class="comment">// other threads acquiring the next pointer.</span>
         <span class="kw">let</span> <span class="ident">next</span> <span class="op">=</span> <span class="ident">NonNull::new</span>(
-            <span class="self">self</span>.<span class="ident">next</span>
+            <span class="self">self</span>.<span class="ident">header</span>
+                .<span class="ident">next</span>
                 .<span class="ident">compare_exchange</span>(<span class="ident">ptr::null_mut</span>(), <span class="ident">new_block</span>.<span class="ident">as_ptr</span>(), <span class="ident">AcqRel</span>, <span class="ident">Acquire</span>)
                 .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>),
         );
@@ -750,19 +858,20 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Values</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">uninitialized</span>() -&gt; <span class="ident">Values</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vals</span> <span class="op">=</span> <span class="ident">MaybeUninit::uninit</span>();
-
+    <span class="doccomment">/// Initialize a `Values` struct from a pointer.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Safety</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The raw pointer must be valid for writing a `Values&lt;T&gt;`.</span>
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">initialize</span>(<span class="ident">_value</span>: <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">Values</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>) {
         <span class="comment">// When fuzzing, `UnsafeCell` needs to be initialized.</span>
         <span class="macro">if_loom!</span> {
-            <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">vals</span>.<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">UnsafeCell</span><span class="op">&lt;</span><span class="ident">MaybeUninit</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+            <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">_value</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">UnsafeCell</span><span class="op">&lt;</span><span class="ident">MaybeUninit</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>;
             <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">BLOCK_CAP</span> {
                 <span class="ident">p</span>.<span class="ident">add</span>(<span class="ident">i</span>)
                     .<span class="ident">write</span>(<span class="ident">UnsafeCell::new</span>(<span class="ident">MaybeUninit::uninit</span>()));
             }
         }
-
-        <span class="ident">Values</span>(<span class="ident">vals</span>.<span class="ident">assume_init</span>())
     }
 }
 
@@ -772,6 +881,23 @@
     <span class="kw">fn</span> <span class="ident">index</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">index</span>: <span class="ident">usize</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Output</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">index</span>(<span class="ident">index</span>)
     }
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">test</span>, <span class="ident">not</span>(<span class="ident">loom</span>)))]</span>
+<span class="attribute">#[<span class="ident">test</span>]</span>
+<span class="kw">fn</span> <span class="ident">assert_no_stack_overflow</span>() {
+    <span class="comment">// https://github.com/tokio-rs/tokio/issues/5293</span>
+
+    <span class="kw">struct</span> <span class="ident">Foo</span> {
+        <span class="ident">_a</span>: [<span class="ident">u8</span>; <span class="number">2_000_000</span>],
+    }
+
+    <span class="macro">assert_eq!</span>(
+        <span class="ident">Layout::new</span>::<span class="op">&lt;</span><span class="ident">MaybeUninit</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
+        <span class="ident">Layout::new</span>::<span class="op">&lt;</span><span class="ident">Block</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span><span class="op">&gt;</span>()
+    );
+
+    <span class="kw">let</span> <span class="ident">_block</span> <span class="op">=</span> <span class="ident">Block</span>::<span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span><span class="ident">::new</span>(<span class="number">0</span>);
 }
 </code></pre></div>
 </section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="tokio" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (285fa7ecd 2022-03-14)" ></div>
