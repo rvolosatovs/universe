@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/vmm-sys-util-0.11.0/src/fam.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>fam.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/vmm-sys-util-0.11.1/src/fam.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>fam.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../vmm_sys_util/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -1043,6 +1043,14 @@
 <span id="1038">1038</span>
 <span id="1039">1039</span>
 <span id="1040">1040</span>
+<span id="1041">1041</span>
+<span id="1042">1042</span>
+<span id="1043">1043</span>
+<span id="1044">1044</span>
+<span id="1045">1045</span>
+<span id="1046">1046</span>
+<span id="1047">1047</span>
+<span id="1048">1048</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.</span>
 <span class="comment">//</span>
 <span class="comment">// Portions Copyright 2017 The Chromium OS Authors. All rights reserved.</span>
@@ -1256,6 +1264,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">mem_allocator</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="ident">required_mem_allocator_capacity</span>);
         <span class="ident">mem_allocator</span>.<span class="ident">push</span>(<span class="ident">T::default</span>());
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">1</span>..<span class="ident">required_mem_allocator_capacity</span> {
+            <span class="comment">// SAFETY: Safe as long T follows the requirements of being POD.</span>
             <span class="ident">mem_allocator</span>.<span class="ident">push</span>(<span class="kw">unsafe</span> { <span class="ident">mem::zeroed</span>() })
         }
         <span class="ident">mem_allocator</span>[<span class="number">0</span>].<span class="ident">set_len</span>(<span class="ident">num_elements</span>);
@@ -1415,12 +1424,14 @@
         <span class="kw">let</span> <span class="ident">current_mem_allocator_len</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">mem_allocator</span>.<span class="ident">len</span>();
         <span class="kw">let</span> <span class="ident">required_mem_allocator_len</span> <span class="op">=</span> <span class="ident">FamStructWrapper</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::mem_allocator_len</span>(<span class="ident">len</span>);
         <span class="comment">// Update the len of the `mem_allocator`.</span>
-        <span class="comment">// This is safe since enough capacity has been reserved.</span>
+        <span class="comment">// SAFETY: This is safe since enough capacity has been reserved.</span>
         <span class="kw">unsafe</span> {
             <span class="self">self</span>.<span class="ident">mem_allocator</span>.<span class="ident">set_len</span>(<span class="ident">required_mem_allocator_len</span>);
         }
         <span class="comment">// Zero-initialize the additional elements if any.</span>
         <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="ident">current_mem_allocator_len</span>..<span class="ident">required_mem_allocator_len</span> {
+            <span class="comment">// SAFETY: Safe as long as the trait is only implemented for POD. This is a requirement</span>
+            <span class="comment">// for the trait implementation.</span>
             <span class="self">self</span>.<span class="ident">mem_allocator</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">mem::zeroed</span>() }
         }
         <span class="comment">// Update the len of the underlying `FamStruct`.</span>
@@ -1493,16 +1504,20 @@
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">mem_allocator</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="ident">required_mem_allocator_capacity</span>);
 
-        <span class="comment">// This is safe as long as the requirements for the `FamStruct` trait to be safe are met</span>
-        <span class="comment">// (the implementing type and the entries elements are POD, therefore `Copy`, so memory</span>
-        <span class="comment">// safety can&#39;t be violated by the ownership of `fam_struct`). It is also safe because we&#39;re</span>
-        <span class="comment">// trying to read a T from a `&amp;T` that is pointing to a properly initialized and aligned T.</span>
+        <span class="comment">// SAFETY: This is safe as long as the requirements for the `FamStruct` trait to be safe</span>
+        <span class="comment">// are met (the implementing type and the entries elements are POD, therefore `Copy`, so</span>
+        <span class="comment">// memory safety can&#39;t be violated by the ownership of `fam_struct`). It is also safe</span>
+        <span class="comment">// because we&#39;re trying to read a T from a `&amp;T` that is pointing to a properly initialized</span>
+        <span class="comment">// and aligned T.</span>
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">fam_struct</span>: <span class="ident">T</span> <span class="op">=</span> <span class="ident">std::ptr::read</span>(<span class="self">self</span>.<span class="ident">as_fam_struct_ref</span>());
             <span class="ident">mem_allocator</span>.<span class="ident">push</span>(<span class="ident">fam_struct</span>);
         }
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">1</span>..<span class="ident">required_mem_allocator_capacity</span> {
-            <span class="ident">mem_allocator</span>.<span class="ident">push</span>(<span class="kw">unsafe</span> { <span class="ident">mem::zeroed</span>() })
+            <span class="ident">mem_allocator</span>.<span class="ident">push</span>(
+                <span class="comment">// SAFETY: This is safe as long as T respects the FamStruct trait and is a POD.</span>
+                <span class="kw">unsafe</span> { <span class="ident">mem::zeroed</span>() },
+            )
         }
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">adapter</span> <span class="op">=</span> <span class="ident">FamStructWrapper</span> { <span class="ident">mem_allocator</span> };
@@ -1618,6 +1633,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::undocumented_unsafe_blocks</span>)]</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;with-serde&quot;</span>)]</span>
     <span class="kw">use</span> <span class="ident">serde_derive</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 

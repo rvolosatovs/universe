@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/vmm-sys-util-0.11.0/src/linux/sock_ctrl_msg.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>sock_ctrl_msg.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/vmm-sys-util-0.11.1/src/linux/sock_ctrl_msg.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>sock_ctrl_msg.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../vmm_sys_util/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -664,6 +664,8 @@
 <span id="659">659</span>
 <span id="660">660</span>
 <span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2017 The Chromium OS Authors. All rights reserved.</span>
 <span class="comment">// Use of this source code is governed by a BSD-style license that can be</span>
 <span class="comment">// found in the LICENSE-BSD-3-Clause file.</span>
@@ -838,6 +840,7 @@
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">target_env</span> <span class="op">=</span> <span class="string">&quot;musl&quot;</span>, <span class="ident">target_pointer_width</span> <span class="op">=</span> <span class="string">&quot;64&quot;</span>))]</span>
             <span class="ident">__pad1</span>: <span class="number">0</span>,
         };
+        <span class="comment">// SAFETY: Check comments below for each call.</span>
         <span class="kw">unsafe</span> {
             <span class="comment">// Safe because cmsg_buffer was allocated to be large enough to contain cmsghdr.</span>
             <span class="ident">write_unaligned</span>(<span class="ident">cmsg_buffer</span>.<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">cmsghdr</span>, <span class="ident">cmsg</span>);
@@ -854,8 +857,8 @@
         <span class="ident">set_msg_controllen</span>(<span class="kw-2">&amp;mut</span> <span class="ident">msg</span>, <span class="ident">cmsg_capacity</span>);
     }
 
-    <span class="comment">// Safe because the msghdr was properly constructed from valid (or null) pointers of the</span>
-    <span class="comment">// indicated length and we check the return value.</span>
+    <span class="comment">// SAFETY: Safe because the msghdr was properly constructed from valid (or null) pointers of</span>
+    <span class="comment">// the indicated length and we check the return value.</span>
     <span class="kw">let</span> <span class="ident">write_count</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">sendmsg</span>(<span class="ident">fd</span>, <span class="kw-2">&amp;</span><span class="ident">msg</span>, <span class="ident">MSG_NOSIGNAL</span>) };
 
     <span class="kw">if</span> <span class="ident">write_count</span> <span class="op">==</span> <span class="op">-</span><span class="number">1</span> {
@@ -1038,14 +1041,14 @@
             <span class="ident">iov_len</span>: <span class="ident">buf</span>.<span class="ident">len</span>(),
         }];
 
-        <span class="comment">// Safe because we have mutably borrowed buf and it&#39;s safe to write arbitrary data</span>
+        <span class="comment">// SAFETY: Safe because we have mutably borrowed buf and it&#39;s safe to write arbitrary data</span>
         <span class="comment">// to a slice.</span>
         <span class="kw">let</span> (<span class="ident">read_count</span>, <span class="ident">fd_count</span>) <span class="op">=</span> <span class="kw">unsafe</span> { <span class="self">self</span>.<span class="ident">recv_with_fds</span>(<span class="kw-2">&amp;mut</span> <span class="ident">iovecs</span>[..], <span class="kw-2">&amp;mut</span> <span class="ident">fd</span>)<span class="question-mark">?</span> };
         <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">fd_count</span> <span class="op">==</span> <span class="number">0</span> {
             <span class="prelude-val">None</span>
         } <span class="kw">else</span> {
-            <span class="comment">// Safe because the first fd from recv_with_fds is owned by us and valid because this</span>
-            <span class="comment">// branch was taken.</span>
+            <span class="comment">// SAFETY: Safe because the first fd from recv_with_fds is owned by us and valid</span>
+            <span class="comment">// because this branch was taken.</span>
             <span class="prelude-val">Some</span>(<span class="kw">unsafe</span> { <span class="ident">File::from_raw_fd</span>(<span class="ident">fd</span>[<span class="number">0</span>]) })
         };
         <span class="prelude-val">Ok</span>((<span class="ident">read_count</span>, <span class="ident">file</span>))
@@ -1105,8 +1108,8 @@
     <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span>;
 }
 
-<span class="comment">// Safe because this slice can not have another mutable reference and it&#39;s pointer and size are</span>
-<span class="comment">// guaranteed to be valid.</span>
+<span class="comment">// SAFETY: Safe because this slice can not have another mutable reference and it&#39;s pointer and</span>
+<span class="comment">// size are guaranteed to be valid.</span>
 <span class="kw">unsafe</span> <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">IntoIovec</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>] {
     <span class="comment">// Clippy false positive: https://github.com/rust-lang/rust-clippy/issues/3480</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cargo-clippy&quot;</span>, <span class="ident">allow</span>(<span class="ident">clippy::useless_asref</span>))]</span>
@@ -1121,6 +1124,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::undocumented_unsafe_blocks</span>)]</span>
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::eventfd::EventFd</span>;
 
