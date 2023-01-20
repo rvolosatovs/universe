@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.8/src/explicit.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>explicit.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.9/src/explicit.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>explicit.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../unicode_bidi/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -198,6 +198,20 @@
 <span id="193">193</span>
 <span id="194">194</span>
 <span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2015 The Servo Project Developers. See the</span>
 <span class="comment">// COPYRIGHT file at the top-level directory of this distribution.</span>
 <span class="comment">//</span>
@@ -247,13 +261,17 @@
             <span class="ident">RLE</span> <span class="op">|</span> <span class="ident">LRE</span> <span class="op">|</span> <span class="ident">RLO</span> <span class="op">|</span> <span class="ident">LRO</span> <span class="op">|</span> <span class="ident">RLI</span> <span class="op">|</span> <span class="ident">LRI</span> <span class="op">|</span> <span class="ident">FSI</span> =&gt; {
                 <span class="kw">let</span> <span class="ident">last_level</span> <span class="op">=</span> <span class="ident">stack</span>.<span class="ident">last</span>().<span class="ident">level</span>;
 
+                <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;</span>
+                <span class="ident">levels</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">last_level</span>;
+
                 <span class="comment">// X5a-X5c: Isolate initiators get the level of the last entry on the stack.</span>
                 <span class="kw">let</span> <span class="ident">is_isolate</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">original_classes</span>[<span class="ident">i</span>] {
                     <span class="ident">RLI</span> <span class="op">|</span> <span class="ident">LRI</span> <span class="op">|</span> <span class="ident">FSI</span> =&gt; <span class="bool-val">true</span>,
                     <span class="kw">_</span> =&gt; <span class="bool-val">false</span>,
                 };
                 <span class="kw">if</span> <span class="ident">is_isolate</span> {
-                    <span class="ident">levels</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">last_level</span>;
+                    <span class="comment">// Redundant due to &quot;Retaining explicit formatting characters&quot; step.</span>
+                    <span class="comment">// levels[i] = last_level;</span>
                     <span class="kw">match</span> <span class="ident">stack</span>.<span class="ident">last</span>().<span class="ident">status</span> {
                         <span class="ident">OverrideStatus::RTL</span> =&gt; <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">R</span>,
                         <span class="ident">OverrideStatus::LTR</span> =&gt; <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">L</span>,
@@ -290,6 +308,13 @@
                 } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">overflow_isolate_count</span> <span class="op">==</span> <span class="number">0</span> {
                     <span class="ident">overflow_embedding_count</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                 }
+
+                <span class="kw">if</span> <span class="op">!</span><span class="ident">is_isolate</span> {
+                    <span class="comment">// X9 +</span>
+                    <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;</span>
+                    <span class="comment">// (PDF handled below)</span>
+                    <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">BN</span>;
+                }
             }
 
             <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#X6a&gt;</span>
@@ -323,31 +348,34 @@
             <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#X7&gt;</span>
             <span class="ident">PDF</span> =&gt; {
                 <span class="kw">if</span> <span class="ident">overflow_isolate_count</span> <span class="op">&gt;</span> <span class="number">0</span> {
-                    <span class="kw">continue</span>;
-                }
-                <span class="kw">if</span> <span class="ident">overflow_embedding_count</span> <span class="op">&gt;</span> <span class="number">0</span> {
+                    <span class="comment">// do nothing</span>
+                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">overflow_embedding_count</span> <span class="op">&gt;</span> <span class="number">0</span> {
                     <span class="ident">overflow_embedding_count</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
-                    <span class="kw">continue</span>;
-                }
-                <span class="kw">if</span> <span class="ident">stack</span>.<span class="ident">last</span>().<span class="ident">status</span> <span class="op">!</span><span class="op">=</span> <span class="ident">OverrideStatus::Isolate</span> <span class="op">&amp;&amp;</span> <span class="ident">stack</span>.<span class="ident">vec</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="number">2</span> {
+                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">stack</span>.<span class="ident">last</span>().<span class="ident">status</span> <span class="op">!</span><span class="op">=</span> <span class="ident">OverrideStatus::Isolate</span> <span class="op">&amp;&amp;</span> <span class="ident">stack</span>.<span class="ident">vec</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="number">2</span> {
                     <span class="ident">stack</span>.<span class="ident">vec</span>.<span class="ident">pop</span>();
                 }
-                <span class="comment">// The spec doesn&#39;t explicitly mention this step, but it is necessary.</span>
-                <span class="comment">// See the reference implementations for comparison.</span>
+                <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;</span>
                 <span class="ident">levels</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">stack</span>.<span class="ident">last</span>().<span class="ident">level</span>;
+                <span class="comment">// X9 part of retaining explicit formatting characters.</span>
+                <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">BN</span>;
             }
 
-            <span class="comment">// Nothing</span>
-            <span class="ident">B</span> <span class="op">|</span> <span class="ident">BN</span> =&gt; {}
+            <span class="comment">// Nothing.</span>
+            <span class="comment">// BN case moved down to X6, see &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;</span>
+            <span class="ident">B</span> =&gt; {}
 
             <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#X6&gt;</span>
             <span class="kw">_</span> =&gt; {
                 <span class="kw">let</span> <span class="ident">last</span> <span class="op">=</span> <span class="ident">stack</span>.<span class="ident">last</span>();
                 <span class="ident">levels</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">last</span>.<span class="ident">level</span>;
-                <span class="kw">match</span> <span class="ident">last</span>.<span class="ident">status</span> {
-                    <span class="ident">OverrideStatus::RTL</span> =&gt; <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">R</span>,
-                    <span class="ident">OverrideStatus::LTR</span> =&gt; <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">L</span>,
-                    <span class="kw">_</span> =&gt; {}
+                <span class="comment">// This condition is not in the spec, but I am pretty sure that is a spec bug.</span>
+                <span class="comment">// https://www.unicode.org/L2/L2023/23014-amd-to-uax9.pdf</span>
+                <span class="kw">if</span> <span class="ident">original_classes</span>[<span class="ident">i</span>] <span class="op">!</span><span class="op">=</span> <span class="ident">BN</span> {
+                    <span class="kw">match</span> <span class="ident">last</span>.<span class="ident">status</span> {
+                        <span class="ident">OverrideStatus::RTL</span> =&gt; <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">R</span>,
+                        <span class="ident">OverrideStatus::LTR</span> =&gt; <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">L</span>,
+                        <span class="kw">_</span> =&gt; {}
+                    }
                 }
             }
         }

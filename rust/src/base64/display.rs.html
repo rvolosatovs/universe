@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/base64-0.13.1/src/display.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>display.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/base64-0.21.0/src/display.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>display.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../base64/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -94,36 +94,36 @@
 </pre><pre class="rust"><code><span class="doccomment">//! Enables base64&#39;d output anywhere you might use a `Display` implementation, like a format string.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ```</span>
-<span class="doccomment">//! use base64::display::Base64Display;</span>
+<span class="doccomment">//! use base64::{display::Base64Display, engine::general_purpose::STANDARD};</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! let data = vec![0x0, 0x1, 0x2, 0x3];</span>
-<span class="doccomment">//! let wrapper = Base64Display::with_config(&amp;data, base64::STANDARD);</span>
+<span class="doccomment">//! let wrapper = Base64Display::new(&amp;data, &amp;STANDARD);</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! assert_eq!(&quot;base64: AAECAw==&quot;, format!(&quot;base64: {}&quot;, wrapper));</span>
 <span class="doccomment">//! ```</span>
 
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::chunked_encoder::ChunkedEncoder</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::Config</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::engine::Engine</span>;
 <span class="kw">use</span> <span class="ident">core::fmt</span>::{<span class="ident">Display</span>, <span class="ident">Formatter</span>};
 <span class="kw">use</span> <span class="ident">core</span>::{<span class="ident">fmt</span>, <span class="ident">str</span>};
 
 <span class="doccomment">/// A convenience wrapper for base64&#39;ing bytes into a format string without heap allocation.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Base64Display</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Base64Display</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;e</span>, <span class="ident">E</span>: <span class="ident">Engine</span><span class="op">&gt;</span> {
     <span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>],
-    <span class="ident">chunked_encoder</span>: <span class="ident">ChunkedEncoder</span>,
+    <span class="ident">chunked_encoder</span>: <span class="ident">ChunkedEncoder</span><span class="op">&lt;</span><span class="lifetime">&#39;e</span>, <span class="ident">E</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Base64Display</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Create a `Base64Display` with the provided config.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_config</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">config</span>: <span class="ident">Config</span>) -&gt; <span class="ident">Base64Display</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;e</span>, <span class="ident">E</span>: <span class="ident">Engine</span><span class="op">&gt;</span> <span class="ident">Base64Display</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;e</span>, <span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Create a `Base64Display` with the provided engine.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>], <span class="ident">engine</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;e</span> <span class="ident">E</span>) -&gt; <span class="ident">Base64Display</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;e</span>, <span class="ident">E</span><span class="op">&gt;</span> {
         <span class="ident">Base64Display</span> {
             <span class="ident">bytes</span>,
-            <span class="ident">chunked_encoder</span>: <span class="ident">ChunkedEncoder::new</span>(<span class="ident">config</span>),
+            <span class="ident">chunked_encoder</span>: <span class="ident">ChunkedEncoder::new</span>(<span class="ident">engine</span>),
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Base64Display</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;e</span>, <span class="ident">E</span>: <span class="ident">Engine</span><span class="op">&gt;</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Base64Display</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;e</span>, <span class="ident">E</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">formatter</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Formatter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">fmt::Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sink</span> <span class="op">=</span> <span class="ident">FormatterSink</span> { <span class="ident">f</span>: <span class="ident">formatter</span> };
         <span class="self">self</span>.<span class="ident">chunked_encoder</span>.<span class="ident">encode</span>(<span class="self">self</span>.<span class="ident">bytes</span>, <span class="kw-2">&amp;mut</span> <span class="ident">sink</span>)
@@ -150,18 +150,18 @@
     <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::<span class="kw">super</span>::chunked_encoder::tests</span>::{
         <span class="ident">chunked_encode_matches_normal_encode_random</span>, <span class="ident">SinkTestHelper</span>,
     };
-    <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::<span class="kw">super</span></span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::engine::general_purpose::STANDARD</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">basic_display</span>() {
         <span class="macro">assert_eq!</span>(
             <span class="string">&quot;~$Zm9vYmFy#*&quot;</span>,
-            <span class="macro">format!</span>(<span class="string">&quot;~${}#*&quot;</span>, <span class="ident">Base64Display::with_config</span>(<span class="string">b&quot;foobar&quot;</span>, <span class="ident">STANDARD</span>))
+            <span class="macro">format!</span>(<span class="string">&quot;~${}#*&quot;</span>, <span class="ident">Base64Display::new</span>(<span class="string">b&quot;foobar&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>))
         );
         <span class="macro">assert_eq!</span>(
             <span class="string">&quot;~$Zm9vYmFyZg==#*&quot;</span>,
-            <span class="macro">format!</span>(<span class="string">&quot;~${}#*&quot;</span>, <span class="ident">Base64Display::with_config</span>(<span class="string">b&quot;foobarf&quot;</span>, <span class="ident">STANDARD</span>))
+            <span class="macro">format!</span>(<span class="string">&quot;~${}#*&quot;</span>, <span class="ident">Base64Display::new</span>(<span class="string">b&quot;foobarf&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>))
         );
     }
 
@@ -174,8 +174,8 @@
     <span class="kw">struct</span> <span class="ident">DisplaySinkTestHelper</span>;
 
     <span class="kw">impl</span> <span class="ident">SinkTestHelper</span> <span class="kw">for</span> <span class="ident">DisplaySinkTestHelper</span> {
-        <span class="kw">fn</span> <span class="ident">encode_to_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="ident">Config</span>, <span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">String</span> {
-            <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">Base64Display::with_config</span>(<span class="ident">bytes</span>, <span class="ident">config</span>))
+        <span class="kw">fn</span> <span class="ident">encode_to_string</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">Engine</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">engine</span>: <span class="kw-2">&amp;</span><span class="ident">E</span>, <span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">String</span> {
+            <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">Base64Display::new</span>(<span class="ident">bytes</span>, <span class="ident">engine</span>))
         }
     }
 }

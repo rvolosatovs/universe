@@ -1,7 +1,7 @@
 var N = null;var sourcesIndex = {};
 sourcesIndex["ansi_term"] = {"name":"","files":["ansi.rs","debug.rs","difference.rs","display.rs","lib.rs","style.rs","util.rs","windows.rs","write.rs"]};
 sourcesIndex["atty"] = {"name":"","files":["lib.rs"]};
-sourcesIndex["base64"] = {"name":"","dirs":[{"name":"read","files":["decoder.rs","mod.rs"]},{"name":"write","files":["encoder.rs","encoder_string_writer.rs","mod.rs"]}],"files":["chunked_encoder.rs","decode.rs","display.rs","encode.rs","lib.rs","tables.rs"]};
+sourcesIndex["base64"] = {"name":"","dirs":[{"name":"engine","dirs":[{"name":"general_purpose","files":["decode.rs","decode_suffix.rs","mod.rs"]}],"files":["mod.rs"]},{"name":"read","files":["decoder.rs","mod.rs"]},{"name":"write","files":["encoder.rs","encoder_string_writer.rs","mod.rs"]}],"files":["alphabet.rs","chunked_encoder.rs","decode.rs","display.rs","encode.rs","lib.rs","prelude.rs"]};
 sourcesIndex["bitflags"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["bytes"] = {"name":"","dirs":[{"name":"buf","files":["buf_impl.rs","buf_mut.rs","chain.rs","iter.rs","limit.rs","mod.rs","reader.rs","take.rs","uninit_slice.rs","vec_deque.rs","writer.rs"]},{"name":"fmt","files":["debug.rs","hex.rs","mod.rs"]}],"files":["bytes.rs","bytes_mut.rs","lib.rs","loom.rs"]};
 sourcesIndex["cfg_if"] = {"name":"","files":["lib.rs"]};

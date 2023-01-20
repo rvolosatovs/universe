@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.8/src/implicit.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>implicit.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.9/src/implicit.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>implicit.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../unicode_bidi/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -242,6 +242,363 @@
 <span id="237">237</span>
 <span id="238">238</span>
 <span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+<span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
+<span id="584">584</span>
+<span id="585">585</span>
+<span id="586">586</span>
+<span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2015 The Servo Project Developers. See the</span>
 <span class="comment">// COPYRIGHT file at the top-level directory of this distribution.</span>
 <span class="comment">//</span>
@@ -258,104 +615,213 @@
 
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::char_data::BidiClass</span>::{<span class="self">self</span>, <span class="kw-2">*</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::level::Level</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::prepare</span>::{<span class="ident">not_removed_by_x9</span>, <span class="ident">removed_by_x9</span>, <span class="ident">IsolatingRunSequence</span>, <span class="ident">LevelRun</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::prepare</span>::{<span class="ident">not_removed_by_x9</span>, <span class="ident">removed_by_x9</span>, <span class="ident">IsolatingRunSequence</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::BidiDataSource</span>;
 
 <span class="doccomment">/// 3.3.4 Resolving Weak Types</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// &lt;http://www.unicode.org/reports/tr9/#Resolving_Weak_Types&gt;</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;flame_it&quot;</span>, <span class="ident">flamer::flame</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">resolve_weak</span>(<span class="ident">sequence</span>: <span class="kw-2">&amp;</span><span class="ident">IsolatingRunSequence</span>, <span class="ident">processing_classes</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">BidiClass</span>]) {
-    <span class="comment">// FIXME (#8): This function applies steps W1-W6 in a single pass.  This can produce</span>
-    <span class="comment">// incorrect results in cases where a &quot;later&quot; rule changes the value of `prev_class` seen</span>
-    <span class="comment">// by an &quot;earlier&quot; rule.  We should either split this into separate passes, or preserve</span>
-    <span class="comment">// extra state so each rule can see the correct previous class.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">resolve_weak</span>(
+    <span class="ident">text</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+    <span class="ident">sequence</span>: <span class="kw-2">&amp;</span><span class="ident">IsolatingRunSequence</span>,
+    <span class="ident">processing_classes</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">BidiClass</span>],
+) {
+    <span class="comment">// Note: The spec treats these steps as individual passes that are applied one after the other</span>
+    <span class="comment">// on the entire IsolatingRunSequence at once. We instead collapse it into a single iteration,</span>
+    <span class="comment">// which is straightforward for rules that are based on the state of the current character, but not</span>
+    <span class="comment">// for rules that care about surrounding characters. To deal with them, we retain additional state</span>
+    <span class="comment">// about previous character classes that may have since been changed by later rules.</span>
 
-    <span class="comment">// FIXME: Also, this could be the cause of increased failure for using longer-UTF-8 chars in</span>
-    <span class="comment">// conformance tests, like BidiTest:69635 (AL ET EN)</span>
-
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">prev_class</span> <span class="op">=</span> <span class="ident">sequence</span>.<span class="ident">sos</span>;
+    <span class="comment">// The previous class for the purposes of rule W4/W6, not tracking changes made after or during W4.</span>
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">prev_class_before_w4</span> <span class="op">=</span> <span class="ident">sequence</span>.<span class="ident">sos</span>;
+    <span class="comment">// The previous class for the purposes of rule W5.</span>
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">prev_class_before_w5</span> <span class="op">=</span> <span class="ident">sequence</span>.<span class="ident">sos</span>;
+    <span class="comment">// The previous class for the purposes of rule W1, not tracking changes from any other rules.</span>
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">prev_class_before_w1</span> <span class="op">=</span> <span class="ident">sequence</span>.<span class="ident">sos</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">last_strong_is_al</span> <span class="op">=</span> <span class="bool-val">false</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">et_run_indices</span> <span class="op">=</span> <span class="ident">Vec::new</span>(); <span class="comment">// for W5</span>
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bn_run_indices</span> <span class="op">=</span> <span class="ident">Vec::new</span>(); <span class="comment">// for W5 +  &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;</span>
 
-    <span class="comment">// Like sequence.runs.iter().flat_map(Clone::clone), but make indices itself clonable.</span>
-    <span class="kw">fn</span> <span class="ident">id</span>(<span class="ident">x</span>: <span class="ident">LevelRun</span>) -&gt; <span class="ident">LevelRun</span> {
-        <span class="ident">x</span>
-    }
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">indices</span> <span class="op">=</span> <span class="ident">sequence</span>
-        .<span class="ident">runs</span>
-        .<span class="ident">iter</span>()
-        .<span class="ident">cloned</span>()
-        .<span class="ident">flat_map</span>(<span class="ident">id</span> <span class="kw">as</span> <span class="kw">fn</span>(<span class="ident">LevelRun</span>) -&gt; <span class="ident">LevelRun</span>);
-
-    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">i</span>) <span class="op">=</span> <span class="ident">indices</span>.<span class="ident">next</span>() {
-        <span class="kw">match</span> <span class="ident">processing_classes</span>[<span class="ident">i</span>] {
-            <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W1&gt;</span>
-            <span class="ident">NSM</span> =&gt; {
-                <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="kw">match</span> <span class="ident">prev_class</span> {
-                    <span class="ident">RLI</span> <span class="op">|</span> <span class="ident">LRI</span> <span class="op">|</span> <span class="ident">FSI</span> <span class="op">|</span> <span class="ident">PDI</span> =&gt; <span class="ident">ON</span>,
-                    <span class="kw">_</span> =&gt; <span class="ident">prev_class</span>,
-                };
+    <span class="kw">for</span> (<span class="ident">run_index</span>, <span class="ident">level_run</span>) <span class="kw">in</span> <span class="ident">sequence</span>.<span class="ident">runs</span>.<span class="ident">iter</span>().<span class="ident">enumerate</span>() {
+        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="ident">level_run</span>.<span class="ident">clone</span>() {
+            <span class="kw">if</span> <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">==</span> <span class="ident">BN</span> {
+                <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;</span>
+                <span class="comment">// Keeps track of bn runs for W5 in case we see an ET.</span>
+                <span class="ident">bn_run_indices</span>.<span class="ident">push</span>(<span class="ident">i</span>);
+                <span class="comment">// BNs aren&#39;t real, skip over them.</span>
+                <span class="kw">continue</span>;
             }
-            <span class="ident">EN</span> =&gt; {
-                <span class="kw">if</span> <span class="ident">last_strong_is_al</span> {
-                    <span class="comment">// W2. If previous strong char was AL, change EN to AN.</span>
-                    <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">AN</span>;
-                } <span class="kw">else</span> {
+
+            <span class="comment">// Store the processing class of all rules before W2/W1.</span>
+            <span class="comment">// Used to keep track of the last strong character for W2. W3 is able to insert new strong</span>
+            <span class="comment">// characters, so we don&#39;t want to be misled by it.</span>
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">w2_processing_class</span> <span class="op">=</span> <span class="ident">processing_classes</span>[<span class="ident">i</span>];
+
+            <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W1&gt;</span>
+            <span class="comment">//</span>
+
+            <span class="kw">if</span> <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">==</span> <span class="ident">NSM</span> {
+                <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="kw">match</span> <span class="ident">prev_class_before_w1</span> {
+                    <span class="ident">RLI</span> <span class="op">|</span> <span class="ident">LRI</span> <span class="op">|</span> <span class="ident">FSI</span> <span class="op">|</span> <span class="ident">PDI</span> =&gt; <span class="ident">ON</span>,
+                    <span class="kw">_</span> =&gt; <span class="ident">prev_class_before_w1</span>,
+                };
+                <span class="comment">// W1 occurs before W2, update this.</span>
+                <span class="ident">w2_processing_class</span> <span class="op">=</span> <span class="ident">processing_classes</span>[<span class="ident">i</span>];
+            }
+
+            <span class="ident">prev_class_before_w1</span> <span class="op">=</span> <span class="ident">processing_classes</span>[<span class="ident">i</span>];
+
+            <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W2&gt;</span>
+            <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W3&gt;</span>
+            <span class="comment">//</span>
+            <span class="kw">match</span> <span class="ident">processing_classes</span>[<span class="ident">i</span>] {
+                <span class="ident">EN</span> =&gt; {
+                    <span class="kw">if</span> <span class="ident">last_strong_is_al</span> {
+                        <span class="comment">// W2. If previous strong char was AL, change EN to AN.</span>
+                        <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">AN</span>;
+                    }
+                }
+                <span class="comment">// W3.</span>
+                <span class="ident">AL</span> =&gt; <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">R</span>,
+                <span class="kw">_</span> =&gt; {}
+            }
+
+            <span class="comment">// update last_strong_is_al.</span>
+            <span class="kw">match</span> <span class="ident">w2_processing_class</span> {
+                <span class="ident">L</span> <span class="op">|</span> <span class="ident">R</span> =&gt; {
+                    <span class="ident">last_strong_is_al</span> <span class="op">=</span> <span class="bool-val">false</span>;
+                }
+                <span class="ident">AL</span> =&gt; {
+                    <span class="ident">last_strong_is_al</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                }
+                <span class="kw">_</span> =&gt; {}
+            }
+
+            <span class="kw">let</span> <span class="ident">class_before_w456</span> <span class="op">=</span> <span class="ident">processing_classes</span>[<span class="ident">i</span>];
+
+            <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W4&gt;</span>
+            <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W5&gt;</span>
+            <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W6&gt; (separators only)</span>
+            <span class="comment">// (see below for W6 terminator code)</span>
+            <span class="comment">//</span>
+            <span class="kw">match</span> <span class="ident">processing_classes</span>[<span class="ident">i</span>] {
+                <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W6&gt;</span>
+                <span class="ident">EN</span> =&gt; {
                     <span class="comment">// W5. If a run of ETs is adjacent to an EN, change the ETs to EN.</span>
                     <span class="kw">for</span> <span class="ident">j</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">et_run_indices</span> {
                         <span class="ident">processing_classes</span>[<span class="kw-2">*</span><span class="ident">j</span>] <span class="op">=</span> <span class="ident">EN</span>;
                     }
                     <span class="ident">et_run_indices</span>.<span class="ident">clear</span>();
                 }
-            }
-            <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W3&gt;</span>
-            <span class="ident">AL</span> =&gt; <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">R</span>,
 
-            <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W4&gt;</span>
-            <span class="ident">ES</span> <span class="op">|</span> <span class="ident">CS</span> =&gt; {
-                <span class="kw">let</span> <span class="ident">next_class</span> <span class="op">=</span> <span class="ident">indices</span>
-                    .<span class="ident">clone</span>()
-                    .<span class="ident">map</span>(<span class="op">|</span><span class="ident">j</span><span class="op">|</span> <span class="ident">processing_classes</span>[<span class="ident">j</span>])
-                    .<span class="ident">find</span>(<span class="ident">not_removed_by_x9</span>)
-                    .<span class="ident">unwrap_or</span>(<span class="ident">sequence</span>.<span class="ident">eos</span>);
-                <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="kw">match</span> (<span class="ident">prev_class</span>, <span class="ident">processing_classes</span>[<span class="ident">i</span>], <span class="ident">next_class</span>) {
-                    (<span class="ident">EN</span>, <span class="ident">ES</span>, <span class="ident">EN</span>) <span class="op">|</span> (<span class="ident">EN</span>, <span class="ident">CS</span>, <span class="ident">EN</span>) =&gt; <span class="ident">EN</span>,
-                    (<span class="ident">AN</span>, <span class="ident">CS</span>, <span class="ident">AN</span>) =&gt; <span class="ident">AN</span>,
-                    (<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="ident">ON</span>,
-                }
-            }
-            <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W5&gt;</span>
-            <span class="ident">ET</span> =&gt; {
-                <span class="kw">match</span> <span class="ident">prev_class</span> {
-                    <span class="ident">EN</span> =&gt; <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">EN</span>,
-                    <span class="kw">_</span> =&gt; <span class="ident">et_run_indices</span>.<span class="ident">push</span>(<span class="ident">i</span>), <span class="comment">// In case this is followed by an EN.</span>
-                }
-            }
-            <span class="ident">class</span> =&gt; {
-                <span class="kw">if</span> <span class="ident">removed_by_x9</span>(<span class="ident">class</span>) {
-                    <span class="kw">continue</span>;
-                }
-            }
-        }
+                <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W4&gt;</span>
+                <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W6&gt;</span>
+                <span class="ident">ES</span> <span class="op">|</span> <span class="ident">CS</span> =&gt; {
+                    <span class="comment">// See https://github.com/servo/unicode-bidi/issues/86 for improving this.</span>
+                    <span class="comment">// We want to make sure we check the correct next character by skipping past the rest</span>
+                    <span class="comment">// of this one.</span>
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ch</span>) <span class="op">=</span> <span class="ident">text</span>.<span class="ident">get</span>(<span class="ident">i</span>..).<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">chars</span>().<span class="ident">next</span>()) {
+                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">next_class</span> <span class="op">=</span> <span class="ident">sequence</span>
+                            .<span class="ident">iter_forwards_from</span>(<span class="ident">i</span> <span class="op">+</span> <span class="ident">ch</span>.<span class="ident">len_utf8</span>(), <span class="ident">run_index</span>)
+                            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">j</span><span class="op">|</span> <span class="ident">processing_classes</span>[<span class="ident">j</span>])
+                            <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;</span>
+                            .<span class="ident">find</span>(<span class="ident">not_removed_by_x9</span>)
+                            .<span class="ident">unwrap_or</span>(<span class="ident">sequence</span>.<span class="ident">eos</span>);
+                        <span class="kw">if</span> <span class="ident">next_class</span> <span class="op">==</span> <span class="ident">EN</span> <span class="op">&amp;&amp;</span> <span class="ident">last_strong_is_al</span> {
+                            <span class="comment">// Apply W2 to next_class. We know that last_strong_is_al</span>
+                            <span class="comment">// has no chance of changing on this character so we can still assume its value</span>
+                            <span class="comment">// will be the same by the time we get to it.</span>
+                            <span class="ident">next_class</span> <span class="op">=</span> <span class="ident">AN</span>;
+                        }
+                        <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span>
+                            <span class="kw">match</span> (<span class="ident">prev_class_before_w4</span>, <span class="ident">processing_classes</span>[<span class="ident">i</span>], <span class="ident">next_class</span>) {
+                                <span class="comment">// W4</span>
+                                (<span class="ident">EN</span>, <span class="ident">ES</span>, <span class="ident">EN</span>) <span class="op">|</span> (<span class="ident">EN</span>, <span class="ident">CS</span>, <span class="ident">EN</span>) =&gt; <span class="ident">EN</span>,
+                                <span class="comment">// W4</span>
+                                (<span class="ident">AN</span>, <span class="ident">CS</span>, <span class="ident">AN</span>) =&gt; <span class="ident">AN</span>,
+                                <span class="comment">// W6 (separators only)</span>
+                                (<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="ident">ON</span>,
+                            };
 
-        <span class="ident">prev_class</span> <span class="op">=</span> <span class="ident">processing_classes</span>[<span class="ident">i</span>];
-        <span class="kw">match</span> <span class="ident">prev_class</span> {
-            <span class="ident">L</span> <span class="op">|</span> <span class="ident">R</span> =&gt; {
-                <span class="ident">last_strong_is_al</span> <span class="op">=</span> <span class="bool-val">false</span>;
+                        <span class="comment">// W6 + &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;</span>
+                        <span class="comment">// We have to do this before W5 gets its grubby hands on these characters and thinks</span>
+                        <span class="comment">// they&#39;re part of an ET run.</span>
+                        <span class="comment">// We check for ON to ensure that we had hit the W6 branch above, since this `ES | CS` match</span>
+                        <span class="comment">// arm handles both W4 and W6.</span>
+                        <span class="kw">if</span> <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">==</span> <span class="ident">ON</span> {
+                            <span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="ident">sequence</span>.<span class="ident">iter_backwards_from</span>(<span class="ident">i</span>, <span class="ident">run_index</span>) {
+                                <span class="kw">let</span> <span class="ident">class</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">processing_classes</span>[<span class="ident">idx</span>];
+                                <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">class</span> <span class="op">!</span><span class="op">=</span> <span class="ident">BN</span> {
+                                    <span class="kw">break</span>;
+                                }
+                                <span class="kw-2">*</span><span class="ident">class</span> <span class="op">=</span> <span class="ident">ON</span>;
+                            }
+                            <span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="ident">sequence</span>.<span class="ident">iter_forwards_from</span>(<span class="ident">i</span> <span class="op">+</span> <span class="ident">ch</span>.<span class="ident">len_utf8</span>(), <span class="ident">run_index</span>) {
+                                <span class="kw">let</span> <span class="ident">class</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">processing_classes</span>[<span class="ident">idx</span>];
+                                <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">class</span> <span class="op">!</span><span class="op">=</span> <span class="ident">BN</span> {
+                                    <span class="kw">break</span>;
+                                }
+                                <span class="kw-2">*</span><span class="ident">class</span> <span class="op">=</span> <span class="ident">ON</span>;
+                            }
+                        }
+                    } <span class="kw">else</span> {
+                        <span class="comment">// We&#39;re in the middle of a character, copy over work done for previous bytes</span>
+                        <span class="comment">// since it&#39;s going to be the same answer.</span>
+                        <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">processing_classes</span>[<span class="ident">i</span> <span class="op">-</span> <span class="number">1</span>];
+                    }
+                }
+                <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W5&gt;</span>
+                <span class="ident">ET</span> =&gt; {
+                    <span class="kw">match</span> <span class="ident">prev_class_before_w5</span> {
+                        <span class="ident">EN</span> =&gt; <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="ident">EN</span>,
+                        <span class="kw">_</span> =&gt; {
+                            <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;</span>
+                            <span class="comment">// If there was a BN run before this, that&#39;s now a part of this ET run.</span>
+                            <span class="ident">et_run_indices</span>.<span class="ident">extend</span>(<span class="kw-2">&amp;</span><span class="ident">bn_run_indices</span>);
+
+                            <span class="comment">// In case this is followed by an EN.</span>
+                            <span class="ident">et_run_indices</span>.<span class="ident">push</span>(<span class="ident">i</span>);
+                        }
+                    }
+                }
+                <span class="kw">_</span> =&gt; {}
             }
-            <span class="ident">AL</span> =&gt; {
-                <span class="ident">last_strong_is_al</span> <span class="op">=</span> <span class="bool-val">true</span>;
+
+            <span class="comment">// Common loop iteration code</span>
+            <span class="comment">//</span>
+
+            <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;</span>
+            <span class="comment">// BN runs would have already continued the loop, clear them before we get to the next one.</span>
+            <span class="ident">bn_run_indices</span>.<span class="ident">clear</span>();
+
+            <span class="comment">// W6 above only deals with separators, so it doesn&#39;t change anything W5 cares about,</span>
+            <span class="comment">// so we still can update this after running that part of W6.</span>
+            <span class="ident">prev_class_before_w5</span> <span class="op">=</span> <span class="ident">processing_classes</span>[<span class="ident">i</span>];
+
+            <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W6&gt; (terminators only)</span>
+            <span class="comment">// (see above for W6 separator code)</span>
+            <span class="comment">//</span>
+            <span class="kw">if</span> <span class="ident">prev_class_before_w5</span> <span class="op">!</span><span class="op">=</span> <span class="ident">ET</span> {
+                <span class="comment">// W6. If we didn&#39;t find an adjacent EN, turn any ETs into ON instead.</span>
+                <span class="kw">for</span> <span class="ident">j</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">et_run_indices</span> {
+                    <span class="ident">processing_classes</span>[<span class="kw-2">*</span><span class="ident">j</span>] <span class="op">=</span> <span class="ident">ON</span>;
+                }
+                <span class="ident">et_run_indices</span>.<span class="ident">clear</span>();
             }
-            <span class="kw">_</span> =&gt; {}
-        }
-        <span class="kw">if</span> <span class="ident">prev_class</span> <span class="op">!</span><span class="op">=</span> <span class="ident">ET</span> {
-            <span class="comment">// W6. If we didn&#39;t find an adjacent EN, turn any ETs into ON instead.</span>
-            <span class="kw">for</span> <span class="ident">j</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">et_run_indices</span> {
-                <span class="ident">processing_classes</span>[<span class="kw-2">*</span><span class="ident">j</span>] <span class="op">=</span> <span class="ident">ON</span>;
-            }
-            <span class="ident">et_run_indices</span>.<span class="ident">clear</span>();
+
+            <span class="comment">// We stashed this before W4/5/6 could get their grubby hands on it, and it&#39;s not</span>
+            <span class="comment">// used in the W6 terminator code below so we can update it now.</span>
+            <span class="ident">prev_class_before_w4</span> <span class="op">=</span> <span class="ident">class_before_w456</span>;
         }
     }
+    <span class="comment">// Rerun this check in case we ended with a sequence of BNs (i.e., we&#39;d never</span>
+    <span class="comment">// hit the end of the for loop above).</span>
+    <span class="comment">// W6. If we didn&#39;t find an adjacent EN, turn any ETs into ON instead.</span>
+    <span class="kw">for</span> <span class="ident">j</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">et_run_indices</span> {
+        <span class="ident">processing_classes</span>[<span class="kw-2">*</span><span class="ident">j</span>] <span class="op">=</span> <span class="ident">ON</span>;
+    }
+    <span class="ident">et_run_indices</span>.<span class="ident">clear</span>();
 
     <span class="comment">// W7. If the previous strong char was L, change EN to L.</span>
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">last_strong_is_l</span> <span class="op">=</span> <span class="ident">sequence</span>.<span class="ident">sos</span> <span class="op">==</span> <span class="ident">L</span>;
@@ -371,6 +837,8 @@
                 <span class="ident">R</span> <span class="op">|</span> <span class="ident">AL</span> =&gt; {
                     <span class="ident">last_strong_is_l</span> <span class="op">=</span> <span class="bool-val">false</span>;
                 }
+                <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;</span>
+                <span class="comment">// Already scanning past BN here.</span>
                 <span class="kw">_</span> =&gt; {}
             }
         }
@@ -381,22 +849,172 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// &lt;http://www.unicode.org/reports/tr9/#Resolving_Neutral_Types&gt;</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;flame_it&quot;</span>, <span class="ident">flamer::flame</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">resolve_neutral</span>(
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">resolve_neutral</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">BidiDataSource</span><span class="op">&gt;</span>(
+    <span class="ident">text</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+    <span class="ident">data_source</span>: <span class="kw-2">&amp;</span><span class="ident">D</span>,
     <span class="ident">sequence</span>: <span class="kw-2">&amp;</span><span class="ident">IsolatingRunSequence</span>,
     <span class="ident">levels</span>: <span class="kw-2">&amp;</span>[<span class="ident">Level</span>],
+    <span class="ident">original_classes</span>: <span class="kw-2">&amp;</span>[<span class="ident">BidiClass</span>],
     <span class="ident">processing_classes</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">BidiClass</span>],
 ) {
+    <span class="comment">// e = embedding direction</span>
     <span class="kw">let</span> <span class="ident">e</span>: <span class="ident">BidiClass</span> <span class="op">=</span> <span class="ident">levels</span>[<span class="ident">sequence</span>.<span class="ident">runs</span>[<span class="number">0</span>].<span class="ident">start</span>].<span class="ident">bidi_class</span>();
+    <span class="kw">let</span> <span class="ident">not_e</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">e</span> <span class="op">==</span> <span class="ident">BidiClass::L</span> {
+        <span class="ident">BidiClass::R</span>
+    } <span class="kw">else</span> {
+        <span class="ident">BidiClass::L</span>
+    };
+    <span class="comment">// N0. Process bracket pairs.</span>
+
+    <span class="comment">// &gt; Identify the bracket pairs in the current isolating run sequence according to BD16.</span>
+    <span class="comment">// We use processing_classes, not original_classes, due to BD14/BD15</span>
+    <span class="kw">let</span> <span class="ident">bracket_pairs</span> <span class="op">=</span> <span class="ident">identify_bracket_pairs</span>(<span class="ident">text</span>, <span class="ident">data_source</span>, <span class="ident">sequence</span>, <span class="ident">processing_classes</span>);
+
+    <span class="comment">// &gt; For each bracket-pair element in the list of pairs of text positions</span>
+    <span class="comment">//</span>
+    <span class="comment">// Note: Rust ranges are interpreted as [start..end), be careful using `pair` directly</span>
+    <span class="comment">// for indexing as it will include the opening bracket pair but not the closing one.</span>
+    <span class="kw">for</span> <span class="ident">pair</span> <span class="kw">in</span> <span class="ident">bracket_pairs</span> {
+        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
+        <span class="macro">debug_assert!</span>(
+            <span class="ident">pair</span>.<span class="ident">start</span> <span class="op">&lt;</span> <span class="ident">processing_classes</span>.<span class="ident">len</span>(),
+            <span class="string">&quot;identify_bracket_pairs returned a range that is out of bounds!&quot;</span>
+        );
+        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
+        <span class="macro">debug_assert!</span>(
+            <span class="ident">pair</span>.<span class="ident">end</span> <span class="op">&lt;</span> <span class="ident">processing_classes</span>.<span class="ident">len</span>(),
+            <span class="string">&quot;identify_bracket_pairs returned a range that is out of bounds!&quot;</span>
+        );
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">found_e</span> <span class="op">=</span> <span class="bool-val">false</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">found_not_e</span> <span class="op">=</span> <span class="bool-val">false</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">class_to_set</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+
+        <span class="kw">let</span> <span class="ident">start_len_utf8</span> <span class="op">=</span> <span class="ident">text</span>[<span class="ident">pair</span>.<span class="ident">start</span>..].<span class="ident">chars</span>().<span class="ident">next</span>().<span class="ident">unwrap</span>().<span class="ident">len_utf8</span>();
+        <span class="comment">// &gt; Inspect the bidirectional types of the characters enclosed within the bracket pair.</span>
+        <span class="comment">//</span>
+        <span class="comment">// `pair` is [start, end) so we will end up processing the opening character but not the closing one.</span>
+        <span class="comment">//</span>
+        <span class="kw">for</span> <span class="ident">enclosed_i</span> <span class="kw">in</span> <span class="ident">sequence</span>.<span class="ident">iter_forwards_from</span>(<span class="ident">pair</span>.<span class="ident">start</span> <span class="op">+</span> <span class="ident">start_len_utf8</span>, <span class="ident">pair</span>.<span class="ident">start_run</span>) {
+            <span class="kw">if</span> <span class="ident">enclosed_i</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">pair</span>.<span class="ident">end</span> {
+                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
+                <span class="macro">debug_assert!</span>(
+                    <span class="ident">enclosed_i</span> <span class="op">==</span> <span class="ident">pair</span>.<span class="ident">end</span>,
+                    <span class="string">&quot;If we skipped past this, the iterator is broken&quot;</span>
+                );
+                <span class="kw">break</span>;
+            }
+            <span class="kw">let</span> <span class="ident">class</span> <span class="op">=</span> <span class="ident">processing_classes</span>[<span class="ident">enclosed_i</span>];
+            <span class="kw">if</span> <span class="ident">class</span> <span class="op">==</span> <span class="ident">e</span> {
+                <span class="ident">found_e</span> <span class="op">=</span> <span class="bool-val">true</span>;
+            } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">class</span> <span class="op">==</span> <span class="ident">not_e</span> {
+                <span class="ident">found_not_e</span> <span class="op">=</span> <span class="bool-val">true</span>;
+            } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">class</span> <span class="op">==</span> <span class="ident">BidiClass::EN</span> <span class="op">|</span><span class="op">|</span> <span class="ident">class</span> <span class="op">==</span> <span class="ident">BidiClass::AN</span> {
+                <span class="comment">// &gt; Within this scope, bidirectional types EN and AN are treated as R.</span>
+                <span class="kw">if</span> <span class="ident">e</span> <span class="op">==</span> <span class="ident">BidiClass::L</span> {
+                    <span class="ident">found_not_e</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                } <span class="kw">else</span> {
+                    <span class="ident">found_e</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                }
+            }
+
+            <span class="comment">// If we have found a character with the class of the embedding direction</span>
+            <span class="comment">// we can bail early.</span>
+            <span class="kw">if</span> <span class="ident">found_e</span> {
+                <span class="kw">break</span>;
+            }
+        }
+        <span class="comment">// &gt; If any strong type (either L or R) matching the embedding direction is found</span>
+        <span class="kw">if</span> <span class="ident">found_e</span> {
+            <span class="comment">// &gt; .. set the type for both brackets in the pair to match the embedding direction</span>
+            <span class="ident">class_to_set</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>);
+        <span class="comment">// &gt; Otherwise, if there is a strong type it must be opposite the embedding direction</span>
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">found_not_e</span> {
+            <span class="comment">// &gt; Therefore, test for an established context with a preceding strong type by</span>
+            <span class="comment">// &gt; checking backwards before the opening paired bracket</span>
+            <span class="comment">// &gt; until the first strong type (L, R, or sos) is found.</span>
+            <span class="comment">// (see note above about processing_classes and character boundaries)</span>
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">previous_strong</span> <span class="op">=</span> <span class="ident">sequence</span>
+                .<span class="ident">iter_backwards_from</span>(<span class="ident">pair</span>.<span class="ident">start</span>, <span class="ident">pair</span>.<span class="ident">start_run</span>)
+                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="ident">processing_classes</span>[<span class="ident">i</span>])
+                .<span class="ident">find</span>(<span class="op">|</span><span class="ident">class</span><span class="op">|</span> {
+                    <span class="kw-2">*</span><span class="ident">class</span> <span class="op">==</span> <span class="ident">BidiClass::L</span>
+                        <span class="op">|</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">class</span> <span class="op">==</span> <span class="ident">BidiClass::R</span>
+                        <span class="op">|</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">class</span> <span class="op">==</span> <span class="ident">BidiClass::EN</span>
+                        <span class="op">|</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">class</span> <span class="op">==</span> <span class="ident">BidiClass::AN</span>
+                })
+                .<span class="ident">unwrap_or</span>(<span class="ident">sequence</span>.<span class="ident">sos</span>);
+
+            <span class="comment">// &gt; Within this scope, bidirectional types EN and AN are treated as R.</span>
+            <span class="kw">if</span> <span class="ident">previous_strong</span> <span class="op">==</span> <span class="ident">BidiClass::EN</span> <span class="op">|</span><span class="op">|</span> <span class="ident">previous_strong</span> <span class="op">==</span> <span class="ident">BidiClass::AN</span> {
+                <span class="ident">previous_strong</span> <span class="op">=</span> <span class="ident">BidiClass::R</span>;
+            }
+
+            <span class="comment">// &gt; If the preceding strong type is also opposite the embedding direction,</span>
+            <span class="comment">// &gt; context is established,</span>
+            <span class="comment">// &gt; so set the type for both brackets in the pair to that direction.</span>
+            <span class="comment">// AND</span>
+            <span class="comment">// &gt; Otherwise set the type for both brackets in the pair to the embedding direction.</span>
+            <span class="comment">// &gt; Either way it gets set to previous_strong</span>
+            <span class="comment">//</span>
+            <span class="comment">// Both branches amount to setting the type to the strong type.</span>
+            <span class="ident">class_to_set</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">previous_strong</span>);
+        }
+
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">class_to_set</span>) <span class="op">=</span> <span class="ident">class_to_set</span> {
+            <span class="comment">// Update all processing classes corresponding to the start and end elements, as requested.</span>
+            <span class="comment">// We should include all bytes of the character, not the first one.</span>
+            <span class="kw">let</span> <span class="ident">end_len_utf8</span> <span class="op">=</span> <span class="ident">text</span>[<span class="ident">pair</span>.<span class="ident">end</span>..].<span class="ident">chars</span>().<span class="ident">next</span>().<span class="ident">unwrap</span>().<span class="ident">len_utf8</span>();
+            <span class="kw">for</span> <span class="ident">class</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="ident">processing_classes</span>[<span class="ident">pair</span>.<span class="ident">start</span>..<span class="ident">pair</span>.<span class="ident">start</span> <span class="op">+</span> <span class="ident">start_len_utf8</span>] {
+                <span class="kw-2">*</span><span class="ident">class</span> <span class="op">=</span> <span class="ident">class_to_set</span>;
+            }
+            <span class="kw">for</span> <span class="ident">class</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="ident">processing_classes</span>[<span class="ident">pair</span>.<span class="ident">end</span>..<span class="ident">pair</span>.<span class="ident">end</span> <span class="op">+</span> <span class="ident">end_len_utf8</span>] {
+                <span class="kw-2">*</span><span class="ident">class</span> <span class="op">=</span> <span class="ident">class_to_set</span>;
+            }
+            <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;</span>
+            <span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="ident">sequence</span>.<span class="ident">iter_backwards_from</span>(<span class="ident">pair</span>.<span class="ident">start</span>, <span class="ident">pair</span>.<span class="ident">start_run</span>) {
+                <span class="kw">let</span> <span class="ident">class</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">processing_classes</span>[<span class="ident">idx</span>];
+                <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">class</span> <span class="op">!</span><span class="op">=</span> <span class="ident">BN</span> {
+                    <span class="kw">break</span>;
+                }
+                <span class="kw-2">*</span><span class="ident">class</span> <span class="op">=</span> <span class="ident">class_to_set</span>;
+            }
+            <span class="comment">// &gt; Any number of characters that had original bidirectional character type NSM prior to the application of</span>
+            <span class="comment">// &gt; W1 that immediately follow a paired bracket which changed to L or R under N0 should change to match the type of their preceding bracket.</span>
+
+            <span class="comment">// This rule deals with sequences of NSMs, so we can just update them all at once, we don&#39;t need to worry</span>
+            <span class="comment">// about character boundaries. We do need to be careful to skip the full set of bytes for the parentheses characters.</span>
+            <span class="kw">let</span> <span class="ident">nsm_start</span> <span class="op">=</span> <span class="ident">pair</span>.<span class="ident">start</span> <span class="op">+</span> <span class="ident">start_len_utf8</span>;
+            <span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="ident">sequence</span>.<span class="ident">iter_forwards_from</span>(<span class="ident">nsm_start</span>, <span class="ident">pair</span>.<span class="ident">start_run</span>) {
+                <span class="kw">let</span> <span class="ident">class</span> <span class="op">=</span> <span class="ident">original_classes</span>[<span class="ident">idx</span>];
+                <span class="kw">if</span> <span class="ident">class</span> <span class="op">==</span> <span class="ident">BidiClass::NSM</span> <span class="op">|</span><span class="op">|</span> <span class="ident">processing_classes</span>[<span class="ident">idx</span>] <span class="op">==</span> <span class="ident">BN</span> {
+                    <span class="ident">processing_classes</span>[<span class="ident">idx</span>] <span class="op">=</span> <span class="ident">class_to_set</span>;
+                } <span class="kw">else</span> {
+                    <span class="kw">break</span>;
+                }
+            }
+            <span class="kw">let</span> <span class="ident">nsm_end</span> <span class="op">=</span> <span class="ident">pair</span>.<span class="ident">end</span> <span class="op">+</span> <span class="ident">end_len_utf8</span>;
+            <span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="ident">sequence</span>.<span class="ident">iter_forwards_from</span>(<span class="ident">nsm_end</span>, <span class="ident">pair</span>.<span class="ident">end_run</span>) {
+                <span class="kw">let</span> <span class="ident">class</span> <span class="op">=</span> <span class="ident">original_classes</span>[<span class="ident">idx</span>];
+                <span class="kw">if</span> <span class="ident">class</span> <span class="op">==</span> <span class="ident">BidiClass::NSM</span> <span class="op">|</span><span class="op">|</span> <span class="ident">processing_classes</span>[<span class="ident">idx</span>] <span class="op">==</span> <span class="ident">BN</span> {
+                    <span class="ident">processing_classes</span>[<span class="ident">idx</span>] <span class="op">=</span> <span class="ident">class_to_set</span>;
+                } <span class="kw">else</span> {
+                    <span class="kw">break</span>;
+                }
+            }
+        }
+        <span class="comment">// &gt; Otherwise, there are no strong types within the bracket pair</span>
+        <span class="comment">// &gt; Therefore, do not set the type for that bracket pair</span>
+    }
+
+    <span class="comment">// N1 and N2.</span>
+    <span class="comment">// Indices of every byte in this isolating run sequence</span>
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">indices</span> <span class="op">=</span> <span class="ident">sequence</span>.<span class="ident">runs</span>.<span class="ident">iter</span>().<span class="ident">flat_map</span>(<span class="ident">Clone::clone</span>);
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">prev_class</span> <span class="op">=</span> <span class="ident">sequence</span>.<span class="ident">sos</span>;
-
     <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">i</span>) <span class="op">=</span> <span class="ident">indices</span>.<span class="ident">next</span>() {
-        <span class="comment">// N0. Process bracket pairs.</span>
-        <span class="comment">// TODO</span>
-
         <span class="comment">// Process sequences of NI characters.</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ni_run</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-        <span class="kw">if</span> <span class="ident">is_NI</span>(<span class="ident">processing_classes</span>[<span class="ident">i</span>]) {
+        <span class="comment">// The BN is for &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;</span>
+        <span class="kw">if</span> <span class="ident">is_NI</span>(<span class="ident">processing_classes</span>[<span class="ident">i</span>]) <span class="op">|</span><span class="op">|</span> <span class="ident">processing_classes</span>[<span class="ident">i</span>] <span class="op">==</span> <span class="ident">BN</span> {
             <span class="comment">// Consume a run of consecutive NI characters.</span>
             <span class="ident">ni_run</span>.<span class="ident">push</span>(<span class="ident">i</span>);
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">next_class</span>;
@@ -404,11 +1022,9 @@
                 <span class="kw">match</span> <span class="ident">indices</span>.<span class="ident">next</span>() {
                     <span class="prelude-val">Some</span>(<span class="ident">j</span>) =&gt; {
                         <span class="ident">i</span> <span class="op">=</span> <span class="ident">j</span>;
-                        <span class="kw">if</span> <span class="ident">removed_by_x9</span>(<span class="ident">processing_classes</span>[<span class="ident">i</span>]) {
-                            <span class="kw">continue</span>;
-                        }
                         <span class="ident">next_class</span> <span class="op">=</span> <span class="ident">processing_classes</span>[<span class="ident">j</span>];
-                        <span class="kw">if</span> <span class="ident">is_NI</span>(<span class="ident">next_class</span>) {
+                        <span class="comment">// The BN is for &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;</span>
+                        <span class="kw">if</span> <span class="ident">is_NI</span>(<span class="ident">next_class</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">next_class</span> <span class="op">==</span> <span class="ident">BN</span> {
                             <span class="ident">ni_run</span>.<span class="ident">push</span>(<span class="ident">i</span>);
                         } <span class="kw">else</span> {
                             <span class="kw">break</span>;
@@ -420,7 +1036,6 @@
                     }
                 };
             }
-
             <span class="comment">// N1-N2.</span>
             <span class="comment">//</span>
             <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#N1&gt;</span>
@@ -447,6 +1062,105 @@
     }
 }
 
+<span class="kw">struct</span> <span class="ident">BracketPair</span> {
+    <span class="doccomment">/// The text-relative index of the opening bracket.</span>
+    <span class="ident">start</span>: <span class="ident">usize</span>,
+    <span class="doccomment">/// The text-relative index of the closing bracket.</span>
+    <span class="ident">end</span>: <span class="ident">usize</span>,
+    <span class="doccomment">/// The index of the run (in the run sequence) that the opening bracket is in.</span>
+    <span class="ident">start_run</span>: <span class="ident">usize</span>,
+    <span class="doccomment">/// The index of the run (in the run sequence) that the closing bracket is in.</span>
+    <span class="ident">end_run</span>: <span class="ident">usize</span>,
+}
+<span class="doccomment">/// 3.1.3 Identifying Bracket Pairs</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Returns all paired brackets in the source, as indices into the</span>
+<span class="doccomment">/// text source.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// &lt;https://www.unicode.org/reports/tr9/#BD16&gt;</span>
+<span class="kw">fn</span> <span class="ident">identify_bracket_pairs</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">BidiDataSource</span><span class="op">&gt;</span>(
+    <span class="ident">text</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+    <span class="ident">data_source</span>: <span class="kw-2">&amp;</span><span class="ident">D</span>,
+    <span class="ident">run_sequence</span>: <span class="kw-2">&amp;</span><span class="ident">IsolatingRunSequence</span>,
+    <span class="ident">original_classes</span>: <span class="kw-2">&amp;</span>[<span class="ident">BidiClass</span>],
+) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BracketPair</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="macro">vec!</span>[];
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stack</span> <span class="op">=</span> <span class="macro">vec!</span>[];
+
+    <span class="kw">for</span> (<span class="ident">run_index</span>, <span class="ident">level_run</span>) <span class="kw">in</span> <span class="ident">run_sequence</span>.<span class="ident">runs</span>.<span class="ident">iter</span>().<span class="ident">enumerate</span>() {
+        <span class="kw">let</span> <span class="ident">slice</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">slice</span>) <span class="op">=</span> <span class="ident">text</span>.<span class="ident">get</span>(<span class="ident">level_run</span>.<span class="ident">clone</span>()) {
+            <span class="ident">slice</span>
+        } <span class="kw">else</span> {
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
+            <span class="macro">std::debug_assert!</span>(
+                <span class="bool-val">false</span>,
+                <span class="string">&quot;Found broken indices in level run: found indices {}..{} for string of length {}&quot;</span>,
+                <span class="ident">level_run</span>.<span class="ident">start</span>,
+                <span class="ident">level_run</span>.<span class="ident">end</span>,
+                <span class="ident">text</span>.<span class="ident">len</span>()
+            );
+            <span class="kw">return</span> <span class="ident">ret</span>;
+        };
+
+        <span class="kw">for</span> (<span class="ident">i</span>, <span class="ident">ch</span>) <span class="kw">in</span> <span class="ident">slice</span>.<span class="ident">char_indices</span>() {
+            <span class="kw">let</span> <span class="ident">actual_index</span> <span class="op">=</span> <span class="ident">level_run</span>.<span class="ident">start</span> <span class="op">+</span> <span class="ident">i</span>;
+            <span class="comment">// All paren characters are ON.</span>
+            <span class="comment">// From BidiBrackets.txt:</span>
+            <span class="comment">// &gt; The Unicode property value stability policy guarantees that characters</span>
+            <span class="comment">// &gt; which have bpt=o or bpt=c also have bc=ON and Bidi_M=Y</span>
+            <span class="kw">if</span> <span class="ident">original_classes</span>[<span class="ident">level_run</span>.<span class="ident">start</span> <span class="op">+</span> <span class="ident">i</span>] <span class="op">!</span><span class="op">=</span> <span class="ident">BidiClass::ON</span> {
+                <span class="kw">continue</span>;
+            }
+
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">matched</span>) <span class="op">=</span> <span class="ident">data_source</span>.<span class="ident">bidi_matched_opening_bracket</span>(<span class="ident">ch</span>) {
+                <span class="kw">if</span> <span class="ident">matched</span>.<span class="ident">is_open</span> {
+                    <span class="comment">// &gt; If an opening paired bracket is found ...</span>
+
+                    <span class="comment">// &gt; ... and there is no room in the stack,</span>
+                    <span class="comment">// &gt; stop processing BD16 for the remainder of the isolating run sequence.</span>
+                    <span class="kw">if</span> <span class="ident">stack</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="number">63</span> {
+                        <span class="kw">break</span>;
+                    }
+                    <span class="comment">// &gt; ... push its Bidi_Paired_Bracket property value and its text position onto the stack</span>
+                    <span class="ident">stack</span>.<span class="ident">push</span>((<span class="ident">matched</span>.<span class="ident">opening</span>, <span class="ident">actual_index</span>, <span class="ident">run_index</span>))
+                } <span class="kw">else</span> {
+                    <span class="comment">// &gt; If a closing paired bracket is found, do the following</span>
+
+                    <span class="comment">// &gt; Declare a variable that holds a reference to the current stack element</span>
+                    <span class="comment">// &gt; and initialize it with the top element of the stack.</span>
+                    <span class="comment">// AND</span>
+                    <span class="comment">// &gt; Else, if the current stack element is not at the bottom of the stack</span>
+                    <span class="kw">for</span> (<span class="ident">stack_index</span>, <span class="ident">element</span>) <span class="kw">in</span> <span class="ident">stack</span>.<span class="ident">iter</span>().<span class="ident">enumerate</span>().<span class="ident">rev</span>() {
+                        <span class="comment">// &gt; Compare the closing paired bracket being inspected or its canonical</span>
+                        <span class="comment">// &gt; equivalent to the bracket in the current stack element.</span>
+                        <span class="kw">if</span> <span class="ident">element</span>.<span class="number">0</span> <span class="op">==</span> <span class="ident">matched</span>.<span class="ident">opening</span> {
+                            <span class="comment">// &gt; If the values match, meaning the two characters form a bracket pair, then</span>
+
+                            <span class="comment">// &gt; Append the text position in the current stack element together with the</span>
+                            <span class="comment">// &gt; text position of the closing paired bracket to the list.</span>
+                            <span class="kw">let</span> <span class="ident">pair</span> <span class="op">=</span> <span class="ident">BracketPair</span> {
+                                <span class="ident">start</span>: <span class="ident">element</span>.<span class="number">1</span>,
+                                <span class="ident">end</span>: <span class="ident">actual_index</span>,
+                                <span class="ident">start_run</span>: <span class="ident">element</span>.<span class="number">2</span>,
+                                <span class="ident">end_run</span>: <span class="ident">run_index</span>,
+                            };
+                            <span class="ident">ret</span>.<span class="ident">push</span>(<span class="ident">pair</span>);
+
+                            <span class="comment">// &gt; Pop the stack through the current stack element inclusively.</span>
+                            <span class="ident">stack</span>.<span class="ident">truncate</span>(<span class="ident">stack_index</span>);
+                            <span class="kw">break</span>;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    <span class="comment">// &gt; Sort the list of pairs of text positions in ascending order based on</span>
+    <span class="comment">// &gt; the text position of the opening paired bracket.</span>
+    <span class="ident">ret</span>.<span class="ident">sort_by_key</span>(<span class="op">|</span><span class="ident">r</span><span class="op">|</span> <span class="ident">r</span>.<span class="ident">start</span>);
+    <span class="ident">ret</span>
+}
+
 <span class="doccomment">/// 3.3.6 Resolving Implicit Levels</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Returns the maximum embedding level in the paragraph.</span>
@@ -455,7 +1169,6 @@
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;flame_it&quot;</span>, <span class="ident">flamer::flame</span>)]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">resolve_levels</span>(<span class="ident">original_classes</span>: <span class="kw-2">&amp;</span>[<span class="ident">BidiClass</span>], <span class="ident">levels</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">Level</span>]) -&gt; <span class="ident">Level</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">max_level</span> <span class="op">=</span> <span class="ident">Level::ltr</span>();
-
     <span class="macro">assert_eq!</span>(<span class="ident">original_classes</span>.<span class="ident">len</span>(), <span class="ident">levels</span>.<span class="ident">len</span>());
     <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">levels</span>.<span class="ident">len</span>() {
         <span class="kw">match</span> (<span class="ident">levels</span>[<span class="ident">i</span>].<span class="ident">is_rtl</span>(), <span class="ident">original_classes</span>[<span class="ident">i</span>]) {
@@ -463,6 +1176,7 @@
             (<span class="bool-val">false</span>, <span class="ident">R</span>) <span class="op">|</span> (<span class="bool-val">true</span>, <span class="ident">L</span>) <span class="op">|</span> (<span class="bool-val">true</span>, <span class="ident">EN</span>) <span class="op">|</span> (<span class="bool-val">true</span>, <span class="ident">AN</span>) =&gt; {
                 <span class="ident">levels</span>[<span class="ident">i</span>].<span class="ident">raise</span>(<span class="number">1</span>).<span class="ident">expect</span>(<span class="string">&quot;Level number error&quot;</span>)
             }
+            <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt; handled here</span>
             (<span class="kw">_</span>, <span class="kw">_</span>) =&gt; {}
         }
         <span class="ident">max_level</span> <span class="op">=</span> <span class="ident">max</span>(<span class="ident">max_level</span>, <span class="ident">levels</span>[<span class="ident">i</span>]);

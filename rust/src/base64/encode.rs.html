@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/base64-0.13.1/src/encode.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>encode.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/base64-0.21.0/src/encode.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>encode.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../base64/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -491,320 +491,62 @@
 <span id="486">486</span>
 <span id="487">487</span>
 <span id="488">488</span>
-<span id="489">489</span>
-<span id="490">490</span>
-<span id="491">491</span>
-<span id="492">492</span>
-<span id="493">493</span>
-<span id="494">494</span>
-<span id="495">495</span>
-<span id="496">496</span>
-<span id="497">497</span>
-<span id="498">498</span>
-<span id="499">499</span>
-<span id="500">500</span>
-<span id="501">501</span>
-<span id="502">502</span>
-<span id="503">503</span>
-<span id="504">504</span>
-<span id="505">505</span>
-<span id="506">506</span>
-<span id="507">507</span>
-<span id="508">508</span>
-<span id="509">509</span>
-<span id="510">510</span>
-<span id="511">511</span>
-<span id="512">512</span>
-<span id="513">513</span>
-<span id="514">514</span>
-<span id="515">515</span>
-<span id="516">516</span>
-<span id="517">517</span>
-<span id="518">518</span>
-<span id="519">519</span>
-<span id="520">520</span>
-<span id="521">521</span>
-<span id="522">522</span>
-<span id="523">523</span>
-<span id="524">524</span>
-<span id="525">525</span>
-<span id="526">526</span>
-<span id="527">527</span>
-<span id="528">528</span>
-<span id="529">529</span>
-<span id="530">530</span>
-<span id="531">531</span>
-<span id="532">532</span>
-<span id="533">533</span>
-<span id="534">534</span>
-<span id="535">535</span>
-<span id="536">536</span>
-<span id="537">537</span>
-<span id="538">538</span>
-<span id="539">539</span>
-<span id="540">540</span>
-<span id="541">541</span>
-<span id="542">542</span>
-<span id="543">543</span>
-<span id="544">544</span>
-<span id="545">545</span>
-<span id="546">546</span>
-<span id="547">547</span>
-<span id="548">548</span>
-<span id="549">549</span>
-<span id="550">550</span>
-<span id="551">551</span>
-<span id="552">552</span>
-<span id="553">553</span>
-<span id="554">554</span>
-<span id="555">555</span>
-<span id="556">556</span>
-<span id="557">557</span>
-<span id="558">558</span>
-<span id="559">559</span>
-<span id="560">560</span>
-<span id="561">561</span>
-<span id="562">562</span>
-<span id="563">563</span>
-<span id="564">564</span>
-<span id="565">565</span>
-<span id="566">566</span>
-<span id="567">567</span>
-<span id="568">568</span>
-<span id="569">569</span>
-<span id="570">570</span>
-<span id="571">571</span>
-<span id="572">572</span>
-<span id="573">573</span>
-<span id="574">574</span>
-<span id="575">575</span>
-<span id="576">576</span>
-<span id="577">577</span>
-<span id="578">578</span>
-<span id="579">579</span>
-<span id="580">580</span>
-<span id="581">581</span>
-<span id="582">582</span>
-<span id="583">583</span>
-<span id="584">584</span>
-<span id="585">585</span>
-<span id="586">586</span>
-<span id="587">587</span>
-<span id="588">588</span>
-<span id="589">589</span>
-<span id="590">590</span>
-<span id="591">591</span>
-<span id="592">592</span>
-<span id="593">593</span>
-<span id="594">594</span>
-<span id="595">595</span>
-<span id="596">596</span>
-<span id="597">597</span>
-<span id="598">598</span>
-<span id="599">599</span>
-<span id="600">600</span>
-<span id="601">601</span>
-<span id="602">602</span>
-<span id="603">603</span>
-<span id="604">604</span>
-<span id="605">605</span>
-<span id="606">606</span>
-<span id="607">607</span>
-<span id="608">608</span>
-<span id="609">609</span>
-<span id="610">610</span>
-<span id="611">611</span>
-<span id="612">612</span>
-<span id="613">613</span>
-<span id="614">614</span>
-<span id="615">615</span>
-<span id="616">616</span>
-<span id="617">617</span>
-<span id="618">618</span>
-<span id="619">619</span>
-<span id="620">620</span>
-<span id="621">621</span>
-<span id="622">622</span>
-<span id="623">623</span>
-<span id="624">624</span>
-<span id="625">625</span>
-<span id="626">626</span>
-<span id="627">627</span>
-<span id="628">628</span>
-<span id="629">629</span>
-<span id="630">630</span>
-<span id="631">631</span>
-<span id="632">632</span>
-<span id="633">633</span>
-<span id="634">634</span>
-<span id="635">635</span>
-<span id="636">636</span>
-<span id="637">637</span>
-<span id="638">638</span>
-<span id="639">639</span>
-<span id="640">640</span>
-<span id="641">641</span>
-<span id="642">642</span>
-<span id="643">643</span>
-<span id="644">644</span>
-<span id="645">645</span>
-<span id="646">646</span>
-<span id="647">647</span>
-<span id="648">648</span>
-<span id="649">649</span>
-<span id="650">650</span>
-<span id="651">651</span>
-<span id="652">652</span>
-<span id="653">653</span>
-<span id="654">654</span>
-<span id="655">655</span>
-<span id="656">656</span>
-<span id="657">657</span>
-<span id="658">658</span>
-<span id="659">659</span>
-<span id="660">660</span>
-<span id="661">661</span>
-<span id="662">662</span>
-<span id="663">663</span>
-<span id="664">664</span>
-<span id="665">665</span>
-<span id="666">666</span>
-<span id="667">667</span>
-<span id="668">668</span>
-<span id="669">669</span>
-<span id="670">670</span>
-<span id="671">671</span>
-<span id="672">672</span>
-<span id="673">673</span>
-<span id="674">674</span>
-<span id="675">675</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Config</span>, <span class="ident">PAD_BYTE</span>};
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>, <span class="ident">test</span>))]</span>
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">chunked_encoder</span>, <span class="ident">STANDARD</span>};
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>, <span class="ident">test</span>))]</span>
-<span class="kw">use</span> <span class="ident">alloc</span>::{<span class="ident">string::String</span>, <span class="ident">vec</span>};
-<span class="kw">use</span> <span class="ident">core::convert::TryInto</span>;
+</pre><pre class="rust"><code><span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>, <span class="ident">test</span>))]</span>
+<span class="kw">use</span> <span class="ident">alloc::string::String</span>;
+<span class="kw">use</span> <span class="ident">core::fmt</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>, <span class="ident">test</span>))]</span>
+<span class="kw">use</span> <span class="ident">std::error</span>;
 
-<span class="doccomment">///Encode arbitrary octets as base64.</span>
-<span class="doccomment">///Returns a String.</span>
-<span class="doccomment">///Convenience for `encode_config(input, base64::STANDARD);`.</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>, <span class="ident">test</span>))]</span>
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::engine::general_purpose::STANDARD</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::engine</span>::{<span class="ident">Config</span>, <span class="ident">Engine</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::PAD_BYTE</span>;
+
+<span class="doccomment">/// Encode arbitrary octets as base64 using the [`STANDARD` engine](STANDARD).</span>
 <span class="doccomment">///</span>
-<span class="doccomment">///# Example</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///```rust</span>
-<span class="doccomment">///extern crate base64;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///fn main() {</span>
-<span class="doccomment">///    let b64 = base64::encode(b&quot;hello world&quot;);</span>
-<span class="doccomment">///    println!(&quot;{}&quot;, b64);</span>
-<span class="doccomment">///}</span>
-<span class="doccomment">///```</span>
+<span class="doccomment">/// See [Engine::encode].</span>
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused</span>)]</span>
+<span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;0.21.0&quot;</span>, <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Use Engine::encode&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>, <span class="ident">test</span>))]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encode</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>) -&gt; <span class="ident">String</span> {
-    <span class="ident">encode_config</span>(<span class="ident">input</span>, <span class="ident">STANDARD</span>)
+    <span class="ident">STANDARD</span>.<span class="ident">encode</span>(<span class="ident">input</span>)
 }
 
-<span class="doccomment">///Encode arbitrary octets as base64.</span>
-<span class="doccomment">///Returns a String.</span>
+<span class="doccomment">///Encode arbitrary octets as base64 using the provided `Engine` into a new `String`.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">///# Example</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///```rust</span>
-<span class="doccomment">///extern crate base64;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///fn main() {</span>
-<span class="doccomment">///    let b64 = base64::encode_config(b&quot;hello world~&quot;, base64::STANDARD);</span>
-<span class="doccomment">///    println!(&quot;{}&quot;, b64);</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///    let b64_url = base64::encode_config(b&quot;hello internet~&quot;, base64::URL_SAFE);</span>
-<span class="doccomment">///    println!(&quot;{}&quot;, b64_url);</span>
-<span class="doccomment">///}</span>
-<span class="doccomment">///```</span>
+<span class="doccomment">/// See [Engine::encode].</span>
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused</span>)]</span>
+<span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;0.21.0&quot;</span>, <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Use Engine::encode&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>, <span class="ident">test</span>))]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encode_config</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>, <span class="ident">config</span>: <span class="ident">Config</span>) -&gt; <span class="ident">String</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">encoded_size</span>(<span class="ident">input</span>.<span class="ident">as_ref</span>().<span class="ident">len</span>(), <span class="ident">config</span>) {
-        <span class="prelude-val">Some</span>(<span class="ident">n</span>) =&gt; <span class="macro">vec!</span>[<span class="number">0</span>; <span class="ident">n</span>],
-        <span class="prelude-val">None</span> =&gt; <span class="macro">panic!</span>(<span class="string">&quot;integer overflow when calculating buffer size&quot;</span>),
-    };
-
-    <span class="ident">encode_with_padding</span>(<span class="ident">input</span>.<span class="ident">as_ref</span>(), <span class="ident">config</span>, <span class="ident">buf</span>.<span class="ident">len</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">buf</span>[..]);
-
-    <span class="ident">String::from_utf8</span>(<span class="ident">buf</span>).<span class="ident">expect</span>(<span class="string">&quot;Invalid UTF8&quot;</span>)
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encode_engine</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">Engine</span>, <span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>, <span class="ident">engine</span>: <span class="kw-2">&amp;</span><span class="ident">E</span>) -&gt; <span class="ident">String</span> {
+    <span class="ident">engine</span>.<span class="ident">encode</span>(<span class="ident">input</span>)
 }
 
-<span class="doccomment">///Encode arbitrary octets as base64.</span>
-<span class="doccomment">///Writes into the supplied output buffer, which will grow the buffer if needed.</span>
+<span class="doccomment">///Encode arbitrary octets as base64 into a supplied `String`.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">///# Example</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///```rust</span>
-<span class="doccomment">///extern crate base64;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///fn main() {</span>
-<span class="doccomment">///    let mut buf = String::new();</span>
-<span class="doccomment">///    base64::encode_config_buf(b&quot;hello world~&quot;, base64::STANDARD, &amp;mut buf);</span>
-<span class="doccomment">///    println!(&quot;{}&quot;, buf);</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///    buf.clear();</span>
-<span class="doccomment">///    base64::encode_config_buf(b&quot;hello internet~&quot;, base64::URL_SAFE, &amp;mut buf);</span>
-<span class="doccomment">///    println!(&quot;{}&quot;, buf);</span>
-<span class="doccomment">///}</span>
-<span class="doccomment">///```</span>
+<span class="doccomment">/// See [Engine::encode_string].</span>
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused</span>)]</span>
+<span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;0.21.0&quot;</span>, <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Use Engine::encode_string&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>, <span class="ident">test</span>))]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encode_config_buf</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>, <span class="ident">config</span>: <span class="ident">Config</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> <span class="ident">String</span>) {
-    <span class="kw">let</span> <span class="ident">input_bytes</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">as_ref</span>();
-
-    {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sink</span> <span class="op">=</span> <span class="ident">chunked_encoder::StringSink::new</span>(<span class="ident">buf</span>);
-        <span class="kw">let</span> <span class="ident">encoder</span> <span class="op">=</span> <span class="ident">chunked_encoder::ChunkedEncoder::new</span>(<span class="ident">config</span>);
-
-        <span class="ident">encoder</span>
-            .<span class="ident">encode</span>(<span class="ident">input_bytes</span>, <span class="kw-2">&amp;mut</span> <span class="ident">sink</span>)
-            .<span class="ident">expect</span>(<span class="string">&quot;Writing to a String shouldn&#39;t fail&quot;</span>)
-    }
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encode_engine_string</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">Engine</span>, <span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span>(
+    <span class="ident">input</span>: <span class="ident">T</span>,
+    <span class="ident">output_buf</span>: <span class="kw-2">&amp;mut</span> <span class="ident">String</span>,
+    <span class="ident">engine</span>: <span class="kw-2">&amp;</span><span class="ident">E</span>,
+) {
+    <span class="ident">engine</span>.<span class="ident">encode_string</span>(<span class="ident">input</span>, <span class="ident">output_buf</span>)
 }
 
-<span class="doccomment">/// Encode arbitrary octets as base64.</span>
-<span class="doccomment">/// Writes into the supplied output buffer.</span>
+<span class="doccomment">/// Encode arbitrary octets as base64 into a supplied slice.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// This is useful if you wish to avoid allocation entirely (e.g. encoding into a stack-resident</span>
-<span class="doccomment">/// or statically-allocated buffer).</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Panics</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// If `output` is too small to hold the encoded version of `input`, a panic will result.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Example</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// extern crate base64;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// fn main() {</span>
-<span class="doccomment">///     let s = b&quot;hello internet!&quot;;</span>
-<span class="doccomment">///     let mut buf = Vec::new();</span>
-<span class="doccomment">///     // make sure we&#39;ll have a slice big enough for base64 + padding</span>
-<span class="doccomment">///     buf.resize(s.len() * 4 / 3 + 4, 0);</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     let bytes_written = base64::encode_config_slice(s,</span>
-<span class="doccomment">///                             base64::STANDARD, &amp;mut buf);</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     // shorten our vec down to just what was written</span>
-<span class="doccomment">///     buf.resize(bytes_written, 0);</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     assert_eq!(s, base64::decode(&amp;buf).unwrap().as_slice());</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encode_config_slice</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>, <span class="ident">config</span>: <span class="ident">Config</span>, <span class="ident">output</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>]) -&gt; <span class="ident">usize</span> {
-    <span class="kw">let</span> <span class="ident">input_bytes</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">as_ref</span>();
-
-    <span class="kw">let</span> <span class="ident">encoded_size</span> <span class="op">=</span> <span class="ident">encoded_size</span>(<span class="ident">input_bytes</span>.<span class="ident">len</span>(), <span class="ident">config</span>)
-        .<span class="ident">expect</span>(<span class="string">&quot;usize overflow when calculating buffer size&quot;</span>);
-
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">b64_output</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">output</span>[<span class="number">0</span>..<span class="ident">encoded_size</span>];
-
-    <span class="ident">encode_with_padding</span>(<span class="kw-2">&amp;</span><span class="ident">input_bytes</span>, <span class="ident">config</span>, <span class="ident">encoded_size</span>, <span class="kw-2">&amp;mut</span> <span class="ident">b64_output</span>);
-
-    <span class="ident">encoded_size</span>
+<span class="doccomment">/// See [Engine::encode_slice].</span>
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused</span>)]</span>
+<span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;0.21.0&quot;</span>, <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Use Engine::encode_slice&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encode_engine_slice</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">Engine</span>, <span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span>(
+    <span class="ident">input</span>: <span class="ident">T</span>,
+    <span class="ident">output_buf</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>],
+    <span class="ident">engine</span>: <span class="kw-2">&amp;</span><span class="ident">E</span>,
+) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">EncodeSliceError</span><span class="op">&gt;</span> {
+    <span class="ident">engine</span>.<span class="ident">encode_slice</span>(<span class="ident">input</span>, <span class="ident">output_buf</span>)
 }
 
 <span class="doccomment">/// B64-encode and pad (if configured).</span>
@@ -817,12 +559,17 @@
 <span class="doccomment">/// `output` must be of size `encoded_size`.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// All bytes in `output` will be written to since it is exactly the size of the output.</span>
-<span class="kw">fn</span> <span class="ident">encode_with_padding</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">config</span>: <span class="ident">Config</span>, <span class="ident">encoded_size</span>: <span class="ident">usize</span>, <span class="ident">output</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>]) {
-    <span class="macro">debug_assert_eq!</span>(<span class="ident">encoded_size</span>, <span class="ident">output</span>.<span class="ident">len</span>());
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">encode_with_padding</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">Engine</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span>(
+    <span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
+    <span class="ident">output</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>],
+    <span class="ident">engine</span>: <span class="kw-2">&amp;</span><span class="ident">E</span>,
+    <span class="ident">expected_encoded_size</span>: <span class="ident">usize</span>,
+) {
+    <span class="macro">debug_assert_eq!</span>(<span class="ident">expected_encoded_size</span>, <span class="ident">output</span>.<span class="ident">len</span>());
 
-    <span class="kw">let</span> <span class="ident">b64_bytes_written</span> <span class="op">=</span> <span class="ident">encode_to_slice</span>(<span class="ident">input</span>, <span class="ident">output</span>, <span class="ident">config</span>.<span class="ident">char_set</span>.<span class="ident">encode_table</span>());
+    <span class="kw">let</span> <span class="ident">b64_bytes_written</span> <span class="op">=</span> <span class="ident">engine</span>.<span class="ident">internal_encode</span>(<span class="ident">input</span>, <span class="ident">output</span>);
 
-    <span class="kw">let</span> <span class="ident">padding_bytes</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">config</span>.<span class="ident">pad</span> {
+    <span class="kw">let</span> <span class="ident">padding_bytes</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">engine</span>.<span class="ident">config</span>().<span class="ident">encode_padding</span>() {
         <span class="ident">add_padding</span>(<span class="ident">input</span>.<span class="ident">len</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">output</span>[<span class="ident">b64_bytes_written</span>..])
     } <span class="kw">else</span> {
         <span class="number">0</span>
@@ -832,144 +579,22 @@
         .<span class="ident">checked_add</span>(<span class="ident">padding_bytes</span>)
         .<span class="ident">expect</span>(<span class="string">&quot;usize overflow when calculating b64 length&quot;</span>);
 
-    <span class="macro">debug_assert_eq!</span>(<span class="ident">encoded_size</span>, <span class="ident">encoded_bytes</span>);
+    <span class="macro">debug_assert_eq!</span>(<span class="ident">expected_encoded_size</span>, <span class="ident">encoded_bytes</span>);
 }
 
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">fn</span> <span class="ident">read_u64</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">u64</span> {
-    <span class="ident">u64::from_be_bytes</span>(<span class="ident">s</span>[..<span class="number">8</span>].<span class="ident">try_into</span>().<span class="ident">unwrap</span>())
-}
-
-<span class="doccomment">/// Encode input bytes to utf8 base64 bytes. Does not pad.</span>
-<span class="doccomment">/// `output` must be long enough to hold the encoded `input` without padding.</span>
-<span class="doccomment">/// Returns the number of bytes written.</span>
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encode_to_slice</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">output</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>], <span class="ident">encode_table</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>; <span class="number">64</span>]) -&gt; <span class="ident">usize</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">input_index</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">0</span>;
-
-    <span class="kw">const</span> <span class="ident">BLOCKS_PER_FAST_LOOP</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">4</span>;
-    <span class="kw">const</span> <span class="ident">LOW_SIX_BITS</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="number">0x3F</span>;
-
-    <span class="comment">// we read 8 bytes at a time (u64) but only actually consume 6 of those bytes. Thus, we need</span>
-    <span class="comment">// 2 trailing bytes to be available to read..</span>
-    <span class="kw">let</span> <span class="ident">last_fast_index</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">len</span>().<span class="ident">saturating_sub</span>(<span class="ident">BLOCKS_PER_FAST_LOOP</span> <span class="op">*</span> <span class="number">6</span> <span class="op">+</span> <span class="number">2</span>);
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">output_index</span> <span class="op">=</span> <span class="number">0</span>;
-
-    <span class="kw">if</span> <span class="ident">last_fast_index</span> <span class="op">&gt;</span> <span class="number">0</span> {
-        <span class="kw">while</span> <span class="ident">input_index</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">last_fast_index</span> {
-            <span class="comment">// Major performance wins from letting the optimizer do the bounds check once, mostly</span>
-            <span class="comment">// on the output side</span>
-            <span class="kw">let</span> <span class="ident">input_chunk</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">input</span>[<span class="ident">input_index</span>..(<span class="ident">input_index</span> <span class="op">+</span> (<span class="ident">BLOCKS_PER_FAST_LOOP</span> <span class="op">*</span> <span class="number">6</span> <span class="op">+</span> <span class="number">2</span>))];
-            <span class="kw">let</span> <span class="ident">output_chunk</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">output</span>[<span class="ident">output_index</span>..(<span class="ident">output_index</span> <span class="op">+</span> <span class="ident">BLOCKS_PER_FAST_LOOP</span> <span class="op">*</span> <span class="number">8</span>)];
-
-            <span class="comment">// Hand-unrolling for 32 vs 16 or 8 bytes produces yields performance about equivalent</span>
-            <span class="comment">// to unsafe pointer code on a Xeon E5-1650v3. 64 byte unrolling was slightly better for</span>
-            <span class="comment">// large inputs but significantly worse for 50-byte input, unsurprisingly. I suspect</span>
-            <span class="comment">// that it&#39;s a not uncommon use case to encode smallish chunks of data (e.g. a 64-byte</span>
-            <span class="comment">// SHA-512 digest), so it would be nice if that fit in the unrolled loop at least once.</span>
-            <span class="comment">// Plus, single-digit percentage performance differences might well be quite different</span>
-            <span class="comment">// on different hardware.</span>
-
-            <span class="kw">let</span> <span class="ident">input_u64</span> <span class="op">=</span> <span class="ident">read_u64</span>(<span class="kw-2">&amp;</span><span class="ident">input_chunk</span>[<span class="number">0</span>..]);
-
-            <span class="ident">output_chunk</span>[<span class="number">0</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">58</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">1</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">52</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">2</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">46</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">3</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">40</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">4</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">34</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">5</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">28</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">6</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">22</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">7</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">16</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-
-            <span class="kw">let</span> <span class="ident">input_u64</span> <span class="op">=</span> <span class="ident">read_u64</span>(<span class="kw-2">&amp;</span><span class="ident">input_chunk</span>[<span class="number">6</span>..]);
-
-            <span class="ident">output_chunk</span>[<span class="number">8</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">58</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">9</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">52</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">10</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">46</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">11</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">40</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">12</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">34</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">13</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">28</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">14</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">22</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">15</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">16</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-
-            <span class="kw">let</span> <span class="ident">input_u64</span> <span class="op">=</span> <span class="ident">read_u64</span>(<span class="kw-2">&amp;</span><span class="ident">input_chunk</span>[<span class="number">12</span>..]);
-
-            <span class="ident">output_chunk</span>[<span class="number">16</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">58</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">17</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">52</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">18</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">46</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">19</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">40</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">20</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">34</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">21</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">28</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">22</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">22</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">23</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">16</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-
-            <span class="kw">let</span> <span class="ident">input_u64</span> <span class="op">=</span> <span class="ident">read_u64</span>(<span class="kw-2">&amp;</span><span class="ident">input_chunk</span>[<span class="number">18</span>..]);
-
-            <span class="ident">output_chunk</span>[<span class="number">24</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">58</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">25</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">52</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">26</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">46</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">27</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">40</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">28</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">34</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">29</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">28</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">30</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">22</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="ident">output_chunk</span>[<span class="number">31</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input_u64</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">16</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-
-            <span class="ident">output_index</span> <span class="op">+</span><span class="op">=</span> <span class="ident">BLOCKS_PER_FAST_LOOP</span> <span class="op">*</span> <span class="number">8</span>;
-            <span class="ident">input_index</span> <span class="op">+</span><span class="op">=</span> <span class="ident">BLOCKS_PER_FAST_LOOP</span> <span class="op">*</span> <span class="number">6</span>;
-        }
-    }
-
-    <span class="comment">// Encode what&#39;s left after the fast loop.</span>
-
-    <span class="kw">const</span> <span class="ident">LOW_SIX_BITS_U8</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">0x3F</span>;
-
-    <span class="kw">let</span> <span class="ident">rem</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">len</span>() <span class="op">%</span> <span class="number">3</span>;
-    <span class="kw">let</span> <span class="ident">start_of_rem</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="ident">rem</span>;
-
-    <span class="comment">// start at the first index not handled by fast loop, which may be 0.</span>
-
-    <span class="kw">while</span> <span class="ident">input_index</span> <span class="op">&lt;</span> <span class="ident">start_of_rem</span> {
-        <span class="kw">let</span> <span class="ident">input_chunk</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">input</span>[<span class="ident">input_index</span>..(<span class="ident">input_index</span> <span class="op">+</span> <span class="number">3</span>)];
-        <span class="kw">let</span> <span class="ident">output_chunk</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">output</span>[<span class="ident">output_index</span>..(<span class="ident">output_index</span> <span class="op">+</span> <span class="number">4</span>)];
-
-        <span class="ident">output_chunk</span>[<span class="number">0</span>] <span class="op">=</span> <span class="ident">encode_table</span>[(<span class="ident">input_chunk</span>[<span class="number">0</span>] <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">2</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-        <span class="ident">output_chunk</span>[<span class="number">1</span>] <span class="op">=</span>
-            <span class="ident">encode_table</span>[((<span class="ident">input_chunk</span>[<span class="number">0</span>] <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span> <span class="op">|</span> <span class="ident">input_chunk</span>[<span class="number">1</span>] <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">4</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS_U8</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-        <span class="ident">output_chunk</span>[<span class="number">2</span>] <span class="op">=</span>
-            <span class="ident">encode_table</span>[((<span class="ident">input_chunk</span>[<span class="number">1</span>] <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">2</span> <span class="op">|</span> <span class="ident">input_chunk</span>[<span class="number">2</span>] <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">6</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS_U8</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-        <span class="ident">output_chunk</span>[<span class="number">3</span>] <span class="op">=</span> <span class="ident">encode_table</span>[(<span class="ident">input_chunk</span>[<span class="number">2</span>] <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS_U8</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-
-        <span class="ident">input_index</span> <span class="op">+</span><span class="op">=</span> <span class="number">3</span>;
-        <span class="ident">output_index</span> <span class="op">+</span><span class="op">=</span> <span class="number">4</span>;
-    }
-
-    <span class="kw">if</span> <span class="ident">rem</span> <span class="op">==</span> <span class="number">2</span> {
-        <span class="ident">output</span>[<span class="ident">output_index</span>] <span class="op">=</span> <span class="ident">encode_table</span>[(<span class="ident">input</span>[<span class="ident">start_of_rem</span>] <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">2</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-        <span class="ident">output</span>[<span class="ident">output_index</span> <span class="op">+</span> <span class="number">1</span>] <span class="op">=</span> <span class="ident">encode_table</span>[((<span class="ident">input</span>[<span class="ident">start_of_rem</span>] <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span>
-            <span class="op">|</span> <span class="ident">input</span>[<span class="ident">start_of_rem</span> <span class="op">+</span> <span class="number">1</span>] <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">4</span>)
-            <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS_U8</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-        <span class="ident">output</span>[<span class="ident">output_index</span> <span class="op">+</span> <span class="number">2</span>] <span class="op">=</span>
-            <span class="ident">encode_table</span>[((<span class="ident">input</span>[<span class="ident">start_of_rem</span> <span class="op">+</span> <span class="number">1</span>] <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">2</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS_U8</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-        <span class="ident">output_index</span> <span class="op">+</span><span class="op">=</span> <span class="number">3</span>;
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">rem</span> <span class="op">==</span> <span class="number">1</span> {
-        <span class="ident">output</span>[<span class="ident">output_index</span>] <span class="op">=</span> <span class="ident">encode_table</span>[(<span class="ident">input</span>[<span class="ident">start_of_rem</span>] <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">2</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-        <span class="ident">output</span>[<span class="ident">output_index</span> <span class="op">+</span> <span class="number">1</span>] <span class="op">=</span>
-            <span class="ident">encode_table</span>[((<span class="ident">input</span>[<span class="ident">start_of_rem</span>] <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span>) <span class="op">&amp;</span> <span class="ident">LOW_SIX_BITS_U8</span>) <span class="kw">as</span> <span class="ident">usize</span>];
-        <span class="ident">output_index</span> <span class="op">+</span><span class="op">=</span> <span class="number">2</span>;
-    }
-
-    <span class="ident">output_index</span>
-}
-
-<span class="doccomment">/// calculate the base64 encoded string size, including padding if appropriate</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encoded_size</span>(<span class="ident">bytes_len</span>: <span class="ident">usize</span>, <span class="ident">config</span>: <span class="ident">Config</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+<span class="doccomment">/// Calculate the base64 encoded length for a given input length, optionally including any</span>
+<span class="doccomment">/// appropriate padding bytes.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Returns `None` if the encoded length can&#39;t be represented in `usize`. This will happen for</span>
+<span class="doccomment">/// input lengths in approximately the top quarter of the range of `usize`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encoded_len</span>(<span class="ident">bytes_len</span>: <span class="ident">usize</span>, <span class="ident">padding</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">rem</span> <span class="op">=</span> <span class="ident">bytes_len</span> <span class="op">%</span> <span class="number">3</span>;
 
     <span class="kw">let</span> <span class="ident">complete_input_chunks</span> <span class="op">=</span> <span class="ident">bytes_len</span> <span class="op">/</span> <span class="number">3</span>;
     <span class="kw">let</span> <span class="ident">complete_chunk_output</span> <span class="op">=</span> <span class="ident">complete_input_chunks</span>.<span class="ident">checked_mul</span>(<span class="number">4</span>);
 
     <span class="kw">if</span> <span class="ident">rem</span> <span class="op">&gt;</span> <span class="number">0</span> {
-        <span class="kw">if</span> <span class="ident">config</span>.<span class="ident">pad</span> {
+        <span class="kw">if</span> <span class="ident">padding</span> {
             <span class="ident">complete_chunk_output</span>.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span>.<span class="ident">checked_add</span>(<span class="number">4</span>))
         } <span class="kw">else</span> {
             <span class="kw">let</span> <span class="ident">encoded_rem</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">rem</span> {
@@ -985,10 +610,12 @@
 }
 
 <span class="doccomment">/// Write padding characters.</span>
+<span class="doccomment">/// `input_len` is the size of the original, not encoded, input.</span>
 <span class="doccomment">/// `output` is the slice where padding should be written, of length at least 2.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Returns the number of padding bytes written.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_padding</span>(<span class="ident">input_len</span>: <span class="ident">usize</span>, <span class="ident">output</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>]) -&gt; <span class="ident">usize</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">add_padding</span>(<span class="ident">input_len</span>: <span class="ident">usize</span>, <span class="ident">output</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>]) -&gt; <span class="ident">usize</span> {
+    <span class="comment">// TODO base on encoded len to use cheaper mod by 4 (aka &amp; 7)</span>
     <span class="kw">let</span> <span class="ident">rem</span> <span class="op">=</span> <span class="ident">input_len</span> <span class="op">%</span> <span class="number">3</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes_written</span> <span class="op">=</span> <span class="number">0</span>;
     <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..((<span class="number">3</span> <span class="op">-</span> <span class="ident">rem</span>) <span class="op">%</span> <span class="number">3</span>) {
@@ -999,79 +626,102 @@
     <span class="ident">bytes_written</span>
 }
 
+<span class="doccomment">/// Errors that can occur while encoding into a slice.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">EncodeSliceError</span> {
+    <span class="doccomment">/// The provided slice is too small.</span>
+    <span class="ident">OutputSliceTooSmall</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">EncodeSliceError</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::OutputSliceTooSmall</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Output slice too small&quot;</span>),
+        }
+    }
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>, <span class="ident">test</span>))]</span>
+<span class="kw">impl</span> <span class="ident">error::Error</span> <span class="kw">for</span> <span class="ident">EncodeSliceError</span> {
+    <span class="kw">fn</span> <span class="ident">cause</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">error::Error</span><span class="op">&gt;</span> {
+        <span class="prelude-val">None</span>
+    }
+}
+
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="kw">crate</span>::{
-        <span class="ident">decode::decode_config_buf</span>,
-        <span class="ident">tests</span>::{<span class="ident">assert_encode_sanity</span>, <span class="ident">random_config</span>},
-        <span class="ident">Config</span>, <span class="ident">STANDARD</span>, <span class="ident">URL_SAFE_NO_PAD</span>,
-    };
 
+    <span class="kw">use</span> <span class="kw">crate</span>::{
+        <span class="ident">alphabet</span>,
+        <span class="ident">engine::general_purpose</span>::{<span class="ident">GeneralPurpose</span>, <span class="ident">NO_PAD</span>, <span class="ident">STANDARD</span>},
+        <span class="ident">tests</span>::{<span class="ident">assert_encode_sanity</span>, <span class="ident">random_config</span>, <span class="ident">random_engine</span>},
+    };
     <span class="kw">use</span> <span class="ident">rand</span>::{
         <span class="ident">distributions</span>::{<span class="ident">Distribution</span>, <span class="ident">Uniform</span>},
-        <span class="ident">FromEntropy</span>, <span class="ident">Rng</span>,
+        <span class="ident">Rng</span>, <span class="ident">SeedableRng</span>,
     };
-    <span class="kw">use</span> <span class="ident">std</span>;
     <span class="kw">use</span> <span class="ident">std::str</span>;
+
+    <span class="kw">const</span> <span class="ident">URL_SAFE_NO_PAD_ENGINE</span>: <span class="ident">GeneralPurpose</span> <span class="op">=</span> <span class="ident">GeneralPurpose::new</span>(<span class="kw-2">&amp;</span><span class="ident">alphabet::URL_SAFE</span>, <span class="ident">NO_PAD</span>);
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">encoded_size_correct_standard</span>() {
-        <span class="ident">assert_encoded_length</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="ident">STANDARD</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>, <span class="bool-val">true</span>);
 
-        <span class="ident">assert_encoded_length</span>(<span class="number">1</span>, <span class="number">4</span>, <span class="ident">STANDARD</span>);
-        <span class="ident">assert_encoded_length</span>(<span class="number">2</span>, <span class="number">4</span>, <span class="ident">STANDARD</span>);
-        <span class="ident">assert_encoded_length</span>(<span class="number">3</span>, <span class="number">4</span>, <span class="ident">STANDARD</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">1</span>, <span class="number">4</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>, <span class="bool-val">true</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">2</span>, <span class="number">4</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>, <span class="bool-val">true</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">3</span>, <span class="number">4</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>, <span class="bool-val">true</span>);
 
-        <span class="ident">assert_encoded_length</span>(<span class="number">4</span>, <span class="number">8</span>, <span class="ident">STANDARD</span>);
-        <span class="ident">assert_encoded_length</span>(<span class="number">5</span>, <span class="number">8</span>, <span class="ident">STANDARD</span>);
-        <span class="ident">assert_encoded_length</span>(<span class="number">6</span>, <span class="number">8</span>, <span class="ident">STANDARD</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">4</span>, <span class="number">8</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>, <span class="bool-val">true</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">5</span>, <span class="number">8</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>, <span class="bool-val">true</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">6</span>, <span class="number">8</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>, <span class="bool-val">true</span>);
 
-        <span class="ident">assert_encoded_length</span>(<span class="number">7</span>, <span class="number">12</span>, <span class="ident">STANDARD</span>);
-        <span class="ident">assert_encoded_length</span>(<span class="number">8</span>, <span class="number">12</span>, <span class="ident">STANDARD</span>);
-        <span class="ident">assert_encoded_length</span>(<span class="number">9</span>, <span class="number">12</span>, <span class="ident">STANDARD</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">7</span>, <span class="number">12</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>, <span class="bool-val">true</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">8</span>, <span class="number">12</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>, <span class="bool-val">true</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">9</span>, <span class="number">12</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>, <span class="bool-val">true</span>);
 
-        <span class="ident">assert_encoded_length</span>(<span class="number">54</span>, <span class="number">72</span>, <span class="ident">STANDARD</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">54</span>, <span class="number">72</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>, <span class="bool-val">true</span>);
 
-        <span class="ident">assert_encoded_length</span>(<span class="number">55</span>, <span class="number">76</span>, <span class="ident">STANDARD</span>);
-        <span class="ident">assert_encoded_length</span>(<span class="number">56</span>, <span class="number">76</span>, <span class="ident">STANDARD</span>);
-        <span class="ident">assert_encoded_length</span>(<span class="number">57</span>, <span class="number">76</span>, <span class="ident">STANDARD</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">55</span>, <span class="number">76</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>, <span class="bool-val">true</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">56</span>, <span class="number">76</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>, <span class="bool-val">true</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">57</span>, <span class="number">76</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>, <span class="bool-val">true</span>);
 
-        <span class="ident">assert_encoded_length</span>(<span class="number">58</span>, <span class="number">80</span>, <span class="ident">STANDARD</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">58</span>, <span class="number">80</span>, <span class="kw-2">&amp;</span><span class="ident">STANDARD</span>, <span class="bool-val">true</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">encoded_size_correct_no_pad</span>() {
-        <span class="ident">assert_encoded_length</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="ident">URL_SAFE_NO_PAD</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="kw-2">&amp;</span><span class="ident">URL_SAFE_NO_PAD_ENGINE</span>, <span class="bool-val">false</span>);
 
-        <span class="ident">assert_encoded_length</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="ident">URL_SAFE_NO_PAD</span>);
-        <span class="ident">assert_encoded_length</span>(<span class="number">2</span>, <span class="number">3</span>, <span class="ident">URL_SAFE_NO_PAD</span>);
-        <span class="ident">assert_encoded_length</span>(<span class="number">3</span>, <span class="number">4</span>, <span class="ident">URL_SAFE_NO_PAD</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="kw-2">&amp;</span><span class="ident">URL_SAFE_NO_PAD_ENGINE</span>, <span class="bool-val">false</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">2</span>, <span class="number">3</span>, <span class="kw-2">&amp;</span><span class="ident">URL_SAFE_NO_PAD_ENGINE</span>, <span class="bool-val">false</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">3</span>, <span class="number">4</span>, <span class="kw-2">&amp;</span><span class="ident">URL_SAFE_NO_PAD_ENGINE</span>, <span class="bool-val">false</span>);
 
-        <span class="ident">assert_encoded_length</span>(<span class="number">4</span>, <span class="number">6</span>, <span class="ident">URL_SAFE_NO_PAD</span>);
-        <span class="ident">assert_encoded_length</span>(<span class="number">5</span>, <span class="number">7</span>, <span class="ident">URL_SAFE_NO_PAD</span>);
-        <span class="ident">assert_encoded_length</span>(<span class="number">6</span>, <span class="number">8</span>, <span class="ident">URL_SAFE_NO_PAD</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">4</span>, <span class="number">6</span>, <span class="kw-2">&amp;</span><span class="ident">URL_SAFE_NO_PAD_ENGINE</span>, <span class="bool-val">false</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">5</span>, <span class="number">7</span>, <span class="kw-2">&amp;</span><span class="ident">URL_SAFE_NO_PAD_ENGINE</span>, <span class="bool-val">false</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">6</span>, <span class="number">8</span>, <span class="kw-2">&amp;</span><span class="ident">URL_SAFE_NO_PAD_ENGINE</span>, <span class="bool-val">false</span>);
 
-        <span class="ident">assert_encoded_length</span>(<span class="number">7</span>, <span class="number">10</span>, <span class="ident">URL_SAFE_NO_PAD</span>);
-        <span class="ident">assert_encoded_length</span>(<span class="number">8</span>, <span class="number">11</span>, <span class="ident">URL_SAFE_NO_PAD</span>);
-        <span class="ident">assert_encoded_length</span>(<span class="number">9</span>, <span class="number">12</span>, <span class="ident">URL_SAFE_NO_PAD</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">7</span>, <span class="number">10</span>, <span class="kw-2">&amp;</span><span class="ident">URL_SAFE_NO_PAD_ENGINE</span>, <span class="bool-val">false</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">8</span>, <span class="number">11</span>, <span class="kw-2">&amp;</span><span class="ident">URL_SAFE_NO_PAD_ENGINE</span>, <span class="bool-val">false</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">9</span>, <span class="number">12</span>, <span class="kw-2">&amp;</span><span class="ident">URL_SAFE_NO_PAD_ENGINE</span>, <span class="bool-val">false</span>);
 
-        <span class="ident">assert_encoded_length</span>(<span class="number">54</span>, <span class="number">72</span>, <span class="ident">URL_SAFE_NO_PAD</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">54</span>, <span class="number">72</span>, <span class="kw-2">&amp;</span><span class="ident">URL_SAFE_NO_PAD_ENGINE</span>, <span class="bool-val">false</span>);
 
-        <span class="ident">assert_encoded_length</span>(<span class="number">55</span>, <span class="number">74</span>, <span class="ident">URL_SAFE_NO_PAD</span>);
-        <span class="ident">assert_encoded_length</span>(<span class="number">56</span>, <span class="number">75</span>, <span class="ident">URL_SAFE_NO_PAD</span>);
-        <span class="ident">assert_encoded_length</span>(<span class="number">57</span>, <span class="number">76</span>, <span class="ident">URL_SAFE_NO_PAD</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">55</span>, <span class="number">74</span>, <span class="kw-2">&amp;</span><span class="ident">URL_SAFE_NO_PAD_ENGINE</span>, <span class="bool-val">false</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">56</span>, <span class="number">75</span>, <span class="kw-2">&amp;</span><span class="ident">URL_SAFE_NO_PAD_ENGINE</span>, <span class="bool-val">false</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">57</span>, <span class="number">76</span>, <span class="kw-2">&amp;</span><span class="ident">URL_SAFE_NO_PAD_ENGINE</span>, <span class="bool-val">false</span>);
 
-        <span class="ident">assert_encoded_length</span>(<span class="number">58</span>, <span class="number">78</span>, <span class="ident">URL_SAFE_NO_PAD</span>);
+        <span class="ident">assert_encoded_length</span>(<span class="number">58</span>, <span class="number">78</span>, <span class="kw-2">&amp;</span><span class="ident">URL_SAFE_NO_PAD_ENGINE</span>, <span class="bool-val">false</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">encoded_size_overflow</span>() {
-        <span class="macro">assert_eq!</span>(<span class="prelude-val">None</span>, <span class="ident">encoded_size</span>(<span class="ident">std::usize::MAX</span>, <span class="ident">STANDARD</span>));
+        <span class="macro">assert_eq!</span>(<span class="prelude-val">None</span>, <span class="ident">encoded_len</span>(<span class="ident">usize::MAX</span>, <span class="bool-val">true</span>));
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">encode_config_buf_into_nonempty_buffer_doesnt_clobber_prefix</span>() {
+    <span class="kw">fn</span> <span class="ident">encode_engine_string_into_nonempty_buffer_doesnt_clobber_prefix</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">orig_data</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">prefix</span> <span class="op">=</span> <span class="ident">String::new</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">encoded_data_no_prefix</span> <span class="op">=</span> <span class="ident">String::new</span>();
@@ -1104,29 +754,39 @@
             }
             <span class="ident">encoded_data_with_prefix</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">prefix</span>);
 
-            <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">random_config</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
-            <span class="ident">encode_config_buf</span>(<span class="kw-2">&amp;</span><span class="ident">orig_data</span>, <span class="ident">config</span>, <span class="kw-2">&amp;mut</span> <span class="ident">encoded_data_no_prefix</span>);
-            <span class="ident">encode_config_buf</span>(<span class="kw-2">&amp;</span><span class="ident">orig_data</span>, <span class="ident">config</span>, <span class="kw-2">&amp;mut</span> <span class="ident">encoded_data_with_prefix</span>);
+            <span class="kw">let</span> <span class="ident">engine</span> <span class="op">=</span> <span class="ident">random_engine</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
+            <span class="ident">engine</span>.<span class="ident">encode_string</span>(<span class="kw-2">&amp;</span><span class="ident">orig_data</span>, <span class="kw-2">&amp;mut</span> <span class="ident">encoded_data_no_prefix</span>);
+            <span class="ident">engine</span>.<span class="ident">encode_string</span>(<span class="kw-2">&amp;</span><span class="ident">orig_data</span>, <span class="kw-2">&amp;mut</span> <span class="ident">encoded_data_with_prefix</span>);
 
             <span class="macro">assert_eq!</span>(
                 <span class="ident">encoded_data_no_prefix</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="ident">prefix_len</span>,
                 <span class="ident">encoded_data_with_prefix</span>.<span class="ident">len</span>()
             );
-            <span class="ident">assert_encode_sanity</span>(<span class="kw-2">&amp;</span><span class="ident">encoded_data_no_prefix</span>, <span class="ident">config</span>, <span class="ident">input_len</span>);
-            <span class="ident">assert_encode_sanity</span>(<span class="kw-2">&amp;</span><span class="ident">encoded_data_with_prefix</span>[<span class="ident">prefix_len</span>..], <span class="ident">config</span>, <span class="ident">input_len</span>);
+            <span class="ident">assert_encode_sanity</span>(
+                <span class="kw-2">&amp;</span><span class="ident">encoded_data_no_prefix</span>,
+                <span class="ident">engine</span>.<span class="ident">config</span>().<span class="ident">encode_padding</span>(),
+                <span class="ident">input_len</span>,
+            );
+            <span class="ident">assert_encode_sanity</span>(
+                <span class="kw-2">&amp;</span><span class="ident">encoded_data_with_prefix</span>[<span class="ident">prefix_len</span>..],
+                <span class="ident">engine</span>.<span class="ident">config</span>().<span class="ident">encode_padding</span>(),
+                <span class="ident">input_len</span>,
+            );
 
             <span class="comment">// append plain encode onto prefix</span>
-            <span class="ident">prefix</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;mut</span> <span class="ident">encoded_data_no_prefix</span>);
+            <span class="ident">prefix</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">encoded_data_no_prefix</span>);
 
             <span class="macro">assert_eq!</span>(<span class="ident">prefix</span>, <span class="ident">encoded_data_with_prefix</span>);
 
-            <span class="ident">decode_config_buf</span>(<span class="kw-2">&amp;</span><span class="ident">encoded_data_no_prefix</span>, <span class="ident">config</span>, <span class="kw-2">&amp;mut</span> <span class="ident">decoded</span>).<span class="ident">unwrap</span>();
+            <span class="ident">engine</span>
+                .<span class="ident">decode_vec</span>(<span class="kw-2">&amp;</span><span class="ident">encoded_data_no_prefix</span>, <span class="kw-2">&amp;mut</span> <span class="ident">decoded</span>)
+                .<span class="ident">unwrap</span>();
             <span class="macro">assert_eq!</span>(<span class="ident">orig_data</span>, <span class="ident">decoded</span>);
         }
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">encode_config_slice_into_nonempty_buffer_doesnt_clobber_suffix</span>() {
+    <span class="kw">fn</span> <span class="ident">encode_engine_slice_into_nonempty_buffer_doesnt_clobber_suffix</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">orig_data</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">encoded_data</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">encoded_data_original_state</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
@@ -1155,18 +815,18 @@
 
             <span class="ident">encoded_data_original_state</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">encoded_data</span>);
 
-            <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">random_config</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
+            <span class="kw">let</span> <span class="ident">engine</span> <span class="op">=</span> <span class="ident">random_engine</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
 
-            <span class="kw">let</span> <span class="ident">encoded_size</span> <span class="op">=</span> <span class="ident">encoded_size</span>(<span class="ident">input_len</span>, <span class="ident">config</span>).<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">encoded_size</span> <span class="op">=</span> <span class="ident">encoded_len</span>(<span class="ident">input_len</span>, <span class="ident">engine</span>.<span class="ident">config</span>().<span class="ident">encode_padding</span>()).<span class="ident">unwrap</span>();
 
             <span class="macro">assert_eq!</span>(
                 <span class="ident">encoded_size</span>,
-                <span class="ident">encode_config_slice</span>(<span class="kw-2">&amp;</span><span class="ident">orig_data</span>, <span class="ident">config</span>, <span class="kw-2">&amp;mut</span> <span class="ident">encoded_data</span>)
+                <span class="ident">engine</span>.<span class="ident">encode_slice</span>(<span class="kw-2">&amp;</span><span class="ident">orig_data</span>, <span class="kw-2">&amp;mut</span> <span class="ident">encoded_data</span>).<span class="ident">unwrap</span>()
             );
 
             <span class="ident">assert_encode_sanity</span>(
-                <span class="ident">std::str::from_utf8</span>(<span class="kw-2">&amp;</span><span class="ident">encoded_data</span>[<span class="number">0</span>..<span class="ident">encoded_size</span>]).<span class="ident">unwrap</span>(),
-                <span class="ident">config</span>,
+                <span class="ident">str::from_utf8</span>(<span class="kw-2">&amp;</span><span class="ident">encoded_data</span>[<span class="number">0</span>..<span class="ident">encoded_size</span>]).<span class="ident">unwrap</span>(),
+                <span class="ident">engine</span>.<span class="ident">config</span>().<span class="ident">encode_padding</span>(),
                 <span class="ident">input_len</span>,
             );
 
@@ -1175,50 +835,9 @@
                 <span class="kw-2">&amp;</span><span class="ident">encoded_data_original_state</span>[<span class="ident">encoded_size</span>..]
             );
 
-            <span class="ident">decode_config_buf</span>(<span class="kw-2">&amp;</span><span class="ident">encoded_data</span>[<span class="number">0</span>..<span class="ident">encoded_size</span>], <span class="ident">config</span>, <span class="kw-2">&amp;mut</span> <span class="ident">decoded</span>).<span class="ident">unwrap</span>();
-            <span class="macro">assert_eq!</span>(<span class="ident">orig_data</span>, <span class="ident">decoded</span>);
-        }
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">encode_config_slice_fits_into_precisely_sized_slice</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">orig_data</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">encoded_data</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">decoded</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-
-        <span class="kw">let</span> <span class="ident">input_len_range</span> <span class="op">=</span> <span class="ident">Uniform::new</span>(<span class="number">0</span>, <span class="number">1000</span>);
-
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand::rngs::SmallRng::from_entropy</span>();
-
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">10_000</span> {
-            <span class="ident">orig_data</span>.<span class="ident">clear</span>();
-            <span class="ident">encoded_data</span>.<span class="ident">clear</span>();
-            <span class="ident">decoded</span>.<span class="ident">clear</span>();
-
-            <span class="kw">let</span> <span class="ident">input_len</span> <span class="op">=</span> <span class="ident">input_len_range</span>.<span class="ident">sample</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
-
-            <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">input_len</span> {
-                <span class="ident">orig_data</span>.<span class="ident">push</span>(<span class="ident">rng</span>.<span class="ident">gen</span>());
-            }
-
-            <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">random_config</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
-
-            <span class="kw">let</span> <span class="ident">encoded_size</span> <span class="op">=</span> <span class="ident">encoded_size</span>(<span class="ident">input_len</span>, <span class="ident">config</span>).<span class="ident">unwrap</span>();
-
-            <span class="ident">encoded_data</span>.<span class="ident">resize</span>(<span class="ident">encoded_size</span>, <span class="number">0</span>);
-
-            <span class="macro">assert_eq!</span>(
-                <span class="ident">encoded_size</span>,
-                <span class="ident">encode_config_slice</span>(<span class="kw-2">&amp;</span><span class="ident">orig_data</span>, <span class="ident">config</span>, <span class="kw-2">&amp;mut</span> <span class="ident">encoded_data</span>)
-            );
-
-            <span class="ident">assert_encode_sanity</span>(
-                <span class="ident">std::str::from_utf8</span>(<span class="kw-2">&amp;</span><span class="ident">encoded_data</span>[<span class="number">0</span>..<span class="ident">encoded_size</span>]).<span class="ident">unwrap</span>(),
-                <span class="ident">config</span>,
-                <span class="ident">input_len</span>,
-            );
-
-            <span class="ident">decode_config_buf</span>(<span class="kw-2">&amp;</span><span class="ident">encoded_data</span>[<span class="number">0</span>..<span class="ident">encoded_size</span>], <span class="ident">config</span>, <span class="kw-2">&amp;mut</span> <span class="ident">decoded</span>).<span class="ident">unwrap</span>();
+            <span class="ident">engine</span>
+                .<span class="ident">decode_vec</span>(<span class="kw-2">&amp;</span><span class="ident">encoded_data</span>[<span class="number">0</span>..<span class="ident">encoded_size</span>], <span class="kw-2">&amp;mut</span> <span class="ident">decoded</span>)
+                .<span class="ident">unwrap</span>();
             <span class="macro">assert_eq!</span>(<span class="ident">orig_data</span>, <span class="ident">decoded</span>);
         }
     }
@@ -1243,17 +862,17 @@
             }
 
             <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">random_config</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
+            <span class="kw">let</span> <span class="ident">engine</span> <span class="op">=</span> <span class="ident">random_engine</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
 
             <span class="comment">// fill up the output buffer with garbage</span>
-            <span class="kw">let</span> <span class="ident">encoded_size</span> <span class="op">=</span> <span class="ident">encoded_size</span>(<span class="ident">input_len</span>, <span class="ident">config</span>).<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">encoded_size</span> <span class="op">=</span> <span class="ident">encoded_len</span>(<span class="ident">input_len</span>, <span class="ident">config</span>.<span class="ident">encode_padding</span>()).<span class="ident">unwrap</span>();
             <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">encoded_size</span> {
                 <span class="ident">output</span>.<span class="ident">push</span>(<span class="ident">rng</span>.<span class="ident">gen</span>());
             }
 
-            <span class="kw">let</span> <span class="ident">orig_output_buf</span> <span class="op">=</span> <span class="ident">output</span>.<span class="ident">to_vec</span>();
+            <span class="kw">let</span> <span class="ident">orig_output_buf</span> <span class="op">=</span> <span class="ident">output</span>.<span class="ident">clone</span>();
 
-            <span class="kw">let</span> <span class="ident">bytes_written</span> <span class="op">=</span>
-                <span class="ident">encode_to_slice</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>, <span class="kw-2">&amp;mut</span> <span class="ident">output</span>, <span class="ident">config</span>.<span class="ident">char_set</span>.<span class="ident">encode_table</span>());
+            <span class="kw">let</span> <span class="ident">bytes_written</span> <span class="op">=</span> <span class="ident">engine</span>.<span class="ident">internal_encode</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>, <span class="kw-2">&amp;mut</span> <span class="ident">output</span>);
 
             <span class="comment">// make sure the part beyond bytes_written is the same garbage it was before</span>
             <span class="macro">assert_eq!</span>(<span class="ident">orig_output_buf</span>[<span class="ident">bytes_written</span>..], <span class="ident">output</span>[<span class="ident">bytes_written</span>..]);
@@ -1282,17 +901,17 @@
                 <span class="ident">input</span>.<span class="ident">push</span>(<span class="ident">rng</span>.<span class="ident">gen</span>());
             }
 
-            <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">random_config</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
+            <span class="kw">let</span> <span class="ident">engine</span> <span class="op">=</span> <span class="ident">random_engine</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
 
             <span class="comment">// fill up the output buffer with garbage</span>
-            <span class="kw">let</span> <span class="ident">encoded_size</span> <span class="op">=</span> <span class="ident">encoded_size</span>(<span class="ident">input_len</span>, <span class="ident">config</span>).<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">encoded_size</span> <span class="op">=</span> <span class="ident">encoded_len</span>(<span class="ident">input_len</span>, <span class="ident">engine</span>.<span class="ident">config</span>().<span class="ident">encode_padding</span>()).<span class="ident">unwrap</span>();
             <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">encoded_size</span> <span class="op">+</span> <span class="number">1000</span> {
                 <span class="ident">output</span>.<span class="ident">push</span>(<span class="ident">rng</span>.<span class="ident">gen</span>());
             }
 
-            <span class="kw">let</span> <span class="ident">orig_output_buf</span> <span class="op">=</span> <span class="ident">output</span>.<span class="ident">to_vec</span>();
+            <span class="kw">let</span> <span class="ident">orig_output_buf</span> <span class="op">=</span> <span class="ident">output</span>.<span class="ident">clone</span>();
 
-            <span class="ident">encode_with_padding</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>, <span class="ident">config</span>, <span class="ident">encoded_size</span>, <span class="kw-2">&amp;mut</span> <span class="ident">output</span>[<span class="number">0</span>..<span class="ident">encoded_size</span>]);
+            <span class="ident">encode_with_padding</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>, <span class="kw-2">&amp;mut</span> <span class="ident">output</span>[<span class="number">0</span>..<span class="ident">encoded_size</span>], <span class="kw-2">&amp;</span><span class="ident">engine</span>, <span class="ident">encoded_size</span>);
 
             <span class="comment">// make sure the part beyond b64 is the same garbage it was before</span>
             <span class="macro">assert_eq!</span>(<span class="ident">orig_output_buf</span>[<span class="ident">encoded_size</span>..], <span class="ident">output</span>[<span class="ident">encoded_size</span>..]);
@@ -1317,7 +936,7 @@
                 <span class="ident">output</span>.<span class="ident">push</span>(<span class="ident">rng</span>.<span class="ident">gen</span>());
             }
 
-            <span class="kw">let</span> <span class="ident">orig_output_buf</span> <span class="op">=</span> <span class="ident">output</span>.<span class="ident">to_vec</span>();
+            <span class="kw">let</span> <span class="ident">orig_output_buf</span> <span class="op">=</span> <span class="ident">output</span>.<span class="ident">clone</span>();
 
             <span class="kw">let</span> <span class="ident">bytes_written</span> <span class="op">=</span> <span class="ident">add_padding</span>(<span class="ident">input_len</span>, <span class="kw-2">&amp;mut</span> <span class="ident">output</span>);
 
@@ -1329,8 +948,13 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">assert_encoded_length</span>(<span class="ident">input_len</span>: <span class="ident">usize</span>, <span class="ident">encoded_len</span>: <span class="ident">usize</span>, <span class="ident">config</span>: <span class="ident">Config</span>) {
-        <span class="macro">assert_eq!</span>(<span class="ident">encoded_len</span>, <span class="ident">encoded_size</span>(<span class="ident">input_len</span>, <span class="ident">config</span>).<span class="ident">unwrap</span>());
+    <span class="kw">fn</span> <span class="ident">assert_encoded_length</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">Engine</span><span class="op">&gt;</span>(
+        <span class="ident">input_len</span>: <span class="ident">usize</span>,
+        <span class="ident">enc_len</span>: <span class="ident">usize</span>,
+        <span class="ident">engine</span>: <span class="kw-2">&amp;</span><span class="ident">E</span>,
+        <span class="ident">padded</span>: <span class="ident">bool</span>,
+    ) {
+        <span class="macro">assert_eq!</span>(<span class="ident">enc_len</span>, <span class="ident">encoded_len</span>(<span class="ident">input_len</span>, <span class="ident">padded</span>).<span class="ident">unwrap</span>());
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand::rngs::SmallRng::from_entropy</span>();
@@ -1339,17 +963,19 @@
             <span class="ident">bytes</span>.<span class="ident">push</span>(<span class="ident">rng</span>.<span class="ident">gen</span>());
         }
 
-        <span class="kw">let</span> <span class="ident">encoded</span> <span class="op">=</span> <span class="ident">encode_config</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>, <span class="ident">config</span>);
-        <span class="ident">assert_encode_sanity</span>(<span class="kw-2">&amp;</span><span class="ident">encoded</span>, <span class="ident">config</span>, <span class="ident">input_len</span>);
+        <span class="kw">let</span> <span class="ident">encoded</span> <span class="op">=</span> <span class="ident">engine</span>.<span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
+        <span class="ident">assert_encode_sanity</span>(<span class="kw-2">&amp;</span><span class="ident">encoded</span>, <span class="ident">padded</span>, <span class="ident">input_len</span>);
 
-        <span class="macro">assert_eq!</span>(<span class="ident">encoded_len</span>, <span class="ident">encoded</span>.<span class="ident">len</span>());
+        <span class="macro">assert_eq!</span>(<span class="ident">enc_len</span>, <span class="ident">encoded</span>.<span class="ident">len</span>());
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">encode_imap</span>() {
         <span class="macro">assert_eq!</span>(
-            <span class="ident">encode_config</span>(<span class="string">b&quot;\xFB\xFF&quot;</span>, <span class="ident"><span class="kw">crate</span>::IMAP_MUTF7</span>),
-            <span class="ident">encode_config</span>(<span class="string">b&quot;\xFB\xFF&quot;</span>, <span class="ident"><span class="kw">crate</span>::STANDARD_NO_PAD</span>).<span class="ident">replace</span>(<span class="string">&quot;/&quot;</span>, <span class="string">&quot;,&quot;</span>)
+            <span class="kw-2">&amp;</span><span class="ident">GeneralPurpose::new</span>(<span class="kw-2">&amp;</span><span class="ident">alphabet::IMAP_MUTF7</span>, <span class="ident">NO_PAD</span>).<span class="ident">encode</span>(<span class="string">b&quot;\xFB\xFF&quot;</span>),
+            <span class="kw-2">&amp;</span><span class="ident">GeneralPurpose::new</span>(<span class="kw-2">&amp;</span><span class="ident">alphabet::STANDARD</span>, <span class="ident">NO_PAD</span>)
+                .<span class="ident">encode</span>(<span class="string">b&quot;\xFB\xFF&quot;</span>)
+                .<span class="ident">replace</span>(<span class="string">&#39;/&#39;</span>, <span class="string">&quot;,&quot;</span>)
         );
     }
 }
