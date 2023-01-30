@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.24.2/src/net/unix/datagram/socket.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>socket.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../../storage.js"></script><script src="../../../../../crates.js"></script><script defer src="../../../../../main.js"></script><script defer src="../../../../../source-script.js"></script><script defer src="../../../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.25.0/src/net/unix/datagram/socket.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>socket.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../../storage.js"></script><script src="../../../../../crates.js"></script><script defer src="../../../../../main.js"></script><script defer src="../../../../../source-script.js"></script><script defer src="../../../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../../tokio/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -1436,6 +1436,11 @@
 <span id="1431">1431</span>
 <span id="1432">1432</span>
 <span id="1433">1433</span>
+<span id="1434">1434</span>
+<span id="1435">1435</span>
+<span id="1436">1436</span>
+<span id="1437">1437</span>
+<span id="1438">1438</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::io</span>::{<span class="ident">Interest</span>, <span class="ident">PollEvented</span>, <span class="ident">ReadBuf</span>, <span class="ident">Ready</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::net::unix::SocketAddr</span>;
 
@@ -1864,9 +1869,16 @@
     <span class="doccomment">/// Creates new `UnixDatagram` from a `std::os::unix::net::UnixDatagram`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This function is intended to be used to wrap a UnixDatagram from the</span>
-    <span class="doccomment">/// standard library in the Tokio equivalent. The conversion assumes</span>
-    <span class="doccomment">/// nothing about the underlying datagram; it is left up to the user to set</span>
-    <span class="doccomment">/// it in non-blocking mode.</span>
+    <span class="doccomment">/// standard library in the Tokio equivalent.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Notes</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The caller is responsible for ensuring that the socker is in</span>
+    <span class="doccomment">/// non-blocking mode. Otherwise all I/O operations on the socket</span>
+    <span class="doccomment">/// will block the thread, which will cause unexpected behavior.</span>
+    <span class="doccomment">/// Non-blocking mode can be set using [`set_nonblocking`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`set_nonblocking`]: std::os::unix::net::UnixDatagram::set_nonblocking</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Panics</span>
     <span class="doccomment">///</span>
@@ -1908,21 +1920,19 @@
     <span class="doccomment">/// Turns a [`tokio::net::UnixDatagram`] into a [`std::os::unix::net::UnixDatagram`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The returned [`std::os::unix::net::UnixDatagram`] will have nonblocking</span>
-    <span class="doccomment">/// mode set as `true`.  Use [`set_nonblocking`] to change the blocking mode</span>
+    <span class="doccomment">/// mode set as `true`. Use [`set_nonblocking`] to change the blocking mode</span>
     <span class="doccomment">/// if needed.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use std::error::Error;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// #[tokio::main]</span>
-    <span class="doccomment">/// async fn main() -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {</span>
-    <span class="doccomment">///     let tokio_socket = tokio::net::UnixDatagram::bind(&quot;127.0.0.1:0&quot;)?;</span>
-    <span class="doccomment">///     let std_socket = tokio_socket.into_std()?;</span>
-    <span class="doccomment">///     std_socket.set_nonblocking(false)?;</span>
-    <span class="doccomment">///     Ok(())</span>
-    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # use std::error::Error;</span>
+    <span class="doccomment">/// # async fn dox() -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {</span>
+    <span class="doccomment">/// let tokio_socket = tokio::net::UnixDatagram::bind(&quot;/path/to/the/socket&quot;)?;</span>
+    <span class="doccomment">/// let std_socket = tokio_socket.into_std()?;</span>
+    <span class="doccomment">/// std_socket.set_nonblocking(false)?;</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`tokio::net::UnixDatagram`]: UnixDatagram</span>
