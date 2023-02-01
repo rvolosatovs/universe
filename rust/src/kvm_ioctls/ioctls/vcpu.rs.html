@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/kvm-ioctls-0.12.0/src/ioctls/vcpu.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>vcpu.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/kvm-ioctls-0.13.0/src/ioctls/vcpu.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>vcpu.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../kvm_ioctls/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -2703,36 +2703,6 @@
 <span id="2698">2698</span>
 <span id="2699">2699</span>
 <span id="2700">2700</span>
-<span id="2701">2701</span>
-<span id="2702">2702</span>
-<span id="2703">2703</span>
-<span id="2704">2704</span>
-<span id="2705">2705</span>
-<span id="2706">2706</span>
-<span id="2707">2707</span>
-<span id="2708">2708</span>
-<span id="2709">2709</span>
-<span id="2710">2710</span>
-<span id="2711">2711</span>
-<span id="2712">2712</span>
-<span id="2713">2713</span>
-<span id="2714">2714</span>
-<span id="2715">2715</span>
-<span id="2716">2716</span>
-<span id="2717">2717</span>
-<span id="2718">2718</span>
-<span id="2719">2719</span>
-<span id="2720">2720</span>
-<span id="2721">2721</span>
-<span id="2722">2722</span>
-<span id="2723">2723</span>
-<span id="2724">2724</span>
-<span id="2725">2725</span>
-<span id="2726">2726</span>
-<span id="2727">2727</span>
-<span id="2728">2728</span>
-<span id="2729">2729</span>
-<span id="2730">2730</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.</span>
 <span class="comment">// SPDX-License-Identifier: Apache-2.0 OR MIT</span>
 <span class="comment">//</span>
@@ -2879,9 +2849,9 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>)))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_regs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">kvm_regs</span><span class="op">&gt;</span> {
-        <span class="comment">// Safe because we know that our file is a vCPU fd, we know the kernel will only read the</span>
-        <span class="comment">// correct amount of memory from our pointer, and we verify the return result.</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">regs</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">std::mem::zeroed</span>() };
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">regs</span> <span class="op">=</span> <span class="ident">kvm_regs::default</span>();
+        <span class="comment">// SAFETY: Safe because we know that our file is a vCPU fd, we know the kernel will only</span>
+        <span class="comment">// read the correct amount of memory from our pointer, and we verify the return result.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_REGS</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">regs</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
@@ -2923,6 +2893,7 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_device_attr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">device_attr</span>: <span class="kw-2">&amp;</span><span class="ident">kvm_device_attr</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="comment">// SAFETY: Safe because we call this with a Vcpu fd and we trust the kernel.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_DEVICE_ATTR</span>(), <span class="ident">device_attr</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
@@ -2962,6 +2933,7 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">has_device_attr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">device_attr</span>: <span class="kw-2">&amp;</span><span class="ident">kvm_device_attr</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="comment">// SAFETY: Safe because we call this with a Vcpu fd and we trust the kernel.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_HAS_DEVICE_ATTR</span>(), <span class="ident">device_attr</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
@@ -2996,8 +2968,8 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>)))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_regs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">regs</span>: <span class="kw-2">&amp;</span><span class="ident">kvm_regs</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="comment">// Safe because we know that our file is a vCPU fd, we know the kernel will only read the</span>
-        <span class="comment">// correct amount of memory from our pointer, and we verify the return result.</span>
+        <span class="comment">// SAFETY: Safe because we know that our file is a vCPU fd, we know the kernel will only</span>
+        <span class="comment">// read the correct amount of memory from our pointer, and we verify the return result.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_REGS</span>(), <span class="ident">regs</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
@@ -3024,10 +2996,9 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_sregs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">kvm_sregs</span><span class="op">&gt;</span> {
-        <span class="comment">// Safe because we know that our file is a vCPU fd, we know the kernel will only write the</span>
-        <span class="comment">// correct amount of memory to our pointer, and we verify the return result.</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">regs</span> <span class="op">=</span> <span class="ident">kvm_sregs::default</span>();
-
+        <span class="comment">// SAFETY: Safe because we know that our file is a vCPU fd, we know the kernel will only</span>
+        <span class="comment">// write the correct amount of memory to our pointer, and we verify the return result.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_SREGS</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">regs</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
@@ -3061,8 +3032,8 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_sregs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">sregs</span>: <span class="kw-2">&amp;</span><span class="ident">kvm_sregs</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="comment">// Safe because we know that our file is a vCPU fd, we know the kernel will only read the</span>
-        <span class="comment">// correct amount of memory from our pointer, and we verify the return result.</span>
+        <span class="comment">// SAFETY: Safe because we know that our file is a vCPU fd, we know the kernel will only</span>
+        <span class="comment">// read the correct amount of memory from our pointer, and we verify the return result.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_SREGS</span>(), <span class="ident">sregs</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
@@ -3090,11 +3061,8 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_fpu</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">kvm_fpu</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fpu</span> <span class="op">=</span> <span class="ident">kvm_fpu::default</span>();
-
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// Here we trust the kernel not to read past the end of the kvm_fpu struct.</span>
-            <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_FPU</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">fpu</span>)
-        };
+        <span class="comment">// SAFETY: Here we trust the kernel not to read past the end of the kvm_fpu struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_FPU</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">fpu</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3130,10 +3098,8 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_fpu</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fpu</span>: <span class="kw-2">&amp;</span><span class="ident">kvm_fpu</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// Here we trust the kernel not to read past the end of the kvm_fpu struct.</span>
-            <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_FPU</span>(), <span class="ident">fpu</span>)
-        };
+        <span class="comment">// SAFETY: Here we trust the kernel not to read past the end of the kvm_fpu struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_FPU</span>(), <span class="ident">fpu</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&lt;</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3177,10 +3143,8 @@
     <span class="doccomment">///</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_cpuid2</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">cpuid</span>: <span class="kw-2">&amp;</span><span class="ident">CpuId</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// Here we trust the kernel not to read past the end of the kvm_cpuid2 struct.</span>
-            <span class="ident">ioctl_with_ptr</span>(<span class="self">self</span>, <span class="ident">KVM_SET_CPUID2</span>(), <span class="ident">cpuid</span>.<span class="ident">as_fam_struct_ptr</span>())
-        };
+        <span class="comment">// SAFETY: Here we trust the kernel not to read past the end of the kvm_cpuid2 struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ptr</span>(<span class="self">self</span>, <span class="ident">KVM_SET_CPUID2</span>(), <span class="ident">cpuid</span>.<span class="ident">as_fam_struct_ptr</span>()) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&lt;</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3218,10 +3182,9 @@
         }
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cpuid</span> <span class="op">=</span> <span class="ident">CpuId::new</span>(<span class="ident">num_entries</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">errno::Error::new</span>(<span class="ident">libc::ENOMEM</span>))<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// Here we trust the kernel not to read past the end of the kvm_cpuid2 struct.</span>
-            <span class="ident">ioctl_with_mut_ptr</span>(<span class="self">self</span>, <span class="ident">KVM_GET_CPUID2</span>(), <span class="ident">cpuid</span>.<span class="ident">as_mut_fam_struct_ptr</span>())
-        };
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span>
+            <span class="comment">// SAFETY: Here we trust the kernel not to read past the end of the kvm_cpuid2 struct.</span>
+            <span class="kw">unsafe</span> { <span class="ident">ioctl_with_mut_ptr</span>(<span class="self">self</span>, <span class="ident">KVM_GET_CPUID2</span>(), <span class="ident">cpuid</span>.<span class="ident">as_mut_fam_struct_ptr</span>()) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3264,7 +3227,7 @@
     <span class="doccomment">///</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enable_cap</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">cap</span>: <span class="kw-2">&amp;</span><span class="ident">kvm_enable_cap</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="comment">// The ioctl is safe because we allocated the struct and we know the</span>
+        <span class="comment">// SAFETY: The ioctl is safe because we allocated the struct and we know the</span>
         <span class="comment">// kernel will write exactly the size of the struct.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_ENABLE_CAP</span>(), <span class="ident">cap</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">==</span> <span class="number">0</span> {
@@ -3296,11 +3259,9 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_lapic</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">kvm_lapic_state</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">klapic</span> <span class="op">=</span> <span class="ident">kvm_lapic_state::default</span>();
 
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// The ioctl is unsafe unless you trust the kernel not to write past the end of the</span>
-            <span class="comment">// local_apic struct.</span>
-            <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_LAPIC</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">klapic</span>)
-        };
+        <span class="comment">// SAFETY: The ioctl is unsafe unless you trust the kernel not to write past the end of the</span>
+        <span class="comment">// local_apic struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_LAPIC</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">klapic</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&lt;</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3341,10 +3302,8 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_lapic</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">klapic</span>: <span class="kw-2">&amp;</span><span class="ident">kvm_lapic_state</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// The ioctl is safe because the kernel will only read from the klapic struct.</span>
-            <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_LAPIC</span>(), <span class="ident">klapic</span>)
-        };
+        <span class="comment">// SAFETY: The ioctl is safe because the kernel will only read from the klapic struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_LAPIC</span>(), <span class="ident">klapic</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&lt;</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3389,10 +3348,8 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_msrs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">msrs</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Msrs</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// Here we trust the kernel not to read past the end of the kvm_msrs struct.</span>
-            <span class="ident">ioctl_with_mut_ptr</span>(<span class="self">self</span>, <span class="ident">KVM_GET_MSRS</span>(), <span class="ident">msrs</span>.<span class="ident">as_mut_fam_struct_ptr</span>())
-        };
+        <span class="comment">// SAFETY: Here we trust the kernel not to read past the end of the kvm_msrs struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_mut_ptr</span>(<span class="self">self</span>, <span class="ident">KVM_GET_MSRS</span>(), <span class="ident">msrs</span>.<span class="ident">as_mut_fam_struct_ptr</span>()) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&lt;</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3430,10 +3387,8 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_msrs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">msrs</span>: <span class="kw-2">&amp;</span><span class="ident">Msrs</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// Here we trust the kernel not to read past the end of the kvm_msrs struct.</span>
-            <span class="ident">ioctl_with_ptr</span>(<span class="self">self</span>, <span class="ident">KVM_SET_MSRS</span>(), <span class="ident">msrs</span>.<span class="ident">as_fam_struct_ptr</span>())
-        };
+        <span class="comment">// SAFETY: Here we trust the kernel not to read past the end of the kvm_msrs struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ptr</span>(<span class="self">self</span>, <span class="ident">KVM_SET_MSRS</span>(), <span class="ident">msrs</span>.<span class="ident">as_fam_struct_ptr</span>()) };
         <span class="comment">// KVM_SET_MSRS actually returns the number of msr entries written.</span>
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&lt;</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
@@ -3469,10 +3424,8 @@
     ))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_mp_state</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">kvm_mp_state</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">mp_state</span> <span class="op">=</span> <span class="ident">Default::default</span>();
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// Here we trust the kernel not to read past the end of the kvm_mp_state struct.</span>
-            <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_MP_STATE</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">mp_state</span>)
-        };
+        <span class="comment">// SAFETY: Here we trust the kernel not to read past the end of the kvm_mp_state struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_MP_STATE</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">mp_state</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3508,10 +3461,8 @@
         <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;s390&quot;</span>
     ))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_mp_state</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">mp_state</span>: <span class="ident">kvm_mp_state</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// Here we trust the kernel not to read past the end of the kvm_mp_state struct.</span>
-            <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_MP_STATE</span>(), <span class="kw-2">&amp;</span><span class="ident">mp_state</span>)
-        };
+        <span class="comment">// SAFETY: Here we trust the kernel not to read past the end of the kvm_mp_state struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_MP_STATE</span>(), <span class="kw-2">&amp;</span><span class="ident">mp_state</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3540,10 +3491,8 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_xsave</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">kvm_xsave</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">xsave</span> <span class="op">=</span> <span class="ident">Default::default</span>();
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// Here we trust the kernel not to read past the end of the kvm_xsave struct.</span>
-            <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_XSAVE</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">xsave</span>)
-        };
+        <span class="comment">// SAFETY: Here we trust the kernel not to read past the end of the kvm_xsave struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_XSAVE</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">xsave</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3573,10 +3522,8 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_xsave</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">xsave</span>: <span class="kw-2">&amp;</span><span class="ident">kvm_xsave</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// Here we trust the kernel not to read past the end of the kvm_xsave struct.</span>
-            <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_XSAVE</span>(), <span class="ident">xsave</span>)
-        };
+        <span class="comment">// SAFETY: Here we trust the kernel not to read past the end of the kvm_xsave struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_XSAVE</span>(), <span class="ident">xsave</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3605,10 +3552,8 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_xcrs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">kvm_xcrs</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">xcrs</span> <span class="op">=</span> <span class="ident">Default::default</span>();
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// Here we trust the kernel not to read past the end of the kvm_xcrs struct.</span>
-            <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_XCRS</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">xcrs</span>)
-        };
+        <span class="comment">// SAFETY: Here we trust the kernel not to read past the end of the kvm_xcrs struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_XCRS</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">xcrs</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3638,10 +3583,8 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_xcrs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">xcrs</span>: <span class="kw-2">&amp;</span><span class="ident">kvm_xcrs</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// Here we trust the kernel not to read past the end of the kvm_xcrs struct.</span>
-            <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_XCRS</span>(), <span class="ident">xcrs</span>)
-        };
+        <span class="comment">// SAFETY: Here we trust the kernel not to read past the end of the kvm_xcrs struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_XCRS</span>(), <span class="ident">xcrs</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3670,10 +3613,8 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_debug_regs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">kvm_debugregs</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">debug_regs</span> <span class="op">=</span> <span class="ident">Default::default</span>();
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// Here we trust the kernel not to read past the end of the kvm_debugregs struct.</span>
-            <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_DEBUGREGS</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">debug_regs</span>)
-        };
+        <span class="comment">// SAFETY: Here we trust the kernel not to read past the end of the kvm_debugregs struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_DEBUGREGS</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">debug_regs</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3703,10 +3644,8 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_debug_regs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">debug_regs</span>: <span class="kw-2">&amp;</span><span class="ident">kvm_debugregs</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// Here we trust the kernel not to read past the end of the kvm_debugregs struct.</span>
-            <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_DEBUGREGS</span>(), <span class="ident">debug_regs</span>)
-        };
+        <span class="comment">// SAFETY: Here we trust the kernel not to read past the end of the kvm_debugregs struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_DEBUGREGS</span>(), <span class="ident">debug_regs</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3743,10 +3682,8 @@
     ))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_vcpu_events</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">kvm_vcpu_events</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vcpu_events</span> <span class="op">=</span> <span class="ident">Default::default</span>();
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// Here we trust the kernel not to read past the end of the kvm_vcpu_events struct.</span>
-            <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_VCPU_EVENTS</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">vcpu_events</span>)
-        };
+        <span class="comment">// SAFETY: Here we trust the kernel not to read past the end of the kvm_vcpu_events struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_VCPU_EVENTS</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">vcpu_events</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3784,10 +3721,8 @@
     ))]</span>
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_vcpu_events</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">vcpu_events</span>: <span class="kw-2">&amp;</span><span class="ident">kvm_vcpu_events</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// Here we trust the kernel not to read past the end of the kvm_vcpu_events struct.</span>
-            <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_VCPU_EVENTS</span>(), <span class="ident">vcpu_events</span>)
-        };
+        <span class="comment">// SAFETY: Here we trust the kernel not to read past the end of the kvm_vcpu_events struct.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_VCPU_EVENTS</span>(), <span class="ident">vcpu_events</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -3822,7 +3757,7 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">vcpu_init</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">kvi</span>: <span class="kw-2">&amp;</span><span class="ident">kvm_vcpu_init</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="comment">// This is safe because we allocated the struct and we know the kernel will read</span>
+        <span class="comment">// SAFETY: This is safe because we allocated the struct and we know the kernel will read</span>
         <span class="comment">// exactly the size of the struct.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_ARM_VCPU_INIT</span>(), <span class="ident">kvi</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&lt;</span> <span class="number">0</span> {
@@ -3863,6 +3798,8 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_reg_list</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">reg_list</span>: <span class="kw-2">&amp;mut</span> <span class="ident">RegList</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span>
+            <span class="comment">// SAFETY: This is safe because we allocated the struct and we trust the kernel will read</span>
+            <span class="comment">// exactly the size of the struct.</span>
             <span class="kw">unsafe</span> { <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_REG_LIST</span>(), <span class="ident">reg_list</span>.<span class="ident">as_mut_fam_struct</span>()) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&lt;</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
@@ -3914,6 +3851,7 @@
         <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;ppc&quot;</span>
     ))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_guest_debug</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">debug_struct</span>: <span class="kw-2">&amp;</span><span class="ident">kvm_guest_debug</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="comment">// SAFETY: Safe because we allocated the structure and we trust the kernel.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_GUEST_DEBUG</span>(), <span class="ident">debug_struct</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&lt;</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
@@ -3937,7 +3875,7 @@
             <span class="ident">id</span>: <span class="ident">reg_id</span>,
             <span class="ident">addr</span>: <span class="ident">data_ptr</span> <span class="kw">as</span> <span class="ident">u64</span>,
         };
-        <span class="comment">// This is safe because we allocated the struct and we know the kernel will read</span>
+        <span class="comment">// SAFETY: This is safe because we allocated the struct and we know the kernel will read</span>
         <span class="comment">// exactly the size of the struct.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_ref</span>(<span class="self">self</span>, <span class="ident">KVM_SET_ONE_REG</span>(), <span class="kw-2">&amp;</span><span class="ident">onereg</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&lt;</span> <span class="number">0</span> {
@@ -3961,7 +3899,8 @@
             <span class="ident">id</span>: <span class="ident">reg_id</span>,
             <span class="ident">addr</span>: <span class="kw-2">&amp;mut</span> <span class="ident">reg_value</span> <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="kw">_</span> <span class="kw">as</span> <span class="ident">u64</span>,
         };
-
+        <span class="comment">// SAFETY: This is safe because we allocated the struct and we know the kernel will read</span>
+        <span class="comment">// exactly the size of the struct.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_GET_ONE_REG</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">onereg</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&lt;</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
@@ -3975,7 +3914,7 @@
     <span class="doccomment">/// [KVM API documentation](https://www.kernel.org/doc/Documentation/virtual/kvm/api.txt).</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">kvmclock_ctrl</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="comment">// Safe because we know that our file is a KVM fd and that the request</span>
+        <span class="comment">// SAFETY: Safe because we know that our file is a KVM fd and that the request</span>
         <span class="comment">// is one of the ones defined by kernel.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl</span>(<span class="self">self</span>, <span class="ident">KVM_KVMCLOCK_CTRL</span>()) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
@@ -4060,7 +3999,7 @@
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">VcpuExit</span><span class="op">&gt;</span> {
-        <span class="comment">// Safe because we know that our file is a vCPU fd and we verify the return result.</span>
+        <span class="comment">// SAFETY: Safe because we know that our file is a vCPU fd and we verify the return result.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl</span>(<span class="self">self</span>, <span class="ident">KVM_RUN</span>()) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">==</span> <span class="number">0</span> {
             <span class="kw">let</span> <span class="ident">run</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">kvm_run_ptr</span>.<span class="ident">as_mut_ref</span>();
@@ -4071,15 +4010,15 @@
                 <span class="ident">KVM_EXIT_EXCEPTION</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">VcpuExit::Exception</span>),
                 <span class="ident">KVM_EXIT_IO</span> =&gt; {
                     <span class="kw">let</span> <span class="ident">run_start</span> <span class="op">=</span> <span class="ident">run</span> <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">kvm_run</span> <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">u8</span>;
-                    <span class="comment">// Safe because the exit_reason (which comes from the kernel) told us which</span>
-                    <span class="comment">// union field to use.</span>
+                    <span class="comment">// SAFETY: Safe because the exit_reason (which comes from the kernel) told us</span>
+                    <span class="comment">// which union field to use.</span>
                     <span class="kw">let</span> <span class="ident">io</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">run</span>.<span class="ident">__bindgen_anon_1</span>.<span class="ident">io</span> };
                     <span class="kw">let</span> <span class="ident">port</span> <span class="op">=</span> <span class="ident">io</span>.<span class="ident">port</span>;
                     <span class="kw">let</span> <span class="ident">data_size</span> <span class="op">=</span> <span class="ident">io</span>.<span class="ident">count</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">*</span> <span class="ident">io</span>.<span class="ident">size</span> <span class="kw">as</span> <span class="ident">usize</span>;
-                    <span class="comment">// The data_offset is defined by the kernel to be some number of bytes into the</span>
-                    <span class="comment">// kvm_run stucture, which we have fully mmap&#39;d.</span>
+                    <span class="comment">// SAFETY: The data_offset is defined by the kernel to be some number of bytes</span>
+                    <span class="comment">// into the kvm_run stucture, which we have fully mmap&#39;d.</span>
                     <span class="kw">let</span> <span class="ident">data_ptr</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">run_start</span>.<span class="ident">offset</span>(<span class="ident">io</span>.<span class="ident">data_offset</span> <span class="kw">as</span> <span class="ident">isize</span>) };
-                    <span class="comment">// The slice&#39;s lifetime is limited to the lifetime of this vCPU, which is equal</span>
+                    <span class="comment">// SAFETY: The slice&#39;s lifetime is limited to the lifetime of this vCPU, which is equal</span>
                     <span class="comment">// to the mmap of the `kvm_run` struct that this is slicing from.</span>
                     <span class="kw">let</span> <span class="ident">data_slice</span> <span class="op">=</span> <span class="kw">unsafe</span> {
                         <span class="ident">std::slice::from_raw_parts_mut</span>::<span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>(<span class="ident">data_ptr</span> <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">u8</span>, <span class="ident">data_size</span>)
@@ -4092,15 +4031,15 @@
                 }
                 <span class="ident">KVM_EXIT_HYPERCALL</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">VcpuExit::Hypercall</span>),
                 <span class="ident">KVM_EXIT_DEBUG</span> =&gt; {
-                    <span class="comment">// Safe because the exit_reason (which comes from the kernel) told us which</span>
-                    <span class="comment">// union field to use.</span>
+                    <span class="comment">// SAFETY: Safe because the exit_reason (which comes from the kernel) told us</span>
+                    <span class="comment">// which union field to use.</span>
                     <span class="kw">let</span> <span class="ident">debug</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">run</span>.<span class="ident">__bindgen_anon_1</span>.<span class="ident">debug</span> };
                     <span class="prelude-val">Ok</span>(<span class="ident">VcpuExit::Debug</span>(<span class="ident">debug</span>.<span class="ident">arch</span>))
                 }
                 <span class="ident">KVM_EXIT_HLT</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">VcpuExit::Hlt</span>),
                 <span class="ident">KVM_EXIT_MMIO</span> =&gt; {
-                    <span class="comment">// Safe because the exit_reason (which comes from the kernel) told us which</span>
-                    <span class="comment">// union field to use.</span>
+                    <span class="comment">// SAFETY: Safe because the exit_reason (which comes from the kernel) told us</span>
+                    <span class="comment">// which union field to use.</span>
                     <span class="kw">let</span> <span class="ident">mmio</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">&amp;mut</span> <span class="ident">run</span>.<span class="ident">__bindgen_anon_1</span>.<span class="ident">mmio</span> };
                     <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="ident">mmio</span>.<span class="ident">phys_addr</span>;
                     <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">mmio</span>.<span class="ident">len</span> <span class="kw">as</span> <span class="ident">usize</span>;
@@ -4114,8 +4053,8 @@
                 <span class="ident">KVM_EXIT_IRQ_WINDOW_OPEN</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">VcpuExit::IrqWindowOpen</span>),
                 <span class="ident">KVM_EXIT_SHUTDOWN</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">VcpuExit::Shutdown</span>),
                 <span class="ident">KVM_EXIT_FAIL_ENTRY</span> =&gt; {
-                    <span class="comment">// Safe because the exit_reason (which comes from the kernel) told us which</span>
-                    <span class="comment">// union field to use.</span>
+                    <span class="comment">// SAFETY: Safe because the exit_reason (which comes from the kernel) told us</span>
+                    <span class="comment">// which union field to use.</span>
                     <span class="kw">let</span> <span class="ident">fail_entry</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">&amp;mut</span> <span class="ident">run</span>.<span class="ident">__bindgen_anon_1</span>.<span class="ident">fail_entry</span> };
                     <span class="prelude-val">Ok</span>(<span class="ident">VcpuExit::FailEntry</span>(
                         <span class="ident">fail_entry</span>.<span class="ident">hardware_entry_failure_reason</span>,
@@ -4137,8 +4076,8 @@
                 <span class="ident">KVM_EXIT_S390_TSCH</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">VcpuExit::S390Tsch</span>),
                 <span class="ident">KVM_EXIT_EPR</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">VcpuExit::Epr</span>),
                 <span class="ident">KVM_EXIT_SYSTEM_EVENT</span> =&gt; {
-                    <span class="comment">// Safe because the exit_reason (which comes from the kernel) told us which</span>
-                    <span class="comment">// union field to use.</span>
+                    <span class="comment">// SAFETY: Safe because the exit_reason (which comes from the kernel) told us</span>
+                    <span class="comment">// which union field to use.</span>
                     <span class="kw">let</span> <span class="ident">system_event</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">&amp;mut</span> <span class="ident">run</span>.<span class="ident">__bindgen_anon_1</span>.<span class="ident">system_event</span> };
                     <span class="prelude-val">Ok</span>(<span class="ident">VcpuExit::SystemEvent</span>(
                         <span class="ident">system_event</span>.<span class="ident">type_</span>,
@@ -4147,8 +4086,8 @@
                 }
                 <span class="ident">KVM_EXIT_S390_STSI</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">VcpuExit::S390Stsi</span>),
                 <span class="ident">KVM_EXIT_IOAPIC_EOI</span> =&gt; {
-                    <span class="comment">// Safe because the exit_reason (which comes from the kernel) told us which</span>
-                    <span class="comment">// union field to use.</span>
+                    <span class="comment">// SAFETY: Safe because the exit_reason (which comes from the kernel) told us</span>
+                    <span class="comment">// which union field to use.</span>
                     <span class="kw">let</span> <span class="ident">eoi</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">&amp;mut</span> <span class="ident">run</span>.<span class="ident">__bindgen_anon_1</span>.<span class="ident">eoi</span> };
                     <span class="prelude-val">Ok</span>(<span class="ident">VcpuExit::IoapicEoi</span>(<span class="ident">eoi</span>.<span class="ident">vector</span>))
                 }
@@ -4186,8 +4125,8 @@
     <span class="doccomment">///</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_tsc_khz</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
-        <span class="comment">// Safe because we know that our file is a KVM fd and that the request is one of the ones</span>
-        <span class="comment">// defined by kernel.</span>
+        <span class="comment">// SAFETY:  Safe because we know that our file is a KVM fd and that the request is one of</span>
+        <span class="comment">// the ones defined by kernel.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl</span>(<span class="self">self</span>, <span class="ident">KVM_GET_TSC_KHZ</span>()) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">ret</span> <span class="kw">as</span> <span class="ident">u32</span>)
@@ -4218,8 +4157,8 @@
     <span class="doccomment">///</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tsc_khz</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">freq</span>: <span class="ident">u32</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="comment">// Safe because we know that our file is a KVM fd and that the request is one of the ones</span>
-        <span class="comment">// defined by kernel.</span>
+        <span class="comment">// SAFETY: Safe because we know that our file is a KVM fd and that the request is one of</span>
+        <span class="comment">// the ones defined by kernel.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_val</span>(<span class="self">self</span>, <span class="ident">KVM_SET_TSC_KHZ</span>(), <span class="ident">freq</span> <span class="kw">as</span> <span class="ident">u64</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&lt;</span> <span class="number">0</span> {
             <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>())
@@ -4256,8 +4195,8 @@
             ..<span class="ident">Default::default</span>()
         };
 
-        <span class="comment">// Safe because we know that our file is a vCPU fd, we know the kernel will only write the</span>
-        <span class="comment">// correct amount of memory to our pointer, and we verify the return result.</span>
+        <span class="comment">// SAFETY: Safe because we know that our file is a vCPU fd, we know the kernel will only</span>
+        <span class="comment">// write the correct amount of memory to our pointer, and we verify the return result.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_mut_ref</span>(<span class="self">self</span>, <span class="ident">KVM_TRANSLATE</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">tr</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
@@ -4428,6 +4367,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::undocumented_unsafe_blocks</span>)]</span>
     <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">byteorder</span>;
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
@@ -4671,7 +4611,7 @@
 
         <span class="comment">// Verify the lengths match.</span>
         <span class="macro">assert_eq!</span>(<span class="ident">nmsrs</span>, <span class="ident">msrs_to_set</span>.<span class="ident">len</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">nmsrs</span>, <span class="ident">returned_kvm_msrs</span>.<span class="ident">as_fam_struct_ref</span>().<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">usize</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">nmsrs</span>, <span class="ident">returned_kvm_msrs</span>.<span class="ident">as_fam_struct_ref</span>().<span class="ident">len</span>());
 
         <span class="comment">// Verify the contents match.</span>
         <span class="kw">let</span> <span class="ident">returned_kvm_msr_entries</span> <span class="op">=</span> <span class="ident">returned_kvm_msrs</span>.<span class="ident">as_slice</span>();

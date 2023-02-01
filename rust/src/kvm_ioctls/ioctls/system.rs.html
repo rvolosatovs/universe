@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/kvm-ioctls-0.12.0/src/ioctls/system.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>system.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/kvm-ioctls-0.13.0/src/ioctls/system.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>system.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../kvm_ioctls/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -777,6 +777,79 @@
 <span id="772">772</span>
 <span id="773">773</span>
 <span id="774">774</span>
+<span id="775">775</span>
+<span id="776">776</span>
+<span id="777">777</span>
+<span id="778">778</span>
+<span id="779">779</span>
+<span id="780">780</span>
+<span id="781">781</span>
+<span id="782">782</span>
+<span id="783">783</span>
+<span id="784">784</span>
+<span id="785">785</span>
+<span id="786">786</span>
+<span id="787">787</span>
+<span id="788">788</span>
+<span id="789">789</span>
+<span id="790">790</span>
+<span id="791">791</span>
+<span id="792">792</span>
+<span id="793">793</span>
+<span id="794">794</span>
+<span id="795">795</span>
+<span id="796">796</span>
+<span id="797">797</span>
+<span id="798">798</span>
+<span id="799">799</span>
+<span id="800">800</span>
+<span id="801">801</span>
+<span id="802">802</span>
+<span id="803">803</span>
+<span id="804">804</span>
+<span id="805">805</span>
+<span id="806">806</span>
+<span id="807">807</span>
+<span id="808">808</span>
+<span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
+<span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
+<span id="817">817</span>
+<span id="818">818</span>
+<span id="819">819</span>
+<span id="820">820</span>
+<span id="821">821</span>
+<span id="822">822</span>
+<span id="823">823</span>
+<span id="824">824</span>
+<span id="825">825</span>
+<span id="826">826</span>
+<span id="827">827</span>
+<span id="828">828</span>
+<span id="829">829</span>
+<span id="830">830</span>
+<span id="831">831</span>
+<span id="832">832</span>
+<span id="833">833</span>
+<span id="834">834</span>
+<span id="835">835</span>
+<span id="836">836</span>
+<span id="837">837</span>
+<span id="838">838</span>
+<span id="839">839</span>
+<span id="840">840</span>
+<span id="841">841</span>
+<span id="842">842</span>
+<span id="843">843</span>
+<span id="844">844</span>
+<span id="845">845</span>
+<span id="846">846</span>
+<span id="847">847</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.</span>
 <span class="comment">// SPDX-License-Identifier: Apache-2.0 OR MIT</span>
 <span class="comment">//</span>
@@ -784,6 +857,7 @@
 <span class="comment">// Use of this source code is governed by a BSD-style license that can be</span>
 <span class="comment">// found in the THIRD-PARTY file.</span>
 <span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">open</span>, <span class="ident">O_CLOEXEC</span>, <span class="ident">O_RDWR</span>};
+<span class="kw">use</span> <span class="ident">std::ffi::CStr</span>;
 <span class="kw">use</span> <span class="ident">std::fs::File</span>;
 <span class="kw">use</span> <span class="ident">std::os::raw</span>::{<span class="ident">c_char</span>, <span class="ident">c_ulong</span>};
 <span class="kw">use</span> <span class="ident">std::os::unix::io</span>::{<span class="ident">AsRawFd</span>, <span class="ident">FromRawFd</span>, <span class="ident">RawFd</span>};
@@ -820,7 +894,34 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="comment">// Open `/dev/kvm` using `O_CLOEXEC` flag.</span>
         <span class="kw">let</span> <span class="ident">fd</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::open_with_cloexec</span>(<span class="bool-val">true</span>)<span class="question-mark">?</span>;
-        <span class="comment">// Safe because we verify that the fd is valid in `open_with_cloexec` and we own the fd.</span>
+        <span class="comment">// SAFETY: Safe because we verify that the fd is valid in `open_with_cloexec` and we own</span>
+        <span class="comment">// the fd.</span>
+        <span class="prelude-val">Ok</span>(<span class="kw">unsafe</span> { <span class="ident"><span class="self">Self</span>::from_raw_fd</span>(<span class="ident">fd</span>) })
+    }
+
+    <span class="doccomment">/// Opens the KVM device at `kvm_path` and returns a `Kvm` object on success.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Arguments</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * `kvm_path`: path to the KVM device. Usually it is `/dev/kvm`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Example</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use kvm_ioctls::Kvm;</span>
+    <span class="doccomment">/// use std::ffi::CString;</span>
+    <span class="doccomment">/// let kvm_path = CString::new(&quot;/dev/kvm&quot;).unwrap();</span>
+    <span class="doccomment">/// let kvm = Kvm::new_with_path(&amp;kvm_path).unwrap();</span>
+    <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::new_ret_no_self</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_with_path</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">kvm_path</span>: <span class="ident">P</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">CStr</span><span class="op">&gt;</span>,
+    {
+        <span class="comment">// Open `kvm_path` using `O_CLOEXEC` flag.</span>
+        <span class="kw">let</span> <span class="ident">fd</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::open_with_cloexec_at</span>(<span class="ident">kvm_path</span>, <span class="bool-val">true</span>)<span class="question-mark">?</span>;
+        <span class="comment">// SAFETY: Safe because we verify that the fd is valid in `open_with_cloexec_at`</span>
+        <span class="comment">// and we own the fd.</span>
         <span class="prelude-val">Ok</span>(<span class="kw">unsafe</span> { <span class="ident"><span class="self">Self</span>::from_raw_fd</span>(<span class="ident">fd</span>) })
     }
 
@@ -846,9 +947,39 @@
     <span class="doccomment">/// let kvm = unsafe { Kvm::from_raw_fd(kvm_fd) };</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">open_with_cloexec</span>(<span class="ident">close_on_exec</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">RawFd</span><span class="op">&gt;</span> {
+        <span class="comment">// SAFETY: Safe because we give a constant nul-terminated string.</span>
+        <span class="kw">let</span> <span class="ident">kvm_path</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">CStr::from_bytes_with_nul_unchecked</span>(<span class="string">b&quot;/dev/kvm\0&quot;</span>) };
+        <span class="ident"><span class="self">Self</span>::open_with_cloexec_at</span>(<span class="ident">kvm_path</span>, <span class="ident">close_on_exec</span>)
+    }
+
+    <span class="doccomment">/// Opens the KVM device at `kvm_path` and returns the fd number on success.</span>
+    <span class="doccomment">/// Same as [open_with_cloexec()](struct.Kvm.html#method.open_with_cloexec)</span>
+    <span class="doccomment">/// except this method opens `kvm_path` instead of `/dev/kvm`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Arguments</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * `kvm_path`: path to the KVM device. Usually it is `/dev/kvm`.</span>
+    <span class="doccomment">/// * `close_on_exec`: If true opens `kvm_path` using the `O_CLOEXEC` flag.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Example</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// # use kvm_ioctls::Kvm;</span>
+    <span class="doccomment">/// # use std::ffi::CString;</span>
+    <span class="doccomment">/// # use std::os::unix::io::FromRawFd;</span>
+    <span class="doccomment">/// let kvm_path = CString::new(&quot;/dev/kvm&quot;).unwrap();</span>
+    <span class="doccomment">/// let kvm_fd = Kvm::open_with_cloexec_at(kvm_path, false).unwrap();</span>
+    <span class="doccomment">/// // The `kvm_fd` can now be passed to another process where we can use</span>
+    <span class="doccomment">/// // `from_raw_fd` for creating a `Kvm` object:</span>
+    <span class="doccomment">/// let kvm = unsafe { Kvm::from_raw_fd(kvm_fd) };</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">open_with_cloexec_at</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>, <span class="ident">close_on_exec</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">RawFd</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">CStr</span><span class="op">&gt;</span>,
+    {
         <span class="kw">let</span> <span class="ident">open_flags</span> <span class="op">=</span> <span class="ident">O_RDWR</span> <span class="op">|</span> <span class="kw">if</span> <span class="ident">close_on_exec</span> { <span class="ident">O_CLOEXEC</span> } <span class="kw">else</span> { <span class="number">0</span> };
-        <span class="comment">// Safe because we give a constant nul-terminated string and verify the result.</span>
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">open</span>(<span class="string">&quot;/dev/kvm\0&quot;</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*const</span> <span class="ident">c_char</span>, <span class="ident">open_flags</span>) };
+        <span class="comment">// SAFETY: Safe because we verify the result.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">open</span>(<span class="ident">path</span>.<span class="ident">as_ref</span>().<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*const</span> <span class="ident">c_char</span>, <span class="ident">open_flags</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&lt;</span> <span class="number">0</span> {
             <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>())
         } <span class="kw">else</span> {
@@ -868,8 +999,8 @@
     <span class="doccomment">/// assert_eq!(kvm.get_api_version(), 12);</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_api_version</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">i32</span> {
-        <span class="comment">// Safe because we know that our file is a KVM fd and that the request is one of the ones</span>
-        <span class="comment">// defined by kernel.</span>
+        <span class="comment">// SAFETY: Safe because we know that our file is a KVM fd and that the request is one of</span>
+        <span class="comment">// the ones defined by kernel.</span>
         <span class="kw">unsafe</span> { <span class="ident">ioctl</span>(<span class="self">self</span>, <span class="ident">KVM_GET_API_VERSION</span>()) }
     }
 
@@ -916,8 +1047,8 @@
     <span class="doccomment">/// assert!(kvm.check_extension_int(Cap::MaxVcpuId) &gt; 0);</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">check_extension_int</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">c</span>: <span class="ident">Cap</span>) -&gt; <span class="ident">i32</span> {
-        <span class="comment">// Safe because we know that our file is a KVM fd and that the extension is one of the ones</span>
-        <span class="comment">// defined by kernel.</span>
+        <span class="comment">// SAFETY: Safe because we know that our file is a KVM fd and that the extension is one of</span>
+        <span class="comment">// the ones defined by kernel.</span>
         <span class="kw">unsafe</span> { <span class="ident">ioctl_with_val</span>(<span class="self">self</span>, <span class="ident">KVM_CHECK_EXTENSION</span>(), <span class="ident">c</span> <span class="kw">as</span> <span class="ident">c_ulong</span>) }
     }
 
@@ -956,7 +1087,7 @@
     <span class="doccomment">/// assert!(kvm.get_vcpu_mmap_size().unwrap() &gt; 0);</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_vcpu_mmap_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
-        <span class="comment">// Safe because we know that our file is a KVM fd and we verify the return result.</span>
+        <span class="comment">// SAFETY: Safe because we know that our file is a KVM fd and we verify the return result.</span>
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl</span>(<span class="self">self</span>, <span class="ident">KVM_GET_VCPU_MMAP_SIZE</span>()) };
         <span class="kw">if</span> <span class="ident">res</span> <span class="op">&gt;</span> <span class="number">0</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">res</span> <span class="kw">as</span> <span class="ident">usize</span>)
@@ -1058,13 +1189,10 @@
         }
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cpuid</span> <span class="op">=</span> <span class="ident">CpuId::new</span>(<span class="ident">num_entries</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">errno::Error::new</span>(<span class="ident">libc::ENOMEM</span>))<span class="question-mark">?</span>;
-
-        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// ioctl is unsafe. The kernel is trusted not to write beyond the bounds of the memory</span>
-            <span class="comment">// allocated for the struct. The limit is read from nent, which is set to the allocated</span>
-            <span class="comment">// size(num_entries) above.</span>
-            <span class="ident">ioctl_with_mut_ptr</span>(<span class="self">self</span>, <span class="ident">kind</span>, <span class="ident">cpuid</span>.<span class="ident">as_mut_fam_struct_ptr</span>())
-        };
+        <span class="comment">// SAFETY: The kernel is trusted not to write beyond the bounds of the memory</span>
+        <span class="comment">// allocated for the struct. The limit is read from nent, which is set to the allocated</span>
+        <span class="comment">// size(num_entries) above.</span>
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_mut_ptr</span>(<span class="self">self</span>, <span class="ident">kind</span>, <span class="ident">cpuid</span>.<span class="ident">as_mut_fam_struct_ptr</span>()) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&lt;</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errno::Error::last</span>());
         }
@@ -1147,10 +1275,10 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">msr_list</span> <span class="op">=</span>
             <span class="ident">MsrList::new</span>(<span class="ident">KVM_MAX_MSR_ENTRIES</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">errno::Error::new</span>(<span class="ident">libc::ENOMEM</span>))<span class="question-mark">?</span>;
 
+        <span class="comment">// SAFETY: The kernel is trusted not to write beyond the bounds of the memory</span>
+        <span class="comment">// allocated for the struct. The limit is read from nmsrs, which is set to the allocated</span>
+        <span class="comment">// size (MAX_KVM_MSR_ENTRIES) above.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="comment">// ioctl is unsafe. The kernel is trusted not to write beyond the bounds of the memory</span>
-            <span class="comment">// allocated for the struct. The limit is read from nmsrs, which is set to the allocated</span>
-            <span class="comment">// size (MAX_KVM_MSR_ENTRIES) above.</span>
             <span class="ident">ioctl_with_mut_ptr</span>(
                 <span class="self">self</span>,
                 <span class="ident">KVM_GET_MSR_INDEX_LIST</span>(),
@@ -1262,11 +1390,11 @@
     <span class="doccomment">/// assert!(vm.run_size() == kvm.get_vcpu_mmap_size().unwrap());</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_vm_with_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">vm_type</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">VmFd</span><span class="op">&gt;</span> {
-        <span class="comment">// Safe because we know `self.kvm` is a real KVM fd as this module is the only one that</span>
-        <span class="comment">// create Kvm objects.</span>
+        <span class="comment">// SAFETY: Safe because we know `self.kvm` is a real KVM fd as this module is the only one</span>
+        <span class="comment">// that create Kvm objects.</span>
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ioctl_with_val</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">kvm</span>, <span class="ident">KVM_CREATE_VM</span>(), <span class="ident">vm_type</span>) };
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span> {
-            <span class="comment">// Safe because we verify the value of ret and we are the owners of the fd.</span>
+            <span class="comment">// SAFETY: Safe because we verify the value of ret and we are the owners of the fd.</span>
             <span class="kw">let</span> <span class="ident">vm_file</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">File::from_raw_fd</span>(<span class="ident">ret</span>) };
             <span class="kw">let</span> <span class="ident">run_mmap_size</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_vcpu_mmap_size</span>()<span class="question-mark">?</span>;
             <span class="prelude-val">Ok</span>(<span class="ident">new_vmfd</span>(<span class="ident">vm_file</span>, <span class="ident">run_mmap_size</span>))
@@ -1351,6 +1479,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::undocumented_unsafe_blocks</span>)]</span>
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
     <span class="kw">use</span> <span class="ident">kvm_bindings::KVM_MAX_CPUID_ENTRIES</span>;
@@ -1364,11 +1493,28 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_kvm_new_with_path</span>() {
+        <span class="kw">let</span> <span class="ident">kvm_path</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">CStr::from_bytes_with_nul_unchecked</span>(<span class="string">b&quot;/dev/kvm\0&quot;</span>) };
+        <span class="ident">Kvm::new_with_path</span>(<span class="ident">kvm_path</span>).<span class="ident">unwrap</span>();
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_open_with_cloexec</span>() {
         <span class="kw">let</span> <span class="ident">fd</span> <span class="op">=</span> <span class="ident">Kvm::open_with_cloexec</span>(<span class="bool-val">false</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">fcntl</span>(<span class="ident">fd</span>, <span class="ident">F_GETFD</span>, <span class="number">0</span>) };
         <span class="macro">assert_eq!</span>(<span class="ident">flags</span> <span class="op">&amp;</span> <span class="ident">FD_CLOEXEC</span>, <span class="number">0</span>);
         <span class="kw">let</span> <span class="ident">fd</span> <span class="op">=</span> <span class="ident">Kvm::open_with_cloexec</span>(<span class="bool-val">true</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">fcntl</span>(<span class="ident">fd</span>, <span class="ident">F_GETFD</span>, <span class="number">0</span>) };
+        <span class="macro">assert_eq!</span>(<span class="ident">flags</span> <span class="op">&amp;</span> <span class="ident">FD_CLOEXEC</span>, <span class="ident">FD_CLOEXEC</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_open_with_cloexec_at</span>() {
+        <span class="kw">let</span> <span class="ident">kvm_path</span> <span class="op">=</span> <span class="ident">std::ffi::CString::new</span>(<span class="string">&quot;/dev/kvm&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">fd</span> <span class="op">=</span> <span class="ident">Kvm::open_with_cloexec_at</span>(<span class="kw-2">&amp;</span><span class="ident">kvm_path</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">fcntl</span>(<span class="ident">fd</span>, <span class="ident">F_GETFD</span>, <span class="number">0</span>) };
+        <span class="macro">assert_eq!</span>(<span class="ident">flags</span> <span class="op">&amp;</span> <span class="ident">FD_CLOEXEC</span>, <span class="number">0</span>);
+        <span class="kw">let</span> <span class="ident">fd</span> <span class="op">=</span> <span class="ident">Kvm::open_with_cloexec_at</span>(<span class="kw-2">&amp;</span><span class="ident">kvm_path</span>, <span class="bool-val">true</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">fcntl</span>(<span class="ident">fd</span>, <span class="ident">F_GETFD</span>, <span class="number">0</span>) };
         <span class="macro">assert_eq!</span>(<span class="ident">flags</span> <span class="op">&amp;</span> <span class="ident">FD_CLOEXEC</span>, <span class="ident">FD_CLOEXEC</span>);
     }

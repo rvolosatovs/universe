@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/kvm-ioctls-0.12.0/src/ioctls/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/kvm-ioctls-0.13.0/src/ioctls/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../kvm_ioctls/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -99,6 +99,7 @@
 <span id="94">94</span>
 <span id="95">95</span>
 <span id="96">96</span>
+<span id="97">97</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.</span>
 <span class="comment">// SPDX-License-Identifier: Apache-2.0 OR MIT</span>
 <span class="comment">//</span>
@@ -138,11 +139,12 @@
     <span class="ident">mmap_size</span>: <span class="ident">usize</span>,
 }
 
-<span class="comment">// Send and Sync aren&#39;t automatically inherited for the raw address pointer.</span>
+<span class="comment">// SAFETY: Send and Sync aren&#39;t automatically inherited for the raw address pointer.</span>
 <span class="comment">// Accessing that pointer is only done through the stateless interface which</span>
 <span class="comment">// allows the object to be shared by multiple threads without a decrease in</span>
 <span class="comment">// safety.</span>
 <span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Send</span> <span class="kw">for</span> <span class="ident">KvmRunWrapper</span> {}
+<span class="comment">// SAFETY: See above.</span>
 <span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Sync</span> <span class="kw">for</span> <span class="ident">KvmRunWrapper</span> {}
 
 <span class="kw">impl</span> <span class="ident">KvmRunWrapper</span> {
@@ -152,8 +154,8 @@
     <span class="doccomment">/// * `fd` - File descriptor to mmap from.</span>
     <span class="doccomment">/// * `size` - Size of memory region in bytes.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">mmap_from_fd</span>(<span class="ident">fd</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">AsRawFd</span>, <span class="ident">size</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">KvmRunWrapper</span><span class="op">&gt;</span> {
-        <span class="comment">// This is safe because we are creating a mapping in a place not already used by any other</span>
-        <span class="comment">// area in this process.</span>
+        <span class="comment">// SAFETY: This is safe because we are creating a mapping in a place not already used by</span>
+        <span class="comment">// any other area in this process.</span>
         <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="kw">unsafe</span> {
             <span class="ident">libc::mmap</span>(
                 <span class="ident">null_mut</span>(),
@@ -177,9 +179,9 @@
     <span class="doccomment">/// Returns a mutable reference to `kvm_run`.</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::mut_from_ref</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_mut_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">kvm_run</span> {
-        <span class="comment">// Safe because we know we mapped enough memory to hold the kvm_run struct because the</span>
-        <span class="comment">// kernel told us how large it was.</span>
         <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::cast_ptr_alignment</span>)]</span>
+        <span class="comment">// SAFETY: Safe because we know we mapped enough memory to hold the kvm_run struct because</span>
+        <span class="comment">// the kernel told us how large it was.</span>
         <span class="kw">unsafe</span> {
             <span class="kw-2">&amp;mut</span> <span class="kw-2">*</span>(<span class="self">self</span>.<span class="ident">kvm_run_ptr</span> <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">kvm_run</span>)
         }
@@ -188,7 +190,7 @@
 
 <span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">KvmRunWrapper</span> {
     <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="comment">// This is safe because we mmap the area at kvm_run_ptr ourselves,</span>
+        <span class="comment">// SAFETY: This is safe because we mmap the area at kvm_run_ptr ourselves,</span>
         <span class="comment">// and nobody else is holding a reference to it.</span>
         <span class="kw">unsafe</span> {
             <span class="ident">libc::munmap</span>(<span class="self">self</span>.<span class="ident">kvm_run_ptr</span> <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">libc::c_void</span>, <span class="self">self</span>.<span class="ident">mmap_size</span>);
