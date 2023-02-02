@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/encoding_rs-0.8.31/src/utf_8.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>utf_8.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/encoding_rs-0.8.32/src/utf_8.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>utf_8.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../encoding_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -1632,8 +1632,6 @@
 <span id="1627">1627</span>
 <span id="1628">1628</span>
 <span id="1629">1629</span>
-<span id="1630">1630</span>
-<span id="1631">1631</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright Mozilla Foundation. See the COPYRIGHT</span>
 <span class="comment">// file at the top-level directory of this distribution.</span>
 <span class="comment">//</span>
@@ -1657,13 +1655,11 @@
         <span class="kw">use</span> <span class="ident">::core::intrinsics::likely</span>;
     } <span class="kw">else</span> {
         <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
-        <span class="comment">// Unsafe to match the intrinsic, which is needlessly unsafe.</span>
-        <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">unlikely</span>(<span class="ident">b</span>: <span class="ident">bool</span>) -&gt; <span class="ident">bool</span> {
+        <span class="kw">fn</span> <span class="ident">unlikely</span>(<span class="ident">b</span>: <span class="ident">bool</span>) -&gt; <span class="ident">bool</span> {
             <span class="ident">b</span>
         }
         <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
-        <span class="comment">// Unsafe to match the intrinsic, which is needlessly unsafe.</span>
-        <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">likely</span>(<span class="ident">b</span>: <span class="ident">bool</span>) -&gt; <span class="ident">bool</span> {
+        <span class="kw">fn</span> <span class="ident">likely</span>(<span class="ident">b</span>: <span class="ident">bool</span>) -&gt; <span class="ident">bool</span> {
             <span class="ident">b</span>
         }
     }
@@ -1724,14 +1720,14 @@
         <span class="comment">// to overflow would mean that the source slice would be so large that</span>
         <span class="comment">// the address space of the process would not have space for any code.</span>
         <span class="comment">// Therefore, the slice cannot be so long that this would overflow.</span>
-        <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">4</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>()) } {
+        <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">4</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>()) {
             <span class="lifetime">&#39;inner</span>: <span class="kw">loop</span> {
                 <span class="comment">// At this point, `byte` is not included in `read`, because we</span>
                 <span class="comment">// don&#39;t yet know that a) the UTF-8 sequence is valid and b) that there</span>
                 <span class="comment">// is output space if it is an astral sequence.</span>
                 <span class="comment">// Inspecting the lead byte directly is faster than what the</span>
                 <span class="comment">// std lib does!</span>
-                <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">in_inclusive_range8</span>(<span class="ident">byte</span>, <span class="number">0xC2</span>, <span class="number">0xDF</span>)) } {
+                <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">in_inclusive_range8</span>(<span class="ident">byte</span>, <span class="number">0xC2</span>, <span class="number">0xDF</span>)) {
                     <span class="comment">// Two-byte</span>
                     <span class="kw">let</span> <span class="ident">second</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">*</span>(<span class="ident">src</span>.<span class="ident">get_unchecked</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">1</span>)) };
                     <span class="kw">if</span> <span class="op">!</span><span class="ident">in_inclusive_range8</span>(<span class="ident">second</span>, <span class="number">0x80</span>, <span class="number">0xBF</span>) {
@@ -1740,7 +1736,7 @@
                     <span class="ident">read</span> <span class="op">+</span><span class="op">=</span> <span class="number">2</span>;
 
                     <span class="comment">// Next lead (manually inlined)</span>
-                    <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">4</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>()) } {
+                    <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">4</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>()) {
                         <span class="ident">byte</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">*</span>(<span class="ident">src</span>.<span class="ident">get_unchecked</span>(<span class="ident">read</span>)) };
                         <span class="kw">if</span> <span class="ident">byte</span> <span class="op">&lt;</span> <span class="number">0x80</span> {
                             <span class="ident">read</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
@@ -1750,7 +1746,7 @@
                     }
                     <span class="kw">break</span> <span class="lifetime">&#39;inner</span>;
                 }
-                <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">byte</span> <span class="op">&lt;</span> <span class="number">0xF0</span>) } {
+                <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">byte</span> <span class="op">&lt;</span> <span class="number">0xF0</span>) {
                     <span class="lifetime">&#39;three</span>: <span class="kw">loop</span> {
                         <span class="comment">// Three-byte</span>
                         <span class="kw">let</span> <span class="ident">second</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">*</span>(<span class="ident">src</span>.<span class="ident">get_unchecked</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">1</span>)) };
@@ -1765,12 +1761,12 @@
                         <span class="ident">read</span> <span class="op">+</span><span class="op">=</span> <span class="number">3</span>;
 
                         <span class="comment">// Next lead (manually inlined)</span>
-                        <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">4</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>()) } {
+                        <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">4</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>()) {
                             <span class="ident">byte</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">*</span>(<span class="ident">src</span>.<span class="ident">get_unchecked</span>(<span class="ident">read</span>)) };
                             <span class="kw">if</span> <span class="ident">in_inclusive_range8</span>(<span class="ident">byte</span>, <span class="number">0xE0</span>, <span class="number">0xEF</span>) {
                                 <span class="kw">continue</span> <span class="lifetime">&#39;three</span>;
                             }
-                            <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">byte</span> <span class="op">&lt;</span> <span class="number">0x80</span>) } {
+                            <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">byte</span> <span class="op">&lt;</span> <span class="number">0x80</span>) {
                                 <span class="ident">read</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                                 <span class="kw">continue</span> <span class="lifetime">&#39;outer</span>;
                             }
@@ -1795,7 +1791,7 @@
                 <span class="ident">read</span> <span class="op">+</span><span class="op">=</span> <span class="number">4</span>;
 
                 <span class="comment">// Next lead</span>
-                <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">4</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>()) } {
+                <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">4</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>()) {
                     <span class="ident">byte</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">*</span>(<span class="ident">src</span>.<span class="ident">get_unchecked</span>(<span class="ident">read</span>)) };
                     <span class="kw">if</span> <span class="ident">byte</span> <span class="op">&lt;</span> <span class="number">0x80</span> {
                         <span class="ident">read</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
@@ -1894,7 +1890,7 @@
         <span class="comment">// to overflow would mean that the source slice would be so large that</span>
         <span class="comment">// the address space of the process would not have space for any code.</span>
         <span class="comment">// Therefore, the slice cannot be so long that this would overflow.</span>
-        <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">4</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>()) } {
+        <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">4</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>()) {
             <span class="lifetime">&#39;inner</span>: <span class="kw">loop</span> {
                 <span class="comment">// At this point, `byte` is not included in `read`, because we</span>
                 <span class="comment">// don&#39;t yet know that a) the UTF-8 sequence is valid and b) that there</span>
@@ -1904,7 +1900,7 @@
                 <span class="comment">// for output space in the BMP cases.</span>
                 <span class="comment">// Inspecting the lead byte directly is faster than what the</span>
                 <span class="comment">// std lib does!</span>
-                <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">in_inclusive_range8</span>(<span class="ident">byte</span>, <span class="number">0xC2</span>, <span class="number">0xDF</span>)) } {
+                <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">in_inclusive_range8</span>(<span class="ident">byte</span>, <span class="number">0xC2</span>, <span class="number">0xDF</span>)) {
                     <span class="comment">// Two-byte</span>
                     <span class="kw">let</span> <span class="ident">second</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">*</span>(<span class="ident">src</span>.<span class="ident">get_unchecked</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">1</span>)) };
                     <span class="kw">if</span> <span class="op">!</span><span class="ident">in_inclusive_range8</span>(<span class="ident">second</span>, <span class="number">0x80</span>, <span class="number">0xBF</span>) {
@@ -1921,7 +1917,7 @@
                     <span class="kw">if</span> <span class="ident">written</span> <span class="op">==</span> <span class="ident">dst</span>.<span class="ident">len</span>() {
                         <span class="kw">break</span> <span class="lifetime">&#39;outer</span>;
                     }
-                    <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">4</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>()) } {
+                    <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">4</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>()) {
                         <span class="ident">byte</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">*</span>(<span class="ident">src</span>.<span class="ident">get_unchecked</span>(<span class="ident">read</span>)) };
                         <span class="kw">if</span> <span class="ident">byte</span> <span class="op">&lt;</span> <span class="number">0x80</span> {
                             <span class="kw">unsafe</span> { <span class="kw-2">*</span>(<span class="ident">dst</span>.<span class="ident">get_unchecked_mut</span>(<span class="ident">written</span>)) <span class="op">=</span> <span class="ident">u16::from</span>(<span class="ident">byte</span>) };
@@ -1933,7 +1929,7 @@
                     }
                     <span class="kw">break</span> <span class="lifetime">&#39;inner</span>;
                 }
-                <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">byte</span> <span class="op">&lt;</span> <span class="number">0xF0</span>) } {
+                <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">byte</span> <span class="op">&lt;</span> <span class="number">0xF0</span>) {
                     <span class="lifetime">&#39;three</span>: <span class="kw">loop</span> {
                         <span class="comment">// Three-byte</span>
                         <span class="kw">let</span> <span class="ident">second</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">*</span>(<span class="ident">src</span>.<span class="ident">get_unchecked</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">1</span>)) };
@@ -1956,12 +1952,12 @@
                         <span class="kw">if</span> <span class="ident">written</span> <span class="op">==</span> <span class="ident">dst</span>.<span class="ident">len</span>() {
                             <span class="kw">break</span> <span class="lifetime">&#39;outer</span>;
                         }
-                        <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">4</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>()) } {
+                        <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">4</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>()) {
                             <span class="ident">byte</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">*</span>(<span class="ident">src</span>.<span class="ident">get_unchecked</span>(<span class="ident">read</span>)) };
                             <span class="kw">if</span> <span class="ident">in_inclusive_range8</span>(<span class="ident">byte</span>, <span class="number">0xE0</span>, <span class="number">0xEF</span>) {
                                 <span class="kw">continue</span> <span class="lifetime">&#39;three</span>;
                             }
-                            <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">byte</span> <span class="op">&lt;</span> <span class="number">0x80</span>) } {
+                            <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">byte</span> <span class="op">&lt;</span> <span class="number">0x80</span>) {
                                 <span class="kw">unsafe</span> { <span class="kw-2">*</span>(<span class="ident">dst</span>.<span class="ident">get_unchecked_mut</span>(<span class="ident">written</span>)) <span class="op">=</span> <span class="ident">u16::from</span>(<span class="ident">byte</span>) };
                                 <span class="ident">read</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                                 <span class="ident">written</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
@@ -2003,7 +1999,7 @@
                 <span class="kw">if</span> <span class="ident">written</span> <span class="op">==</span> <span class="ident">dst</span>.<span class="ident">len</span>() {
                     <span class="kw">break</span> <span class="lifetime">&#39;outer</span>;
                 }
-                <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">4</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>()) } {
+                <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">read</span> <span class="op">+</span> <span class="number">4</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>()) {
                     <span class="ident">byte</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">*</span>(<span class="ident">src</span>.<span class="ident">get_unchecked</span>(<span class="ident">read</span>)) };
                     <span class="kw">if</span> <span class="ident">byte</span> <span class="op">&lt;</span> <span class="number">0x80</span> {
                         <span class="kw">unsafe</span> { <span class="kw-2">*</span>(<span class="ident">dst</span>.<span class="ident">get_unchecked_mut</span>(<span class="ident">written</span>)) <span class="op">=</span> <span class="ident">u16::from</span>(<span class="ident">byte</span>) };
@@ -2290,7 +2286,7 @@
                     <span class="kw">break</span>;
                 }
                 <span class="kw">let</span> <span class="ident">unit_minus_surrogate_start</span> <span class="op">=</span> <span class="ident">unit</span>.<span class="ident">wrapping_sub</span>(<span class="number">0xD800</span>);
-                <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">unit_minus_surrogate_start</span> <span class="op">&gt;</span> (<span class="number">0xDFFF</span> <span class="op">-</span> <span class="number">0xD800</span>)) } {
+                <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">unit_minus_surrogate_start</span> <span class="op">&gt;</span> (<span class="number">0xDFFF</span> <span class="op">-</span> <span class="number">0xD800</span>)) {
                     <span class="kw">unsafe</span> {
                         <span class="kw-2">*</span>(<span class="ident">dst</span>.<span class="ident">get_unchecked_mut</span>(<span class="ident">written</span>)) <span class="op">=</span> (<span class="ident">unit</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">12</span>) <span class="kw">as</span> <span class="ident">u8</span> <span class="op">|</span> <span class="number">0xE0u8</span>;
                         <span class="ident">written</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
@@ -2301,7 +2297,7 @@
                     }
                     <span class="kw">break</span>;
                 }
-                <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">unit_minus_surrogate_start</span> <span class="op">&lt;</span><span class="op">=</span> (<span class="number">0xDBFF</span> <span class="op">-</span> <span class="number">0xD800</span>)) } {
+                <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">unit_minus_surrogate_start</span> <span class="op">&lt;</span><span class="op">=</span> (<span class="number">0xDBFF</span> <span class="op">-</span> <span class="number">0xD800</span>)) {
                     <span class="comment">// high surrogate</span>
                     <span class="comment">// read &gt; src.len() is impossible, but using</span>
                     <span class="comment">// &gt;= instead of == allows the compiler to elide a bound check.</span>
@@ -2320,7 +2316,7 @@
                     }
                     <span class="kw">let</span> <span class="ident">second</span> <span class="op">=</span> <span class="ident">src</span>[<span class="ident">read</span>];
                     <span class="kw">let</span> <span class="ident">second_minus_low_surrogate_start</span> <span class="op">=</span> <span class="ident">second</span>.<span class="ident">wrapping_sub</span>(<span class="number">0xDC00</span>);
-                    <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">likely</span>(<span class="ident">second_minus_low_surrogate_start</span> <span class="op">&lt;</span><span class="op">=</span> (<span class="number">0xDFFF</span> <span class="op">-</span> <span class="number">0xDC00</span>)) } {
+                    <span class="kw">if</span> <span class="ident">likely</span>(<span class="ident">second_minus_low_surrogate_start</span> <span class="op">&lt;</span><span class="op">=</span> (<span class="number">0xDFFF</span> <span class="op">-</span> <span class="number">0xDC00</span>)) {
                         <span class="comment">// The next code unit is a low surrogate. Advance position.</span>
                         <span class="ident">read</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                         <span class="kw">let</span> <span class="ident">astral</span> <span class="op">=</span> (<span class="ident">u32::from</span>(<span class="ident">unit</span>) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">10</span>) <span class="op">+</span> <span class="ident">u32::from</span>(<span class="ident">second</span>)
@@ -2362,7 +2358,7 @@
                 <span class="kw">return</span> (<span class="ident">read</span>, <span class="ident">written</span>);
             }
             <span class="ident">unit</span> <span class="op">=</span> <span class="ident">src</span>[<span class="ident">read</span>];
-            <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">unlikely</span>(<span class="ident">unit</span> <span class="op">&lt;</span> <span class="number">0x80</span>) } {
+            <span class="kw">if</span> <span class="ident">unlikely</span>(<span class="ident">unit</span> <span class="op">&lt;</span> <span class="number">0x80</span>) {
                 <span class="comment">// written &gt; dst.len() is impossible, but using</span>
                 <span class="comment">// &gt;= instead of == allows the compiler to elide a bound check.</span>
                 <span class="kw">if</span> <span class="ident">written</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">dst</span>.<span class="ident">len</span>() {

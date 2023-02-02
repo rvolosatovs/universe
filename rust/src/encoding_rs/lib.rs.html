@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/encoding_rs-0.8.31/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/encoding_rs-0.8.32/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../encoding_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -6116,6 +6116,26 @@
 <span id="6111">6111</span>
 <span id="6112">6112</span>
 <span id="6113">6113</span>
+<span id="6114">6114</span>
+<span id="6115">6115</span>
+<span id="6116">6116</span>
+<span id="6117">6117</span>
+<span id="6118">6118</span>
+<span id="6119">6119</span>
+<span id="6120">6120</span>
+<span id="6121">6121</span>
+<span id="6122">6122</span>
+<span id="6123">6123</span>
+<span id="6124">6124</span>
+<span id="6125">6125</span>
+<span id="6126">6126</span>
+<span id="6127">6127</span>
+<span id="6128">6128</span>
+<span id="6129">6129</span>
+<span id="6130">6130</span>
+<span id="6131">6131</span>
+<span id="6132">6132</span>
+<span id="6133">6133</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright Mozilla Foundation. See the COPYRIGHT</span>
 <span class="comment">// file at the top-level directory of this distribution.</span>
 <span class="comment">//</span>
@@ -6287,8 +6307,10 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! The Encoding Standard doesn&#39;t specify encoders for UTF-16LE and UTF-16BE,</span>
 <span class="doccomment">//! __so this crate does not provide encoders for those encodings__!</span>
-<span class="doccomment">//! Along with the replacement encoding, their _output encoding_ is UTF-8,</span>
-<span class="doccomment">//! so you get an UTF-8 encoder if you request an encoder for them.</span>
+<span class="doccomment">//! Along with the replacement encoding, their _output encoding_ (i.e. the</span>
+<span class="doccomment">//! encoding used for form submission and error handling in the query string</span>
+<span class="doccomment">//! of URLs) is UTF-8, so you get an UTF-8 encoder if you request an encoder</span>
+<span class="doccomment">//! for them.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Additionally, the Encoding Standard factors BOM handling into wrapper</span>
 <span class="doccomment">//! algorithms so that BOM handling isn&#39;t part of the definition of the</span>
@@ -6315,6 +6337,10 @@
 <span class="doccomment">//! by this crate. The Encoding Standard doesn&#39;t define any UTF-32</span>
 <span class="doccomment">//! family encodings, since they aren&#39;t necessary for consuming Web</span>
 <span class="doccomment">//! content.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! While gb18030 is capable of representing U+FEFF, the Encoding</span>
+<span class="doccomment">//! Standard does not treat the gb18030 byte representation of U+FEFF</span>
+<span class="doccomment">//! as a BOM, so neither does this crate.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ## ISO-8859-1</span>
 <span class="doccomment">//!</span>
@@ -6375,7 +6401,8 @@
 <span class="doccomment">//! Normalizing text into Unicode Normalization Form C prior to encoding text</span>
 <span class="doccomment">//! into a legacy encoding minimizes unmappable characters. Text can be</span>
 <span class="doccomment">//! normalized to Unicode Normalization Form C using the</span>
-<span class="doccomment">//! [`unic-normal`](https://crates.io/crates/unic-normal) crate.</span>
+<span class="doccomment">//! [`icu_normalizer`](https://crates.io/crates/icu_normalizer) crate, which</span>
+<span class="doccomment">//! is part of [ICU4X](https://icu4x.unicode.org/).</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! The exception is windows-1258, which after normalizing to Unicode</span>
 <span class="doccomment">//! Normalization Form C requires tone marks to be decomposed in order to</span>
@@ -6400,10 +6427,10 @@
 <span class="doccomment">//! The C API (header file generated at `target/include/encoding_rs.h` when</span>
 <span class="doccomment">//! building encoding_rs) can, in turn, be wrapped for use from C++. Such a</span>
 <span class="doccomment">//! C++ wrapper can re-create the non-streaming API in C++ for C++ callers.</span>
-<span class="doccomment">//! The C binding comes with a [C++14 wrapper][2] that uses standard library +</span>
+<span class="doccomment">//! The C binding comes with a [C++17 wrapper][2] that uses standard library +</span>
 <span class="doccomment">//! [GSL][3] types and that recreates the non-streaming API in C++ on top of</span>
-<span class="doccomment">//! the streaming API. A C++ wrapper with XPCOM/MFBT types is being developed</span>
-<span class="doccomment">//! as part of Mozilla [bug 1261841][4].</span>
+<span class="doccomment">//! the streaming API. A C++ wrapper with XPCOM/MFBT types is available as</span>
+<span class="doccomment">//! [`mozilla::Encoding`][4].</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! The `Encoding` type is common to both the streaming and non-streaming</span>
 <span class="doccomment">//! modes. In the streaming mode, decoding operations are performed with a</span>
@@ -6415,7 +6442,7 @@
 <span class="doccomment">//! [1]: https://github.com/hsivonen/encoding_c</span>
 <span class="doccomment">//! [2]: https://github.com/hsivonen/encoding_c/blob/master/include/encoding_rs_cpp.h</span>
 <span class="doccomment">//! [3]: https://github.com/Microsoft/GSL/</span>
-<span class="doccomment">//! [4]: https://bugzilla.mozilla.org/show_bug.cgi?id=encoding_rs</span>
+<span class="doccomment">//! [4]: https://searchfox.org/mozilla-central/source/intl/Encoding.h</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # Memory management</span>
 <span class="doccomment">//!</span>
@@ -6800,7 +6827,7 @@
 <span class="doccomment">//! for discussion about the UTF-16 family.</span>
 
 <span class="attribute">#![<span class="ident">no_std</span>]</span>
-<span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;simd-accel&quot;</span>, <span class="ident">feature</span>(<span class="ident">stdsimd</span>, <span class="ident">core_intrinsics</span>))]</span>
+<span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;simd-accel&quot;</span>, <span class="ident">feature</span>(<span class="ident">core_intrinsics</span>))]</span>
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">test</span>, <span class="ident">macro_use</span>)]</span>
@@ -9040,7 +9067,10 @@
     }
 
     <span class="doccomment">/// Returns the _output encoding_ of this encoding. This is UTF-8 for</span>
-    <span class="doccomment">/// UTF-16BE, UTF-16LE and replacement and the encoding itself otherwise.</span>
+    <span class="doccomment">/// UTF-16BE, UTF-16LE, and replacement and the encoding itself otherwise.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// _Note:_ The _output encoding_ concept is needed for form submission and</span>
+    <span class="doccomment">/// error handling in the query strings of URLs in the Web Platform.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Available via the C wrapper.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
@@ -9056,6 +9086,8 @@
     <span class="doccomment">/// malformed sequences replaced with the REPLACEMENT CHARACTER when the</span>
     <span class="doccomment">/// entire input is available as a single buffer (i.e. the end of the</span>
     <span class="doccomment">/// buffer marks the end of the stream).</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The BOM, if any, does not appear in the output.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This method implements the (non-streaming version of) the</span>
     <span class="doccomment">/// [_decode_](https://encoding.spec.whatwg.org/#decode) spec concept.</span>
@@ -9102,6 +9134,8 @@
     <span class="doccomment">/// malformed sequences replaced with the REPLACEMENT CHARACTER when the</span>
     <span class="doccomment">/// entire input is available as a single buffer (i.e. the end of the</span>
     <span class="doccomment">/// buffer marks the end of the stream).</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Only an initial byte sequence that is a BOM for this encoding is removed.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// When invoked on `UTF_8`, this method implements the (non-streaming</span>
     <span class="doccomment">/// version of) the</span>
@@ -9335,10 +9369,11 @@
         }
     }
 
-    <span class="doccomment">/// Encode complete input to `Cow&lt;&#39;a, [u8]&gt;` with unmappable characters</span>
-    <span class="doccomment">/// replaced with decimal numeric character references when the entire input</span>
-    <span class="doccomment">/// is available as a single buffer (i.e. the end of the buffer marks the</span>
-    <span class="doccomment">/// end of the stream).</span>
+    <span class="doccomment">/// Encode complete input to `Cow&lt;&#39;a, [u8]&gt;` using the</span>
+    <span class="doccomment">/// [_output encoding_](Encoding::output_encoding) of this encoding with</span>
+    <span class="doccomment">/// unmappable characters replaced with decimal numeric character references</span>
+    <span class="doccomment">/// when the entire input is available as a single buffer (i.e. the end of</span>
+    <span class="doccomment">/// the buffer marks the end of the stream).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This method implements the (non-streaming version of) the</span>
     <span class="doccomment">/// [_encode_](https://encoding.spec.whatwg.org/#encode) spec concept. For</span>
@@ -9348,8 +9383,8 @@
     <span class="doccomment">/// method on `UTF_8`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The second item in the returned tuple is the encoding that was actually</span>
-    <span class="doccomment">/// used (which may differ from this encoding thanks to some encodings</span>
-    <span class="doccomment">/// having UTF-8 as their output encoding).</span>
+    <span class="doccomment">/// used (*which may differ from this encoding thanks to some encodings</span>
+    <span class="doccomment">/// having UTF-8 as their output encoding*).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The third item in the returned tuple indicates whether there were</span>
     <span class="doccomment">/// unmappable characters (that were replaced with HTML numeric character</span>
@@ -9438,7 +9473,8 @@
     <span class="doccomment">/// Instantiates a new decoder for this encoding with BOM sniffing enabled.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// BOM sniffing may cause the returned decoder to morph into a decoder</span>
-    <span class="doccomment">/// for UTF-8, UTF-16LE or UTF-16BE instead of this encoding.</span>
+    <span class="doccomment">/// for UTF-8, UTF-16LE or UTF-16BE instead of this encoding. The BOM</span>
+    <span class="doccomment">/// does not appear in the output.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Available via the C wrapper.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
@@ -9476,7 +9512,11 @@
         <span class="ident">Decoder::new</span>(<span class="self">self</span>, <span class="self">self</span>.<span class="ident">new_variant_decoder</span>(), <span class="ident">BomHandling::Off</span>)
     }
 
-    <span class="doccomment">/// Instantiates a new encoder for the output encoding of this encoding.</span>
+    <span class="doccomment">/// Instantiates a new encoder for the [_output encoding_](Encoding::output_encoding)</span>
+    <span class="doccomment">/// of this encoding.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// _Note:_ The output encoding of UTF-16BE, UTF-16LE, and replacement is UTF-8. There</span>
+    <span class="doccomment">/// is no encoder for UTF-16BE, UTF-16LE, and replacement themselves.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Available via the C wrapper.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
